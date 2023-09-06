@@ -157,6 +157,36 @@ const addUserFeetDimensions = async (req, res) => {
   }
 };
 
+// add user_address by userId
+const addUserAddress = async (req, res) => {
+  try {
+    const userId = req.params.userId;
+    const { shipping_address } = req.body;
+
+    const query = `
+      INSERT INTO user_address (user_id, shipping_address)
+      VALUES ($1, $2 )
+    `;
+
+    const values = [userId, shipping_address];
+    await pool.query(query, values);
+
+    res.json({
+      status: "success",
+      msg: "User shipping address added",
+    });
+  } catch (error) {
+    if (error.code === "23505") {
+      return res.status(409).json({
+        status: "error",
+        msg: "User shipping address already exists",
+      });
+    }
+    console.log(error.message);
+    res.json({ status: "error", msg: error.message });
+  }
+};
+
 // get user climbing experience by userId
 const getUserClimbingExperience = async (req, res) => {
   try {
@@ -199,16 +229,36 @@ const getUserFeetDimensions = async (req, res) => {
   }
 };
 
+// get user_address by UserId
+const getUserAddress = async (req, res) => {
+  try {
+    const userId = req.params.userId;
+    const query = `
+      SELECT * FROM user_address
+      WHERE user_id = $1
+    `;
+    const address = await pool.query(query, [userId]);
+    if (address.rows.length === 0) {
+      return res
+        .status(404)
+        .json({ status: "error", msg: "Address not found" });
+    }
+    res.json(address.rows[0]);
+  } catch (error) {
+    console.log(error.message);
+    res.json({ status: "error", msg: error.message });
+  }
+};
+
 // update user climbing experience by userId
 const updateUserClimbingExperience = async (req, res) => {
   try {
     const userId = req.params.userId;
-    const { sportClimbing, bouldering, tradClimbing, yearsOfExperience } =
-      req.body;
+    const { sport_climbing, bouldering, trad_climbing, years_exp } = req.body;
 
     // Check if the userId exists in the users_climbingexp table
     const userExistsQuery = `
-      SELECT 1
+      SELECT *
       FROM users_climbingexp
       WHERE user_id = $1
     `;
@@ -227,10 +277,10 @@ const updateUserClimbingExperience = async (req, res) => {
     `;
 
     const values = [
-      sportClimbing,
+      sport_climbing,
       bouldering,
-      tradClimbing,
-      yearsOfExperience,
+      trad_climbing,
+      years_exp,
       userId,
     ];
     await pool.query(query, values);
@@ -307,14 +357,52 @@ const updateUserFeetDimensions = async (req, res) => {
   }
 };
 
+// update user_address by userId
+const updateUserAddress = async (req, res) => {
+  try {
+    const userId = req.params.userId;
+    const { shipping_address } = req.body;
+
+    // Check if the userId exists in the user_address table
+    const userExistsQuery = `
+      SELECT 1
+      FROM user_address
+      WHERE user_id = $1
+    `;
+    const userExistsResult = await pool.query(userExistsQuery, [userId]);
+
+    if (userExistsResult.rows.length === 0) {
+      return res
+        .status(404)
+        .json({ status: "error", msg: "User address not found" });
+    }
+
+    const query = `
+      UPDATE user_address
+      SET shipping_address = $1
+      WHERE user_id = $2
+    `;
+
+    const values = [shipping_address, userId];
+    await pool.query(query, values);
+
+    res.json({ status: "success", msg: "User address updated" });
+  } catch (error) {
+    console.log(error.message);
+    res.json({ status: "error", msg: error.message });
+  }
+};
 module.exports = {
   getAllUsers,
   getUserById,
   patchUser,
   addUserClimbingExperience,
   addUserFeetDimensions,
+  addUserAddress,
   getUserClimbingExperience,
   getUserFeetDimensions,
+  getUserAddress,
   updateUserClimbingExperience,
   updateUserFeetDimensions,
+  updateUserAddress,
 };
