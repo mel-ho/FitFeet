@@ -2,24 +2,24 @@ CREATE DATABASE fitfeet;
 
 -- user table
 CREATE TABLE users(
-    id SERIAL PRIMARY KEY,
+    id UUID PRIMARY KEY,
     email VARCHAR(255) NOT NULL UNIQUE,
     password VARCHAR(255) NOT NULL,
     is_retailer BOOLEAN NOT NULL DEFAULT FALSE,
-    retailer_id INT,
+    retailer_id UUID,
     is_admin BOOLEAN NOT NULL DEFAULT FALSE,
     is_active BOOLEAN NOT NULL DEFAULT FALSE
 );
 
 -- seeding some user data
-INSERT INTO users (email, password, is_retailer, retailer_id, is_admin, is_active)
-VALUES ('user@test.com', '123456', FALSE, NULL, FALSE, TRUE);
-INSERT INTO users (email, password, is_retailer, retailer_id, is_admin, is_active)
-VALUES ('fiveten@test.com', '123456', TRUE, 1, FALSE, TRUE);
+INSERT INTO users (id, email, password, is_retailer, retailer_id, is_admin, is_active)
+VALUES ('3801f23d-5dea-477e-803e-5d8e61ba38ba','user@test.com', '$2b$12$oDvwjsCctlU7UfQO00ZPZOmGjr6TlM8K/ToqBTqjqXr6ibU0GBY9W', FALSE, NULL, FALSE, TRUE);
+INSERT INTO users (id,email, password, is_retailer, retailer_id, is_admin, is_active)
+VALUES ('aca95e36-25d7-4d99-a794-3a1888a2ad34','fiveten@test.com', '$2b$12$7mQw.ZtKW.kHtVFuaNWujuPKpMuJHrfJV8ecyF9eayFgoSbu3oYO.', FALSE, NULL, FALSE, TRUE);
 
 -- each user can only have 1 registered address
 CREATE TABLE user_address( 
-    user_id INT,
+    user_id UUID,
     shipping_address VARCHAR(255) NOT NULL,
     PRIMARY KEY (user_id),
     CONSTRAINT fk_user_id FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
@@ -27,7 +27,7 @@ CREATE TABLE user_address(
 
 -- each user can only have 1 stored feet size detail
 CREATE TABLE user_feet(
-    user_id INT,
+    user_id UUID,
     foot_length_L INT,
     foot_length_R INT,
     foot_width_L INT,
@@ -46,7 +46,7 @@ CREATE TABLE user_feet(
 
 -- each user can only have 1 stored climbing experience
 CREATE TABLE users_climbingexp(
-    user_id INT,
+    user_id UUID,
     sport_climbing BOOLEAN NOT NULL,
     bouldering BOOLEAN NOT NULL,
     trad_climbing BOOLEAN NOT NULL,
@@ -57,31 +57,31 @@ CREATE TABLE users_climbingexp(
 
 
 CREATE TABLE retailers(
-    id SERIAL PRIMARY KEY,
+    id UUID PRIMARY KEY,
     name VARCHAR(255) NOT NULL,
     contact_detail VARCHAR(255) NOT NULL,
     contact_address VARCHAR(255) NOT NULL
 );
 
--- seeding some retailer data
-INSERT INTO retailers (name, contact_detail, contact_address)
-VALUES ('FiveTen', '91234567', '5 Tenth Avenue');
-INSERT INTO retailers (name, contact_detail, contact_address)
-VALUES ('FiveTenSG', '92345678', '5 Tenth Avenue Singapore');
+-- -- seeding some retailer data
+-- INSERT INTO retailers (name, contact_detail, contact_address)
+-- VALUES ('FiveTen', '91234567', '5 Tenth Avenue');
+-- INSERT INTO retailers (name, contact_detail, contact_address)
+-- VALUES ('FiveTenSG', '92345678', '5 Tenth Avenue Singapore');
 
 CREATE TABLE brands(
     id SERIAL PRIMARY KEY,
     brand_name VARCHAR(255) NOT NULL,
-    retailer_id INT NOT NULL,
+    retailer_id UUID NOT NULL,
     CONSTRAINT fk_retailer_id FOREIGN KEY (retailer_id) REFERENCES retailers(id)
 );
 
 
--- seeding some brand data
-INSERT INTO brands (brand_name, retailer_id)
-VALUES ('FiveTen', '1');
-INSERT INTO brands (brand_name, retailer_id)
-VALUES ('FiveTen', '2');
+-- -- seeding some brand data
+-- INSERT INTO brands (brand_name, retailer_id)
+-- VALUES ('FiveTen', '1');
+-- INSERT INTO brands (brand_name, retailer_id)
+-- VALUES ('FiveTen', '2');
 
 
 CREATE TABLE shoes(
@@ -94,7 +94,7 @@ CREATE TABLE shoes(
 
 CREATE TABLE products(
     id SERIAL PRIMARY KEY,
-    retailer_id INT NOT NULL,
+    retailer_id UUID NOT NULL,
     shoe_id INT NOT NULL,
     date_purchased DATE NOT NULL,
     quantity INT NOT NULL,
@@ -112,7 +112,7 @@ INSERT INTO order_status (order_status) VALUES ('ORDERED'), ('PACKED'), ('SHIPPE
 
 CREATE TABLE orders(
     id SERIAL PRIMARY KEY,
-    retailer_id INT NOT NULL,
+    retailer_id UUID NOT NULL,
     product_id INT NOT NULL,
     quantity INT NOT NULL,
     order_date DATE NOT NULL,
@@ -129,7 +129,7 @@ CREATE TABLE user_shoes(
     date_worn DATE NOT NULL,
     date_disposed DATE NOT NULL,
     star_rating INT NOT NULL,
-    user_id INT,
+    user_id UUID,
     PRIMARY KEY (user_id, shoe_id),
     CONSTRAINT fk_user_id FOREIGN KEY (user_id) REFERENCES users(id),
     CONSTRAINT fk_shoe_id FOREIGN KEY (shoe_id) REFERENCES shoes(id)

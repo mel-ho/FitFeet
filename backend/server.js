@@ -5,6 +5,7 @@ const cors = require("cors");
 const helmet = require("helmet");
 const rateLimit = require("express-rate-limit");
 
+const auth = require("./src/routers/auth");
 const users = require("./src/routers/users");
 const retail = require("./src/routers/retail");
 
@@ -25,6 +26,7 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 
 // routes
+app.use("/auth", auth);
 app.use("/users", users);
 app.use("/retail", retail);
 

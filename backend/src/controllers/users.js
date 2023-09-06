@@ -32,7 +32,7 @@ const getUserById = async (req, res) => {
   }
 };
 
-// UPDATE user details By ID
+// UPDATE user login related details By ID
 const patchUser = async (req, res) => {
   try {
     const userId = req.params.userId;
@@ -64,6 +64,8 @@ const patchUser = async (req, res) => {
     res.json({ status: "error", msg: error.message });
   }
 };
+
+// GET all shoe data
 
 module.exports = {
   getAllUsers,
