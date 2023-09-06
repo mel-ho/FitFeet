@@ -15,6 +15,7 @@ Capstone project for GA's Software Engineering Immersion.
 - Link to deployed app?
 - *Wireframe*: https://miro.com/app/board/uXjVMoki5VI=/?share_link_id=803697538485
 - *Database Design*: https://drawsql.app/teams/wallgecko/diagrams/fit-feet
+- *APIs*: https://docs.google.com/spreadsheets/d/18pTQCA-RoQGHWLiaYrPv_kepFGzF3ZKIpl3xFsQfCcc/edit?usp=sharing
 - *.env*:
 - *MySQL*: codes to create database can be found in the file "./backend/database.sql"
 
