@@ -13,7 +13,7 @@ const getAllUsers = async (req, res) => {
   }
 };
 
-// GET user By ID
+// GET user By userId
 const getUserById = async (req, res) => {
   try {
     const userId = req.params.userId;
@@ -32,7 +32,7 @@ const getUserById = async (req, res) => {
   }
 };
 
-// UPDATE user login related details By ID
+// UPDATE user login related details By userId
 const patchUser = async (req, res) => {
   try {
     const userId = req.params.userId;
@@ -65,10 +65,256 @@ const patchUser = async (req, res) => {
   }
 };
 
-// GET all shoe data
+// add user climbing exerience by userId
+const addUserClimbingExperience = async (req, res) => {
+  try {
+    const userId = req.params.userId;
+    const { sportClimbing, bouldering, tradClimbing, yearsOfExperience } =
+      req.body;
+
+    const query = `
+      INSERT INTO users_climbingexp (user_id, sport_climbing, bouldering, trad_climbing, years_exp)
+      VALUES ($1, $2, $3, $4, $5)
+    `;
+
+    const values = [
+      userId,
+      sportClimbing,
+      bouldering,
+      tradClimbing,
+      yearsOfExperience,
+    ];
+    await pool.query(query, values);
+
+    res.json({
+      status: "success",
+      msg: "User climbing experience added",
+    });
+  } catch (error) {
+    if (error.code === "23505") {
+      return res.status(409).json({
+        status: "error",
+        msg: "User climbing experience already exists",
+      });
+    }
+    console.log(error.message);
+    res.json({ status: "error", msg: error.message });
+  }
+};
+
+// add feet dimension by userId
+const addUserFeetDimensions = async (req, res) => {
+  try {
+    const userId = req.params.userId;
+    const {
+      footLengthL,
+      footLengthR,
+      footWidthL,
+      footWidthR,
+      toeLengthL,
+      toeLengthR,
+      smallPerimL,
+      smallPerimR,
+      bigPerimL,
+      bigPerimR,
+      heelPerimL,
+      heelPerimR,
+    } = req.body;
+
+    const query = `
+      INSERT INTO user_feet (user_id, foot_length_L, foot_length_R, foot_width_L, foot_width_R,
+        toe_length_L, toe_length_R, small_perim_L, small_perim_R, big_perim_L, big_perim_R,
+        heel_perim_L, heel_perim_R)
+      VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13)
+    `;
+
+    const values = [
+      userId,
+      footLengthL,
+      footLengthR,
+      footWidthL,
+      footWidthR,
+      toeLengthL,
+      toeLengthR,
+      smallPerimL,
+      smallPerimR,
+      bigPerimL,
+      bigPerimR,
+      heelPerimL,
+      heelPerimR,
+    ];
+    await pool.query(query, values);
+
+    res.json({ status: "success", msg: "User feet dimensions added" });
+  } catch (error) {
+    if (error.code === "23505") {
+      return res
+        .status(409)
+        .json({ status: "error", msg: "User feet dimensions already exists" });
+    }
+    console.log(error.message);
+    res.json({ status: "error", msg: error.message });
+  }
+};
+
+// get user climbing experience by userId
+const getUserClimbingExperience = async (req, res) => {
+  try {
+    const userId = req.params.userId;
+    const query = `
+      SELECT * FROM users_climbingexp
+      WHERE user_id = $1
+    `;
+    const climbingExp = await pool.query(query, [userId]);
+    if (climbingExp.rows.length === 0) {
+      return res
+        .status(404)
+        .json({ status: "error", msg: "Climbing experience not found" });
+    }
+    res.json(climbingExp.rows[0]);
+  } catch (error) {
+    console.log(error.message);
+    res.json({ status: "error", msg: error.message });
+  }
+};
+
+// get feet dimension by userId
+const getUserFeetDimensions = async (req, res) => {
+  try {
+    const userId = req.params.userId;
+    const query = `
+      SELECT * FROM user_feet
+      WHERE user_id = $1
+    `;
+    const feetDimensions = await pool.query(query, [userId]);
+    if (feetDimensions.rows.length === 0) {
+      return res
+        .status(404)
+        .json({ status: "error", msg: "Feet dimensions not found" });
+    }
+    res.json(feetDimensions.rows[0]);
+  } catch (error) {
+    console.log(error.message);
+    res.json({ status: "error", msg: error.message });
+  }
+};
+
+// update user climbing experience by userId
+const updateUserClimbingExperience = async (req, res) => {
+  try {
+    const userId = req.params.userId;
+    const { sportClimbing, bouldering, tradClimbing, yearsOfExperience } =
+      req.body;
+
+    // Check if the userId exists in the users_climbingexp table
+    const userExistsQuery = `
+      SELECT 1
+      FROM users_climbingexp
+      WHERE user_id = $1
+    `;
+    const userExistsResult = await pool.query(userExistsQuery, [userId]);
+
+    if (userExistsResult.rows.length === 0) {
+      return res
+        .status(404)
+        .json({ status: "error", msg: "User climbing experience not found" });
+    }
+
+    const query = `
+      UPDATE users_climbingexp
+      SET sport_climbing = $1, bouldering = $2, trad_climbing = $3, years_exp = $4
+      WHERE user_id = $5
+    `;
+
+    const values = [
+      sportClimbing,
+      bouldering,
+      tradClimbing,
+      yearsOfExperience,
+      userId,
+    ];
+    await pool.query(query, values);
+
+    res.json({ status: "success", msg: "User climbing experience updated" });
+  } catch (error) {
+    console.log(error.message);
+    res.json({ status: "error", msg: error.message });
+  }
+};
+
+// update feet dimension by userId
+const updateUserFeetDimensions = async (req, res) => {
+  try {
+    const userId = req.params.userId;
+    const {
+      footLengthL,
+      footLengthR,
+      footWidthL,
+      footWidthR,
+      toeLengthL,
+      toeLengthR,
+      smallPerimL,
+      smallPerimR,
+      bigPerimL,
+      bigPerimR,
+      heelPerimL,
+      heelPerimR,
+    } = req.body;
+
+    // Check if the userId exists in the user_feet table
+    const userExistsQuery = `
+      SELECT 1
+      FROM user_feet
+      WHERE user_id = $1
+    `;
+    const userExistsResult = await pool.query(userExistsQuery, [userId]);
+
+    if (userExistsResult.rows.length === 0) {
+      return res
+        .status(404)
+        .json({ status: "error", msg: "User feet dimensions not found" });
+    }
+
+    const query = `
+      UPDATE user_feet
+      SET foot_length_L = $1, foot_length_R = $2, foot_width_L = $3, foot_width_R = $4,
+          toe_length_L = $5, toe_length_R = $6, small_perim_L = $7, small_perim_R = $8,
+          big_perim_L = $9, big_perim_R = $10, heel_perim_L = $11, heel_perim_R = $12
+      WHERE user_id = $13
+    `;
+
+    const values = [
+      footLengthL,
+      footLengthR,
+      footWidthL,
+      footWidthR,
+      toeLengthL,
+      toeLengthR,
+      smallPerimL,
+      smallPerimR,
+      bigPerimL,
+      bigPerimR,
+      heelPerimL,
+      heelPerimR,
+      userId,
+    ];
+    await pool.query(query, values);
+
+    res.json({ status: "success", msg: "User feet dimensions updated" });
+  } catch (error) {
+    console.log(error.message);
+    res.json({ status: "error", msg: error.message });
+  }
+};
 
 module.exports = {
   getAllUsers,
   getUserById,
   patchUser,
+  addUserClimbingExperience,
+  addUserFeetDimensions,
+  getUserClimbingExperience,
+  getUserFeetDimensions,
+  updateUserClimbingExperience,
+  updateUserFeetDimensions,
 };
