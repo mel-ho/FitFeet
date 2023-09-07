@@ -5,6 +5,7 @@ import DisplayClimbingExp from "./DisplayClimbingExp";
 import DisplayFeet from "./DisplayFeet";
 import DisplayShoes from "./DisplayShoes";
 import DisplayProfile from "./DisplayProfile";
+import UserBar from "../Login/UserBar";
 
 const UserDisplay = () => {
   const [value, setValue] = useState(0);
@@ -20,6 +21,7 @@ const UserDisplay = () => {
 
   return (
     <div>
+      <UserBar></UserBar>
       <h2>User Display Page</h2>
       <Box sx={{ borderBottom: 1, borderColor: "divider" }}>
         <Tabs

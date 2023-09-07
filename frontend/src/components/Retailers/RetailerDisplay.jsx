@@ -1,7 +1,12 @@
 import React from "react";
+import UserBar from "../Login/UserBar";
 
 const RetailerDisplay = () => {
-  return <div>Retailer Display Page</div>;
+  return (
+    <div>
+      <UserBar></UserBar>Retailer Display Page
+    </div>
+  );
 };
 
 export default RetailerDisplay;
