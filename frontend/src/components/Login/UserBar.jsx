@@ -10,7 +10,7 @@ const UserBar = () => {
       <AppBar position="fixed">
         <Toolbar sx={{ justifyContent: "space-between" }}>
           <div>
-            <img src="/shoelogopng.png" height="30px" />
+            <img src="/fitfeetlogo.png" height="50px" />
           </div>
           <div>
             {userCtx.userEmail && (

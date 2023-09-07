@@ -8,6 +8,7 @@ import {
   TableContainer,
   TableHead,
   TableRow,
+  Checkbox,
 } from "@mui/material";
 import UserContext from "../context/user";
 import useFetch from "../hooks/useFetch";
@@ -20,7 +21,7 @@ const UserManagement = () => {
   console.log(userCtx);
   useEffect(() => {
     // Fetch user data from your API using useFetch
-    fetchData("/api/users", "GET", undefined, userCtx.accessToken)
+    fetchData("/users/users", "GET", undefined, userCtx.accessToken)
       .then((response) => {
         if (response.ok) {
           setUserData(response.data);
@@ -33,6 +34,32 @@ const UserManagement = () => {
         console.error("Error fetching user data: ", error);
       });
   }, [fetchData]);
+
+  // PATCH to update user attributes
+  const handleAttributeChange = async (user, attribute) => {
+    const updatedValue = !user[attribute]; // Toggle the attribute value
+    const dataToUpdate = { [attribute]: updatedValue };
+    const res = await fetchData(
+      `/users/${user.id}`,
+      "PATCH",
+      dataToUpdate,
+      userCtx.accessToken
+    );
+    if (res.ok) {
+      // Update the user data in the state
+      setUserData((prevUserData) => {
+        const updatedUserData = prevUserData.map((u) => {
+          if (u.id === user.id) {
+            return { ...u, [attribute]: updatedValue };
+          }
+          return u;
+        });
+        return updatedUserData;
+      });
+    } else {
+      console.error(`Error updating ${attribute}: `, res.data);
+    }
+  };
 
   return (
     <Box>
@@ -54,10 +81,27 @@ const UserManagement = () => {
                 <TableRow>
                   <TableCell>{user.id}</TableCell>
                   <TableCell>{user.email}</TableCell>
-                  <TableCell>{user.is_retailer ? "Yes" : "No"}</TableCell>
+                  <TableCell>
+                    <Checkbox
+                      checked={user.is_retailer}
+                      onChange={() =>
+                        handleAttributeChange(user, "is_retailer")
+                      }
+                    />
+                  </TableCell>
                   <TableCell>{user.retailer_id}</TableCell>
-                  <TableCell>{user.id_admin ? "Yes" : "No"}</TableCell>
-                  <TableCell>{user.id_active ? "Yes" : "No"}</TableCell>
+                  <TableCell>
+                    <Checkbox
+                      checked={user.is_admin}
+                      onChange={() => handleAttributeChange(user, "is_admin")}
+                    />
+                  </TableCell>
+                  <TableCell>
+                    <Checkbox
+                      checked={user.is_active}
+                      onChange={() => handleAttributeChange(user, "is_active")}
+                    />
+                  </TableCell>
                 </TableRow>
               ))}
             </TableBody>

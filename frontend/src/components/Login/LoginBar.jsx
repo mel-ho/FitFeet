@@ -8,7 +8,6 @@ import {
   Toolbar,
   Box,
   Grid,
-  Typography,
   InputAdornment,
   IconButton,
   Button,
@@ -63,7 +62,7 @@ const LoginBar = () => {
       <AppBar position="fixed">
         <Toolbar sx={{ justifyContent: "space-between" }}>
           <div>
-            <img src="/shoelogopng.png" height="30px" />
+            <img src="/fitfeetlogo.png" height="50px" />
           </div>
           <div>
             <Grid container spacing={1} alignItems="center">
@@ -76,7 +75,9 @@ const LoginBar = () => {
                   name="email"
                   autoComplete="email"
                   autoFocus
+                  color="warning"
                   size="small"
+                  variant="outlined"
                   onChange={(e) => setEmail(e.target.value)}
                 />
               </Grid>
@@ -89,7 +90,9 @@ const LoginBar = () => {
                   type={showPassword ? "text" : "password"}
                   id="password"
                   autoComplete="current-password"
+                  color="warning"
                   size="small"
+                  variant="outlined"
                   onChange={(e) => setPassword(e.target.value)}
                   InputProps={{
                     endAdornment: (

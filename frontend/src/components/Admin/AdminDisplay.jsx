@@ -6,7 +6,7 @@ const AdminDisplay = () => {
   return (
     <div>
       <UserBar></UserBar>
-      Admin Display Page
+      <h3>Admin Display Page</h3>
       <UserManagement></UserManagement>
     </div>
   );
