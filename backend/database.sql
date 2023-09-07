@@ -13,9 +13,13 @@ CREATE TABLE users(
 
 -- seeding some user data
 INSERT INTO users (id, email, password, is_retailer, retailer_id, is_admin, is_active)
-VALUES ('3801f23d-5dea-477e-803e-5d8e61ba38ba','user@test.com', '$2b$12$oDvwjsCctlU7UfQO00ZPZOmGjr6TlM8K/ToqBTqjqXr6ibU0GBY9W', FALSE, NULL, FALSE, TRUE);
+VALUES ('3801f23d-5dea-477e-803e-5d8e61ba38ba','admin@test.com', '$2b$12$oDvwjsCctlU7UfQO00ZPZOmGjr6TlM8K/ToqBTqjqXr6ibU0GBY9W', FALSE, NULL, TRUE, TRUE);
+INSERT INTO users (id, email, password, is_retailer, retailer_id, is_admin, is_active)
+VALUES ('3801f23d-5dea-477e-803e-5d8e61ba38bb','retailer@test.com', '$2b$12$oDvwjsCctlU7UfQO00ZPZOmGjr6TlM8K/ToqBTqjqXr6ibU0GBY9W', TRUE, 'fe5f4809-9c2a-47a2-8faf-fe34f43cb2e2', FALSE, TRUE);
+INSERT INTO users (id, email, password, is_retailer, retailer_id, is_admin, is_active)
+VALUES ('3801f23d-5dea-477e-803e-5d8e61ba38bc','user@test.com', '$2b$12$oDvwjsCctlU7UfQO00ZPZOmGjr6TlM8K/ToqBTqjqXr6ibU0GBY9W', FALSE, NULL, FALSE, TRUE);
 INSERT INTO users (id,email, password, is_retailer, retailer_id, is_admin, is_active)
-VALUES ('aca95e36-25d7-4d99-a794-3a1888a2ad34','fiveten@test.com', '$2b$12$7mQw.ZtKW.kHtVFuaNWujuPKpMuJHrfJV8ecyF9eayFgoSbu3oYO.', TRUE, 'fe5f4809-9c2a-47a2-8faf-fe34f43cb2e2', FALSE, TRUE);
+VALUES ('aca95e36-25d7-4d99-a794-3a1888a2ad34','invalid@test.com', '$2b$12$7mQw.ZtKW.kHtVFuaNWujuPKpMuJHrfJV8ecyF9eayFgoSbu3oYO.', TRUE, NULL, FALSE, FALSE);
 
 -- each user can only have 1 registered address
 CREATE TABLE user_address( 
