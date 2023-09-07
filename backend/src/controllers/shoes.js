@@ -267,7 +267,7 @@ const getUserShoesByUserId = async (req, res) => {
 // Get a specific user shoes by usershoe ID
 const getUserShoeByUsershoeId = async (req, res) => {
   try {
-    const user_shoe_id = req.params.user_shoe_id;
+    const user_shoe_id = req.params.usershoeId;
     const query = `
         SELECT * FROM user_shoes
         WHERE user_shoe_id = $1
