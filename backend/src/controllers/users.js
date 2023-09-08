@@ -36,23 +36,20 @@ const getUserById = async (req, res) => {
 const patchUser = async (req, res) => {
   try {
     const userId = req.params.userId;
-    const { email, password, is_retailer, retailerId, is_admin, is_active } =
-      req.body;
+    const { email, is_retailer, retailer_id, is_admin, is_active } = req.body;
     const query = `
       UPDATE users
       SET email = $1,
-          password = $2,
-          is_retailer = $3,
-          retailer_id = $4,
-          is_admin = $5,
-          is_active = $6
-      WHERE id = $7
+          is_retailer = $2,
+          retailer_id = $3,
+          is_admin = $4,
+          is_active = $5
+      WHERE id = $6
     `;
     const values = [
       email,
-      password,
       is_retailer,
-      retailerId,
+      retailer_id,
       is_admin,
       is_active,
       userId,

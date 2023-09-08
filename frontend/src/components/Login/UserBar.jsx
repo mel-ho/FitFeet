@@ -1,5 +1,7 @@
 import React, { useContext } from "react";
-import { AppBar, Toolbar, Box, Typography, Grid } from "@mui/material";
+import { Link } from "react-router-dom";
+import { AppBar, Toolbar, Box, Typography } from "@mui/material";
+
 import UserContext from "../context/user";
 
 const UserBar = () => {
@@ -10,7 +12,9 @@ const UserBar = () => {
       <AppBar position="fixed">
         <Toolbar sx={{ justifyContent: "space-between" }}>
           <div>
-            <img src="/fitfeetlogo.png" height="50px" />
+            <Link to="/">
+              <img src="/fitfeetlogo.png" height="50px" alt="FitFeet Logo" />
+            </Link>
           </div>
           <div>
             {userCtx.userEmail && (
