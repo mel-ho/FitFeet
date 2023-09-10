@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { Box, Tabs, Tab } from "@mui/material";
 import CustomTabPanel from "./CustomTabPanel";
-import DisplayClimbingExp from "./DisplayClimbingExp";
+import DisplayRecommended from "./DisplayRecommended";
 import DisplayFeet from "./DisplayFeet";
 import DisplayShoes from "./DisplayShoes";
 import DisplayProfile from "./DisplayProfile";
@@ -29,20 +29,20 @@ const UserDisplay = () => {
           onChange={handleChange}
           aria-label="basic tabs example"
         >
-          <Tab label="Climbing Experience" {...a11yProps(0)} />
-          <Tab label="Feet Dimensions" {...a11yProps(1)} />
-          <Tab label="My Shoes" {...a11yProps(2)} />
+          <Tab label="Recommended Shoes" {...a11yProps(0)} />
+          <Tab label="Shoes History" {...a11yProps(1)} />
+          <Tab label="Feet Dimensions" {...a11yProps(2)} />
           <Tab label="User Profile" {...a11yProps(3)} />
         </Tabs>
       </Box>
       <CustomTabPanel value={value} index={0}>
-        <DisplayClimbingExp></DisplayClimbingExp>
+        <DisplayRecommended></DisplayRecommended>
       </CustomTabPanel>
       <CustomTabPanel value={value} index={1}>
-        <DisplayFeet></DisplayFeet>
+        <DisplayShoes></DisplayShoes>
       </CustomTabPanel>
       <CustomTabPanel value={value} index={2}>
-        <DisplayShoes></DisplayShoes>
+        <DisplayFeet></DisplayFeet>
       </CustomTabPanel>
       <CustomTabPanel value={value} index={3}>
         <DisplayProfile></DisplayProfile>

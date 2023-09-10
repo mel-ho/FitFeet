@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Box, Tabs, Tab } from "@mui/material";
+import { Box, Grid, Tabs, Tab } from "@mui/material";
 import CustomTabPanel from "../Users/CustomTabPanel";
 
 import Orders from "./Orders";
@@ -23,7 +23,19 @@ const RetailerDisplay = () => {
     <div>
       <UserBar></UserBar>
       <h2>Retailer Display Page</h2>
-      <h2>"DashBOX"</h2>
+      <Box sx={{ flexGrow: 1 }}>
+        <Grid container spacing={2}>
+          <Grid item xs={4}>
+            "highlight item 1"
+          </Grid>
+          <Grid item xs={4}>
+            "highlight item 2"
+          </Grid>
+          <Grid item xs={4}>
+            "highlight item 3"
+          </Grid>
+        </Grid>
+      </Box>
       <Box sx={{ borderBottom: 1, borderColor: "divider" }}>
         <Tabs value={value} onChange={handleChange}>
           <Tab label="Orders" {...a11yProps(0)} />

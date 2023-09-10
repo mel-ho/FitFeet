@@ -33,7 +33,7 @@ const LoginBar = () => {
     if (res.ok) {
       userCtx.setAccessToken(res.data.access);
       const decoded = jwtDecode(res.data.access);
-      userCtx.setUserId(decoded.id);
+      userCtx.setUserId(decoded.user_id);
       userCtx.setUserEmail(decoded.email);
       userCtx.setIsActive(decoded.is_active);
       userCtx.setIsRetailer(decoded.is_retailer);

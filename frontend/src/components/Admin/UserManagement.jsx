@@ -48,7 +48,7 @@ const UserManagement = () => {
   // Filter the userData based on the searchText
   const filteredUserData = userData.filter(
     (user) =>
-      user.id.toString().includes(searchText) ||
+      user.user_id.toString().includes(searchText) ||
       user.email.toLowerCase().includes(searchText.toLowerCase())
   );
 
@@ -83,7 +83,7 @@ const UserManagement = () => {
     };
 
     const res = await fetchData(
-      `/users/users/${user.id}`,
+      `/users/users/${user.user_id}`,
       "PATCH",
       dataToUpdateForUser,
       userCtx.accessToken
@@ -123,8 +123,8 @@ const UserManagement = () => {
             </TableHead>
             <TableBody>
               {filteredUserData.map((user) => (
-                <TableRow key={user.id}>
-                  <TableCell>{user.id}</TableCell>
+                <TableRow key={user.user_id}>
+                  <TableCell>{user.user_id}</TableCell>
                   <TableCell>{user.email}</TableCell>
                   <TableCell>
                     <Checkbox

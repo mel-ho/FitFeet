@@ -8,7 +8,7 @@ const addBrand = async (req, res) => {
     const query = `
       INSERT INTO brands (brandname)
       VALUES ($1)
-      RETURNING id
+      RETURNING brand_id
     `;
     const values = [brandname];
     const newBrand = await pool.query(query, values);
@@ -16,7 +16,7 @@ const addBrand = async (req, res) => {
     res.json({
       status: "success",
       msg: "New brand added",
-      brandId: newBrand.rows[0].id,
+      brand_id: newBrand.rows[0].brand_id,
     });
   } catch (error) {
     console.log(error.message);
@@ -41,19 +41,19 @@ const getAllBrands = async (req, res) => {
 // Add a new brand model
 const addBrandModel = async (req, res) => {
   try {
-    const { brandId, modelName } = req.body;
+    const { brand_id, model } = req.body;
     const query = `
       INSERT INTO models (brand_id, model)
       VALUES ($1, $2)
-      RETURNING id
+      RETURNING model_id
     `;
-    const values = [brandId, modelName];
+    const values = [brand_id, model];
     const newBrandModel = await pool.query(query, values);
 
     res.json({
       status: "success",
       msg: "New brand model added",
-      brandModelId: newBrandModel.rows[0].id,
+      brandModelId: newBrandModel.rows[0].model_id,
     });
   } catch (error) {
     console.log(error.message);
@@ -65,9 +65,9 @@ const addBrandModel = async (req, res) => {
 const getAllBrandModels = async (req, res) => {
   try {
     const query = `
-    SELECT b.brandname AS brand_name, m.model
+    SELECT b.brandname AS brandname, m.model
     FROM models m
-    JOIN brands b ON m.brand_id = b.id
+    JOIN brands b ON m.brand_id = b.brand_id
   `;
     const brandModels = await pool.query(query);
     res.json(brandModels.rows);
@@ -84,7 +84,7 @@ const addSize = async (req, res) => {
     const query = `
       INSERT INTO sizes (size_us)
       VALUES ($1)
-      RETURNING id
+      RETURNING size_id
     `;
     const values = [size_us];
     const newSize = await pool.query(query, values);
@@ -92,7 +92,7 @@ const addSize = async (req, res) => {
     res.json({
       status: "success",
       msg: "New size added",
-      sizeId: newSize.rows[0].id,
+      size_id: newSize.rows[0].size_id,
     });
   } catch (error) {
     console.log(error.message);
@@ -121,7 +121,7 @@ const addShoes = async (req, res) => {
 
     // Retrieve the model_id based on the provided model
     const getModelIdQuery = `
-        SELECT id FROM models WHERE model = $1
+        SELECT model_id FROM models WHERE model = $1
       `;
     const modelResult = await pool.query(getModelIdQuery, [model]);
 
@@ -129,11 +129,11 @@ const addShoes = async (req, res) => {
       return res.status(404).json({ status: "error", msg: "Model not found" });
     }
 
-    const model_id = modelResult.rows[0].id;
+    const model_id = modelResult.rows[0].model_id;
 
     // Retrieve the size_id based on the provided size_us
     const getSizeIdQuery = `
-        SELECT id FROM sizes WHERE size_us = $1
+        SELECT size_id FROM sizes WHERE size_us = $1
       `;
     const sizeResult = await pool.query(getSizeIdQuery, [size_us]);
 
@@ -141,13 +141,13 @@ const addShoes = async (req, res) => {
       return res.status(404).json({ status: "error", msg: "Size not found" });
     }
 
-    const size_id = sizeResult.rows[0].id;
+    const size_id = sizeResult.rows[0].size_id;
 
     // Insert the new pair of shoes with the retrieved model_id and size_id
     const insertShoesQuery = `
         INSERT INTO shoes (model_id, size_id)
         VALUES ($1, $2)
-        RETURNING id
+        RETURNING shoe_id
       `;
     const values = [model_id, size_id];
     const newShoes = await pool.query(insertShoesQuery, values);
@@ -155,7 +155,7 @@ const addShoes = async (req, res) => {
     res.json({
       status: "success",
       msg: "New pair of shoes added",
-      shoesId: newShoes.rows[0].id,
+      shoe_id: newShoes.rows[0].shoe_id,
     });
   } catch (error) {
     console.log(error.message);
@@ -180,12 +180,12 @@ const getAllShoes = async (req, res) => {
 // Get shoe by shoe ID
 const getShoeByShoeId = async (req, res) => {
   try {
-    const shoeId = req.params.shoeId;
+    const shoe_id = req.params.shoeId;
     const query = `
       SELECT * FROM shoes
-      WHERE id = $1
+      WHERE shoe_id = $1
     `;
-    const shoe = await pool.query(query, [shoeId]);
+    const shoe = await pool.query(query, [shoe_id]);
 
     // Check if a shoe with the specified ID exists
     if (shoe.rows.length === 0) {
@@ -203,24 +203,24 @@ const getShoeByShoeId = async (req, res) => {
 const addUserShoes = async (req, res) => {
   try {
     const {
-      shoeId,
+      shoe_id,
       datePurchased,
       dateWorn,
       dateDisposed,
       starRating,
-      userId,
+      user_id,
     } = req.body;
     const query = `
       INSERT INTO user_shoes (shoe_id, date_purchased, date_worn, date_disposed, star_rating, user_id)
       VALUES ($1, $2, $3, $4, $5, $6)
     `;
     const values = [
-      shoeId,
+      shoe_id,
       datePurchased,
       dateWorn,
       dateDisposed,
       starRating,
-      userId,
+      user_id,
     ];
     await pool.query(query, values);
 
@@ -251,12 +251,12 @@ const getAllUserShoes = async (req, res) => {
 // Get all user shoes by user ID
 const getUserShoesByUserId = async (req, res) => {
   try {
-    const userId = req.params.userId;
+    const user_id = req.params.userId;
     const query = `
       SELECT * FROM user_shoes
       WHERE user_id = $1
     `;
-    const userShoes = await pool.query(query, [userId]);
+    const userShoes = await pool.query(query, [user_id]);
     res.json(userShoes.rows);
   } catch (error) {
     console.log(error.message);

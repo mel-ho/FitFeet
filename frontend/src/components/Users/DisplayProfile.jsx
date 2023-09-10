@@ -1,7 +1,256 @@
-import React from "react";
+import React, { useState, useEffect, useContext } from "react";
+import {
+  Box,
+  Button,
+  Paper,
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableHead,
+  TableRow,
+  TextField,
+  Checkbox,
+} from "@mui/material";
+
+import UserContext from "../context/user";
+
+import useFetch from "../hooks/useFetch";
 
 const DisplayProfile = () => {
-  return <div>Display Profile</div>;
+  const userCtx = useContext(UserContext);
+  const [userData, setUserData] = useState({});
+  const [shippingAddress, setShippingAddress] = useState("");
+  const [climbingExperience, setClimbingExperience] = useState({
+    sport_climbing: false,
+    bouldering: false,
+    trad_climbing: false,
+    years_exp: 0,
+  });
+
+  const fetchData = useFetch();
+
+  const getUserProfile = async () => {
+    const user_id = userCtx.userId; // Retrieve user ID from context
+    const res = await fetchData(
+      `/users/users/${user_id}`,
+      "GET",
+      undefined,
+      userCtx.accessToken
+    );
+
+    if (res.ok) {
+      setUserData(res.data);
+    } else {
+      console.error("Error fetching user profile: ", res.data);
+    }
+  };
+
+  const getShippingAddress = async () => {
+    const user_id = userCtx.userId; // Retrieve user ID from context
+    const res = await fetchData(
+      `/users/useraddress/${user_id}`,
+      "GET",
+      undefined,
+      userCtx.accessToken
+    );
+
+    if (res.ok) {
+      setShippingAddress(res.data.shipping_address || "");
+    } else {
+      console.error("Error fetching shipping address: ", res);
+    }
+  };
+
+  const handleSaveAddress = () => {
+    // Make a PATCH request to update the shipping address in the database
+    const user_id = userCtx.userId;
+    const updatedShippingAddress = {
+      shipping_address: shippingAddress,
+    };
+    fetchData(
+      `/users/useraddress/${user_id}`,
+      "PATCH",
+      updatedShippingAddress,
+      userCtx.accessToken
+    )
+      .then((res) => {
+        if (res.ok) {
+          console.log("Shipping address updated successfully.");
+        } else {
+          console.error("Error updating shipping address: ", res.data);
+        }
+      })
+      .catch((error) => {
+        console.error("Error updating shipping address: ", error);
+      });
+  };
+
+  const getClimbingExperience = async () => {
+    const user_id = userCtx.userId; // Retrieve user ID from context
+    const res = await fetchData(
+      `/users/userexp/${user_id}`,
+      "GET",
+      undefined,
+      userCtx.accessToken
+    );
+
+    if (res.ok) {
+      setClimbingExperience(res.data);
+    } else {
+      console.error("Error fetching climbing experience: ", res.data);
+    }
+  };
+
+  // Handler to toggle climbing experience checkboxes
+  const handleClimbingExperienceChange = (experienceName, experienceValue) => {
+    let updatedExperience;
+
+    if (experienceName === "years_exp") {
+      // Convert the input value to an integer
+      const yearsExp = parseInt(experienceValue, 10);
+
+      if (!isNaN(yearsExp)) {
+        // Update years of experience as an integer
+        updatedExperience = {
+          ...climbingExperience,
+          [experienceName]: yearsExp,
+        };
+      } else {
+        // Handle the case where the input is not a valid integer
+        updatedExperience = {
+          ...climbingExperience,
+          [experienceName]: 0, // Set a default value or handle the error as needed
+        };
+      }
+    } else {
+      // Update checkboxes (sport_climbing, bouldering, trad_climbing)
+      updatedExperience = {
+        ...climbingExperience,
+        [experienceName]: !climbingExperience[experienceName],
+      };
+    }
+    setClimbingExperience(updatedExperience);
+
+    // Make a PATCH request to update climbing experience in the database
+    const user_id = userCtx.userId;
+    const updatedClimbingExperience = {
+      ...updatedExperience,
+    };
+    fetchData(
+      `/users/userexp/${user_id}`,
+      "PATCH",
+      updatedClimbingExperience,
+      userCtx.accessToken
+    )
+      .then((res) => {
+        if (res.ok) {
+          console.log("Climbing experience updated successfully.");
+        } else {
+          console.error("Error updating climbing experience: ", res.data);
+        }
+      })
+      .catch((error) => {
+        console.error("Error updating climbing experience: ", error);
+      });
+  };
+
+  useEffect(() => {
+    getUserProfile();
+    getClimbingExperience();
+    getShippingAddress();
+  }, []);
+
+  return (
+    <Box>
+      <TableContainer component={Paper}>
+        <Table sx={{ minWidth: 650 }} aria-label="simple table">
+          <TableBody>
+            <TableRow>
+              <TableCell>Email</TableCell>
+              <TableCell>{userData.email}</TableCell>
+            </TableRow>
+            <TableRow>
+              <TableCell>Shipping Address</TableCell>
+              <TableCell>
+                <TextField
+                  aria-label="Shipping Address"
+                  type="text"
+                  placeholder="Enter an address"
+                  value={shippingAddress}
+                  onChange={(e) => setShippingAddress(e.target.value)}
+                />
+              </TableCell>
+              <TableCell>
+                <Button variant="contained" onClick={handleSaveAddress}>
+                  Save
+                </Button>
+              </TableCell>
+            </TableRow>
+          </TableBody>
+        </Table>
+      </TableContainer>
+
+      {/* Display Climbing Experience */}
+      <Paper>
+        <TableContainer>
+          <Table>
+            <TableHead>
+              <TableRow>
+                <TableCell>Climbing Experience</TableCell>
+              </TableRow>
+            </TableHead>
+            <TableRow>
+              <TableCell>Sport Climbing</TableCell>
+              <TableCell align="left">
+                <Checkbox
+                  checked={climbingExperience.sport_climbing}
+                  onChange={() =>
+                    handleClimbingExperienceChange("sport_climbing")
+                  }
+                />
+              </TableCell>
+            </TableRow>
+            <TableRow>
+              <TableCell>Bouldering</TableCell>
+              <TableCell align="left">
+                <Checkbox
+                  checked={climbingExperience.bouldering}
+                  onChange={() => handleClimbingExperienceChange("bouldering")}
+                />
+              </TableCell>
+              <TableCell>{climbingExperience.bouldering}</TableCell>
+            </TableRow>
+            <TableRow>
+              <TableCell>Trad Climbing</TableCell>
+              <TableCell align="left">
+                <Checkbox
+                  checked={climbingExperience.trad_climbing}
+                  onChange={() =>
+                    handleClimbingExperienceChange("trad_climbing")
+                  }
+                />
+              </TableCell>
+            </TableRow>
+            <TableRow>
+              <TableCell>Years of Experience</TableCell>
+              <TableCell>
+                <TextField
+                  aria-label="Years of Experience"
+                  type="number"
+                  placeholder="Type a number…"
+                  value={climbingExperience.years_exp}
+                  onChange={(e) =>
+                    handleClimbingExperienceChange("years_exp", e.target.value)
+                  }
+                />
+              </TableCell>
+            </TableRow>
+          </Table>
+        </TableContainer>
+      </Paper>
+    </Box>
+  );
 };
 
 export default DisplayProfile;

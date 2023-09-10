@@ -15,7 +15,7 @@ const addNewRetailer = async (req, res) => {
     try {
       // Check if the provided email exists in the users table
       const checkUserQuery = `
-        SELECT id, is_retailer FROM users WHERE email = $1
+        SELECT retailer_id, is_retailer FROM users WHERE email = $1
       `;
       const checkUserResult = await client.query(checkUserQuery, [email]);
 
@@ -23,24 +23,24 @@ const addNewRetailer = async (req, res) => {
         return res.status(404).json({ status: "error", msg: "User not found" });
       }
 
-      const userId = checkUserResult.rows[0].id;
-      const isRetailer = checkUserResult.rows[0].is_retailer;
+      const user_id = checkUserResult.rows[0].user_id;
+      const is_retailer = checkUserResult.rows[0].is_retailer;
 
       // If the user is already a retailer, return an error
-      if (isRetailer) {
+      if (is_retailer) {
         return res
           .status(400)
           .json({ status: "error", msg: "User is already a retailer" });
       }
 
       // Insert the new retailer into the retailers table
-      const retailerId = uuidv4(); // Generate a new UUID for the retailer
+      const retailer_id = uuidv4(); // Generate a new UUID for the retailer
       const insertRetailerQuery = `
-        INSERT INTO retailers (id, name, contact_detail, contact_address)
+        INSERT INTO retailers (retailer_id, name, contact_detail, contact_address)
         VALUES ($1, $2, $3, $4)
       `;
       const retailerValues = [
-        retailerId,
+        retailer_id,
         name,
         contact_detail,
         contact_address,
@@ -51,9 +51,9 @@ const addNewRetailer = async (req, res) => {
       const updateUserQuery = `
         UPDATE users
         SET is_retailer = TRUE, retailer_id = $1
-        WHERE id = $2
+        WHERE user_id = $2
       `;
-      await client.query(updateUserQuery, [retailerId, userId]);
+      await client.query(updateUserQuery, [retailer_id, user_id]);
 
       // Commit the transaction
       await client.query("COMMIT");
@@ -61,7 +61,7 @@ const addNewRetailer = async (req, res) => {
       res.json({
         status: "success",
         msg: "New retailer added",
-        retailerId: retailerId,
+        retailer_id: retailer_id,
       });
     } catch (error) {
       // If any error occurs, rollback the transaction and handle the error
@@ -81,14 +81,14 @@ const addNewRetailer = async (req, res) => {
 const getAllRetailers = async (req, res) => {
   try {
     const query = `
-      SELECT u.id AS user_id,
-        u.email AS user_email,
-        r.id AS retailer_id,
+      SELECT u.user_id AS user_id,
+        u.email AS email,
+        r.retailer_id AS retailer_id,
         r.name AS retailer_name,
         r.contact_detail AS retailer_contact_detail,
         r.contact_address AS retailer_contact_address
       FROM users u
-      JOIN retailers r ON u.retailer_id = r.id
+      JOIN retailers r ON u.retailer_id = r.retailer_id
       WHERE u.is_retailer = TRUE
     `;
 
@@ -103,20 +103,20 @@ const getAllRetailers = async (req, res) => {
 // GET retailer By ID
 const getRetailerById = async (req, res) => {
   try {
-    const retailerId = req.params.retailerId;
+    const retailer_id = req.params.retailerId;
     const query = `
-      SELECT u.id AS user_id,
-        u.email AS user_email,
-        r.id AS retailer_id,
+      SELECT u.user_id AS user_id,
+        u.email AS email,
+        r.retailer_id AS retailer_id,
         r.name AS retailer_name,
         r.contact_detail AS retailer_contact_detail,
         r.contact_address AS retailer_contact_address
       FROM users u
-      JOIN retailers r ON u.retailer_id = r.id
-      WHERE r.id = $1
+      JOIN retailers r ON u.user_id = r.retailer_id
+      WHERE r.retailer_id = $1
         AND u.is_retailer = TRUE
     `;
-    const retailer = await pool.query(query, [retailerId]);
+    const retailer = await pool.query(query, [retailer_id]);
     if (retailer.rows.length === 0) {
       return res
         .status(404)
@@ -132,16 +132,16 @@ const getRetailerById = async (req, res) => {
 // UPDATE retailer details By Retailer ID
 const patchRetailerByRetailerId = async (req, res) => {
   try {
-    const retailerId = req.params.retailerId;
+    const retailer_id = req.params.retailerId;
     const { name, contact_detail, contact_address } = req.body;
 
     const query = `
       UPDATE retailers
       SET name = $1, contact_detail = $2, contact_address = $3
-      WHERE id = $4
+      WHERE retailer_id = $4
     `;
 
-    const values = [name, contact_detail, contact_address, retailerId];
+    const values = [name, contact_detail, contact_address, retailer_id];
     await pool.query(query, values);
 
     res.json({ status: "success", msg: "Retailer details updated" });
@@ -154,19 +154,19 @@ const patchRetailerByRetailerId = async (req, res) => {
 // ADD new product
 const addNewProduct = async (req, res) => {
   try {
-    const { retailerId, shoeId, datePurchased, quantity } = req.body;
+    const { retailer_id, shoe_id, datePurchased, quantity } = req.body;
     const query = `
       INSERT INTO products (retailer_id, shoe_id, date_purchased, quantity)
       VALUES ($1, $2, $3, $4)
-      RETURNING id
+      RETURNING product_id
     `;
-    const values = [retailerId, shoeId, datePurchased, quantity];
+    const values = [retailer_id, shoe_id, date_purchased, quantity];
     const newProduct = await pool.query(query, values);
 
     res.json({
       status: "success",
       msg: "New product added",
-      productId: newProduct.rows[0].id,
+      product_id: newProduct.rows[0].product_id,
     });
   } catch (error) {
     console.log(error.message);
@@ -177,19 +177,19 @@ const addNewProduct = async (req, res) => {
 // GET all products by retailer ID
 const getAllProductsByRetailerId = async (req, res) => {
   try {
-    const retailerId = req.params.retailerId;
+    const retailer_id = req.params.retailerId;
     const query = `
-      SELECT p.id AS product_id,
+      SELECT p.product_id AS product_id,
         p.shoe_id,
         p.date_purchased,
         p.quantity AS product_quantity,
-        r.id AS retailer_id,
+        r.retailer_id AS retailer_id,
         r.name AS retailer_name
       FROM products p
-      JOIN retailers r ON p.retailer_id = r.id
-      WHERE r.id = $1
+      JOIN retailers r ON p.retailer_id = r.retailer_id
+      WHERE r.retailer_id = $1
     `;
-    const products = await pool.query(query, [retailerId]);
+    const products = await pool.query(query, [retailer_id]);
     res.json(products.rows);
   } catch (error) {
     console.log(error.message);
@@ -200,19 +200,19 @@ const getAllProductsByRetailerId = async (req, res) => {
 // GET product by productID
 const getProductByProductId = async (req, res) => {
   try {
-    const productId = req.params.productId;
+    const product_id = req.params.productId;
     const query = `
-      SELECT p.id AS product_id,
+      SELECT p.product_id AS product_id,
         p.shoe_id,
         p.date_purchased,
         p.quantity AS product_quantity,
-        r.id AS retailer_id,
+        r.retailer_id AS retailer_id,
         r.name AS retailer_name
       FROM products p
-      JOIN retailers r ON p.retailer_id = r.id
-      WHERE p.id = $1
+      JOIN retailers r ON p.retailer_id = r.retailer_id
+      WHERE p.product_id = $1
     `;
-    const product = await pool.query(query, [productId]);
+    const product = await pool.query(query, [product_id]);
 
     // Check if a product with the specified ID exists
     if (product.rows.length === 0) {
@@ -231,14 +231,14 @@ const getProductByProductId = async (req, res) => {
 // UPDATE product quantity by product ID
 const updateProductQuantitybyProductId = async (req, res) => {
   try {
-    const productId = req.params.productId;
+    const product_id = req.params.productId;
     const { quantity } = req.body;
     const query = `
       UPDATE products
       SET quantity = $1
-      WHERE id = $2
+      WHERE product_id = $2
     `;
-    const values = [quantity, productId];
+    const values = [quantity, product_id];
     await pool.query(query, values);
 
     res.json({ status: "success", msg: "Product quantity updated" });
@@ -253,7 +253,7 @@ const addNewOrder = async (req, res) => {
   const client = await pool.connect();
 
   try {
-    const { retailerId, productId, quantity, orderDate, orderStatus } =
+    const { retailer_id, product_id, quantity, order_date, order_status } =
       req.body;
 
     // Start a transaction
@@ -263,25 +263,25 @@ const addNewOrder = async (req, res) => {
     const insertOrderQuery = `
       INSERT INTO orders (retailer_id, product_id, quantity, order_date, order_status)
       VALUES ($1, $2, $3, $4, $5)
-      RETURNING id
+      RETURNING order_id
     `;
     const orderValues = [
-      retailerId,
-      productId,
+      retailer_id,
+      product_id,
       quantity,
-      orderDate,
-      orderStatus,
+      order_date,
+      order_status,
     ];
     const newOrder = await client.query(insertOrderQuery, orderValues);
-    const orderId = newOrder.rows[0].id;
+    const order_id = newOrder.rows[0].order_id;
 
     // Update the product quantity in the products table
     const updateProductQuantityQuery = `
       UPDATE products
       SET quantity = quantity - $1
-      WHERE id = $2
+      WHERE product_id = $2
     `;
-    const updateValues = [quantity, productId];
+    const updateValues = [quantity, product_id];
     await client.query(updateProductQuantityQuery, updateValues);
 
     // Commit the transaction
@@ -290,7 +290,7 @@ const addNewOrder = async (req, res) => {
     res.json({
       status: "success",
       msg: "New order added",
-      orderId: orderId,
+      order_id: order_id,
     });
   } catch (error) {
     // If an error occurs, roll back the transaction
@@ -306,9 +306,9 @@ const addNewOrder = async (req, res) => {
 // GET all orders by retailer ID
 const getAllOrdersByRetailerId = async (req, res) => {
   try {
-    const retailerId = req.params.retailerId;
+    const retailer_id = req.params.retailerId;
     const query = `
-      SELECT o.id AS order_id,
+      SELECT o.order_id AS order_id,
         o.product_id,
         o.quantity AS order_quantity,
         o.order_date,
@@ -318,10 +318,10 @@ const getAllOrdersByRetailerId = async (req, res) => {
         p.date_purchased,
         p.quantity AS product_quantity
       FROM orders o
-      JOIN products p ON o.product_id = p.id
+      JOIN products p ON o.product_id = p.product_id
       WHERE p.retailer_id = $1
     `;
-    const orders = await pool.query(query, [retailerId]);
+    const orders = await pool.query(query, [retailer_id]);
     res.json(orders.rows);
   } catch (error) {
     console.log(error.message);
@@ -332,9 +332,9 @@ const getAllOrdersByRetailerId = async (req, res) => {
 // GET order by orderID
 const getOrderById = async (req, res) => {
   try {
-    const orderId = req.params.orderId;
+    const order_id = req.params.orderId;
     const query = `
-      SELECT o.id AS order_id,
+      SELECT o.order_id AS order_id,
         o.product_id,
         o.quantity AS order_quantity,
         o.order_date,
@@ -344,10 +344,10 @@ const getOrderById = async (req, res) => {
         p.date_purchased,
         p.quantity AS product_quantity
       FROM orders o
-      JOIN products p ON o.product_id = p.id
-      WHERE o.id = $1
+      JOIN products p ON o.product_id = p.product_id
+      WHERE o.order_id = $1
     `;
-    const order = await pool.query(query, [orderId]);
+    const order = await pool.query(query, [order_id]);
 
     // Check if an order with the specified ID exists
     if (order.rows.length === 0) {
@@ -364,14 +364,14 @@ const getOrderById = async (req, res) => {
 // UPDATE order_status by order ID
 const updateOrderStatusByOrderId = async (req, res) => {
   try {
-    const orderId = req.params.orderId;
-    const { orderStatus } = req.body;
+    const order_id = req.params.orderId;
+    const { order_status } = req.body;
     const query = `
       UPDATE orders
       SET order_status = $1
-      WHERE id = $2
+      WHERE order_id = $2
     `;
-    const values = [orderStatus, orderId];
+    const values = [order_status, order_id];
     await pool.query(query, values);
 
     res.json({ status: "success", msg: "Order status updated" });

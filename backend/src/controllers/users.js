@@ -16,12 +16,12 @@ const getAllUsers = async (req, res) => {
 // GET user By userId
 const getUserById = async (req, res) => {
   try {
-    const userId = req.params.userId;
+    const user_id = req.params.userId;
     const query = `
       SELECT * FROM users
-      WHERE id = $1
+      WHERE user_id = $1
     `;
-    const user = await pool.query(query, [userId]);
+    const user = await pool.query(query, [user_id]);
     if (user.rows.length === 0) {
       return res.status(404).json({ status: "error", msg: "User not found" });
     }
@@ -35,7 +35,7 @@ const getUserById = async (req, res) => {
 // UPDATE user login related details By userId
 const patchUser = async (req, res) => {
   try {
-    const userId = req.params.userId;
+    const user_id = req.params.userId;
     const { email, is_retailer, retailer_id, is_admin, is_active } = req.body;
     const query = `
       UPDATE users
@@ -44,7 +44,7 @@ const patchUser = async (req, res) => {
           retailer_id = $3,
           is_admin = $4,
           is_active = $5
-      WHERE id = $6
+      WHERE user_id = $6
     `;
     const values = [
       email,
@@ -52,7 +52,7 @@ const patchUser = async (req, res) => {
       retailer_id,
       is_admin,
       is_active,
-      userId,
+      user_id,
     ];
     await pool.query(query, values);
     res.json({ status: "success", msg: "User details updated" });
@@ -65,9 +65,8 @@ const patchUser = async (req, res) => {
 // add user climbing exerience by userId
 const addUserClimbingExperience = async (req, res) => {
   try {
-    const userId = req.params.userId;
-    const { sportClimbing, bouldering, tradClimbing, yearsOfExperience } =
-      req.body;
+    const user_id = req.params.userId;
+    const { sport_climbing, bouldering, trad_climbing, years_exp } = req.body;
 
     const query = `
       INSERT INTO users_climbingexp (user_id, sport_climbing, bouldering, trad_climbing, years_exp)
@@ -75,11 +74,11 @@ const addUserClimbingExperience = async (req, res) => {
     `;
 
     const values = [
-      userId,
-      sportClimbing,
+      user_id,
+      sport_climbing,
       bouldering,
-      tradClimbing,
-      yearsOfExperience,
+      trad_climbing,
+      years_exp,
     ];
     await pool.query(query, values);
 
@@ -102,43 +101,43 @@ const addUserClimbingExperience = async (req, res) => {
 // add feet dimension by userId
 const addUserFeetDimensions = async (req, res) => {
   try {
-    const userId = req.params.userId;
+    const user_id = req.params.userId;
     const {
-      footLengthL,
-      footLengthR,
-      footWidthL,
-      footWidthR,
-      toeLengthL,
-      toeLengthR,
-      smallPerimL,
-      smallPerimR,
-      bigPerimL,
-      bigPerimR,
-      heelPerimL,
-      heelPerimR,
+      foot_length_l,
+      foot_length_r,
+      foot_width_l,
+      foot_width_r,
+      toe_length_l,
+      toe_length_r,
+      small_perim_l,
+      small_perim_r,
+      big_perim_l,
+      big_perim_r,
+      heel_perim_l,
+      heel_perim_r,
     } = req.body;
-
+    console.log("req.body", req.body);
     const query = `
-      INSERT INTO user_feet (user_id, foot_length_L, foot_length_R, foot_width_L, foot_width_R,
-        toe_length_L, toe_length_R, small_perim_L, small_perim_R, big_perim_L, big_perim_R,
-        heel_perim_L, heel_perim_R)
+      INSERT INTO user_feet (user_id, foot_length_l, foot_length_r, foot_width_l, foot_width_r,
+        toe_length_l, toe_length_r, small_perim_l, small_perim_r, big_perim_l, big_perim_r,
+        heel_perim_l, heel_perim_r)
       VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13)
     `;
 
     const values = [
-      userId,
-      footLengthL,
-      footLengthR,
-      footWidthL,
-      footWidthR,
-      toeLengthL,
-      toeLengthR,
-      smallPerimL,
-      smallPerimR,
-      bigPerimL,
-      bigPerimR,
-      heelPerimL,
-      heelPerimR,
+      user_id,
+      foot_length_l,
+      foot_length_r,
+      foot_width_l,
+      foot_width_r,
+      toe_length_l,
+      toe_length_r,
+      small_perim_l,
+      small_perim_r,
+      big_perim_l,
+      big_perim_r,
+      heel_perim_l,
+      heel_perim_r,
     ];
     await pool.query(query, values);
 
@@ -157,7 +156,7 @@ const addUserFeetDimensions = async (req, res) => {
 // add user_address by userId
 const addUserAddress = async (req, res) => {
   try {
-    const userId = req.params.userId;
+    const user_id = req.params.userId;
     const { shipping_address } = req.body;
 
     const query = `
@@ -165,7 +164,7 @@ const addUserAddress = async (req, res) => {
       VALUES ($1, $2 )
     `;
 
-    const values = [userId, shipping_address];
+    const values = [user_id, shipping_address];
     await pool.query(query, values);
 
     res.json({
@@ -187,12 +186,12 @@ const addUserAddress = async (req, res) => {
 // get user climbing experience by userId
 const getUserClimbingExperience = async (req, res) => {
   try {
-    const userId = req.params.userId;
+    const user_id = req.params.userId;
     const query = `
       SELECT * FROM users_climbingexp
       WHERE user_id = $1
     `;
-    const climbingExp = await pool.query(query, [userId]);
+    const climbingExp = await pool.query(query, [user_id]);
     if (climbingExp.rows.length === 0) {
       return res
         .status(404)
@@ -208,12 +207,12 @@ const getUserClimbingExperience = async (req, res) => {
 // get feet dimension by userId
 const getUserFeetDimensions = async (req, res) => {
   try {
-    const userId = req.params.userId;
+    const user_id = req.params.userId;
     const query = `
       SELECT * FROM user_feet
       WHERE user_id = $1
     `;
-    const feetDimensions = await pool.query(query, [userId]);
+    const feetDimensions = await pool.query(query, [user_id]);
     if (feetDimensions.rows.length === 0) {
       return res
         .status(404)
@@ -229,12 +228,12 @@ const getUserFeetDimensions = async (req, res) => {
 // get user_address by UserId
 const getUserAddress = async (req, res) => {
   try {
-    const userId = req.params.userId;
+    const user_id = req.params.userId;
     const query = `
       SELECT * FROM user_address
       WHERE user_id = $1
     `;
-    const address = await pool.query(query, [userId]);
+    const address = await pool.query(query, [user_id]);
     if (address.rows.length === 0) {
       return res
         .status(404)
@@ -250,16 +249,16 @@ const getUserAddress = async (req, res) => {
 // update user climbing experience by userId
 const updateUserClimbingExperience = async (req, res) => {
   try {
-    const userId = req.params.userId;
+    const user_id = req.params.userId;
     const { sport_climbing, bouldering, trad_climbing, years_exp } = req.body;
 
-    // Check if the userId exists in the users_climbingexp table
+    // Check if the user_id exists in the users_climbingexp table
     const userExistsQuery = `
       SELECT *
       FROM users_climbingexp
       WHERE user_id = $1
     `;
-    const userExistsResult = await pool.query(userExistsQuery, [userId]);
+    const userExistsResult = await pool.query(userExistsQuery, [user_id]);
 
     if (userExistsResult.rows.length === 0) {
       return res
@@ -278,7 +277,7 @@ const updateUserClimbingExperience = async (req, res) => {
       bouldering,
       trad_climbing,
       years_exp,
-      userId,
+      user_id,
     ];
     await pool.query(query, values);
 
@@ -292,29 +291,29 @@ const updateUserClimbingExperience = async (req, res) => {
 // update feet dimension by userId
 const updateUserFeetDimensions = async (req, res) => {
   try {
-    const userId = req.params.userId;
+    const user_id = req.params.userId;
     const {
-      footLengthL,
-      footLengthR,
-      footWidthL,
-      footWidthR,
-      toeLengthL,
-      toeLengthR,
-      smallPerimL,
-      smallPerimR,
-      bigPerimL,
-      bigPerimR,
-      heelPerimL,
-      heelPerimR,
+      foot_length_l,
+      foot_length_r,
+      foot_width_l,
+      foot_width_r,
+      toe_length_l,
+      toe_length_r,
+      small_perim_l,
+      small_perim_r,
+      big_perim_l,
+      big_perim_r,
+      heel_perim_l,
+      heel_perim_r,
     } = req.body;
 
-    // Check if the userId exists in the user_feet table
+    // Check if the user_id exists in the user_feet table
     const userExistsQuery = `
       SELECT 1
       FROM user_feet
       WHERE user_id = $1
     `;
-    const userExistsResult = await pool.query(userExistsQuery, [userId]);
+    const userExistsResult = await pool.query(userExistsQuery, [user_id]);
 
     if (userExistsResult.rows.length === 0) {
       return res
@@ -324,26 +323,26 @@ const updateUserFeetDimensions = async (req, res) => {
 
     const query = `
       UPDATE user_feet
-      SET foot_length_L = $1, foot_length_R = $2, foot_width_L = $3, foot_width_R = $4,
-          toe_length_L = $5, toe_length_R = $6, small_perim_L = $7, small_perim_R = $8,
-          big_perim_L = $9, big_perim_R = $10, heel_perim_L = $11, heel_perim_R = $12
+      SET foot_length_l = $1, foot_length_r = $2, foot_width_l = $3, foot_width_r = $4,
+          toe_length_l = $5, toe_length_r = $6, small_perim_l = $7, small_perim_r = $8,
+          big_perim_l = $9, big_perim_r = $10, heel_perim_l = $11, heel_perim_r = $12, user_id = $13
       WHERE user_id = $13
     `;
 
     const values = [
-      footLengthL,
-      footLengthR,
-      footWidthL,
-      footWidthR,
-      toeLengthL,
-      toeLengthR,
-      smallPerimL,
-      smallPerimR,
-      bigPerimL,
-      bigPerimR,
-      heelPerimL,
-      heelPerimR,
-      userId,
+      foot_length_l,
+      foot_length_r,
+      foot_width_l,
+      foot_width_r,
+      toe_length_l,
+      toe_length_r,
+      small_perim_l,
+      small_perim_r,
+      big_perim_l,
+      big_perim_r,
+      heel_perim_l,
+      heel_perim_r,
+      user_id,
     ];
     await pool.query(query, values);
 
@@ -357,16 +356,16 @@ const updateUserFeetDimensions = async (req, res) => {
 // update user_address by userId
 const updateUserAddress = async (req, res) => {
   try {
-    const userId = req.params.userId;
+    const user_id = req.params.userId;
     const { shipping_address } = req.body;
 
-    // Check if the userId exists in the user_address table
+    // Check if the user_id exists in the user_address table
     const userExistsQuery = `
       SELECT 1
       FROM user_address
       WHERE user_id = $1
     `;
-    const userExistsResult = await pool.query(userExistsQuery, [userId]);
+    const userExistsResult = await pool.query(userExistsQuery, [user_id]);
 
     if (userExistsResult.rows.length === 0) {
       return res
@@ -380,7 +379,7 @@ const updateUserAddress = async (req, res) => {
       WHERE user_id = $2
     `;
 
-    const values = [shipping_address, userId];
+    const values = [shipping_address, user_id];
     await pool.query(query, values);
 
     res.json({ status: "success", msg: "User address updated" });

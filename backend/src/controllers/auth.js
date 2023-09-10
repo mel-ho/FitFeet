@@ -19,11 +19,11 @@ const registerUser = async (req, res) => {
     }
 
     const hashedPassword = await bcrypt.hash(password, 12);
-    const userId = uuidv4();
+    const user_id = uuidv4();
 
     await pool.query(
-      "INSERT INTO users (id, email, password, is_active) VALUES ($1, $2, $3, $4)",
-      [userId, email, hashedPassword, true]
+      "INSERT INTO users (user_id, email, password, is_active) VALUES ($1, $2, $3, $4)",
+      [user_id, email, hashedPassword, true]
     );
 
     res.json({ status: "success", msg: "User registration successful" });
@@ -64,7 +64,7 @@ const loginUser = async (req, res) => {
     }
 
     const claims = {
-      id: userData.id,
+      user_id: userData.user_id,
       email: userData.email,
       is_active: userData.is_active,
       is_retailer: userData.is_retailer,
@@ -93,7 +93,7 @@ const refresh = (req, res) => {
   try {
     const decoded = jwt.verify(req.body.refresh, process.env.REFRESH_SECRET);
     const claims = {
-      id: decoded.id,
+      user_id: decoded.user_id,
       email: decoded.email,
       is_active: decoded.is_active,
       is_retailer: decoded.is_retailer,
