@@ -20,9 +20,11 @@ const SizeAdd = () => {
   const [sizeCountries, setSizeCountries] = useState([]);
   const [sizesData, setSizesData] = useState([]);
   const [errorMessage, setErrorMessage] = useState("");
+  const [isLoading, setIsLoading] = useState(false); // New loading state
   const fetchData = useFetch();
 
   const fetchCountries = async () => {
+    setIsLoading(true); // Set loading state to true
     try {
       const response = await fetchData(
         "/shoes/sizecountry",
@@ -32,14 +34,16 @@ const SizeAdd = () => {
       );
       if (response.ok) {
         setSizeCountries(response.data);
+        setIsLoading(false); // Set loading state to false
       } else {
         console.error("Error fetching countries:", response.data);
+        setIsLoading(false); // Set loading state to false
       }
     } catch (error) {
       console.error("Error fetching countries:", error);
+      setIsLoading(false); // Set loading state to false
     }
   };
-
   useEffect(() => {
     fetchCountries();
   }, []);
@@ -120,6 +124,7 @@ const SizeAdd = () => {
   const handleCountryChange = (event) => {
     setSelectedCountry(event.target.value);
   };
+  console.log("Size Countries:", sizeCountries);
 
   return (
     <Box>
@@ -134,30 +139,37 @@ const SizeAdd = () => {
             id="size-country-select"
             value={selectedCountry}
             onChange={handleCountryChange}
+            sx={{ m: 1, minWidth: 120 }}
           >
             <MenuItem value="">
               <em>Select Country</em>
             </MenuItem>
-            {sizeCountries.map((country) => (
-              <MenuItem key={country} value={country}>
-                {country}
+            {!isLoading ? (
+              sizeCountries.map((country) => (
+                <MenuItem key={country} value={country}>
+                  {country}
+                </MenuItem>
+              ))
+            ) : (
+              <MenuItem value="" disabled>
+                Loading...
               </MenuItem>
-            ))}
+            )}
           </Select>
+
+          <TextField
+            type="text"
+            placeholder="Enter size"
+            sx={{ m: 1, minWidth: 120 }}
+            size="small"
+            value={newSize}
+            onChange={(e) => setNewSize(e.target.value)}
+          />
+
+          <Button variant="contained" onClick={handleAddSize}>
+            Add Size
+          </Button>
         </FormControl>
-        <TextField
-          type="text"
-          placeholder="Enter size"
-          sx={{ m: 1, minWidth: 120 }}
-          size="small"
-          value={newSize}
-          onChange={(e) => setNewSize(e.target.value)}
-        />
-
-        <Button variant="contained" onClick={handleAddSize}>
-          Add
-        </Button>
-
         {errorMessage && (
           <Typography variant="body2" color="error">
             {errorMessage}

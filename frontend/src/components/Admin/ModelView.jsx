@@ -3,7 +3,7 @@ import { Box, Paper, Typography, TableCell } from "@mui/material";
 import UserContext from "../context/user";
 import useFetch from "../hooks/useFetch";
 
-const ModelSelect = () => {
+const ModelView = () => {
   const userCtx = useContext(UserContext);
   const [models, setModels] = useState([]);
   const fetchData = useFetch();
@@ -42,4 +42,4 @@ const ModelSelect = () => {
   );
 };
 
-export default ModelSelect;
+export default ModelView;

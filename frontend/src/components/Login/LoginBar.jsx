@@ -7,6 +7,7 @@ import {
   AppBar,
   Toolbar,
   Box,
+  Container,
   Grid,
   InputAdornment,
   IconButton,
@@ -61,10 +62,10 @@ const LoginBar = () => {
     <Box sx={{ flexGrow: 1 }}>
       <AppBar position="fixed">
         <Toolbar sx={{ justifyContent: "space-between" }}>
-          <div>
+          <>
             <img src="/fitfeetlogo.png" height="50px" />
-          </div>
-          <div>
+          </>
+          <>
             <Grid container spacing={1} alignItems="center">
               <Grid item>
                 <TextField
@@ -117,7 +118,7 @@ const LoginBar = () => {
                 </Button>
               </Grid>
             </Grid>
-          </div>
+          </>
         </Toolbar>
       </AppBar>
     </Box>

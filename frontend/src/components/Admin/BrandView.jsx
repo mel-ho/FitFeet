@@ -3,7 +3,7 @@ import { Box, Paper, Typography, TableCell } from "@mui/material";
 import UserContext from "../context/user";
 import useFetch from "../hooks/useFetch";
 
-const BrandSelect = () => {
+const BrandView = () => {
   const userCtx = useContext(UserContext);
   const [brands, setBrands] = useState([]);
   const fetchData = useFetch();
@@ -41,4 +41,4 @@ const BrandSelect = () => {
   );
 };
 
-export default BrandSelect;
+export default BrandView;

@@ -169,18 +169,36 @@ const getSizesbyCountry = async (req, res) => {
   }
 };
 
-// Add a new pair of shoes by brand, model, and size
 const addShoes = async (req, res) => {
   try {
-    const { brand, model, size_id } = req.body;
+    const { brand, model, size_country, size_number } = req.body;
+
+    // Lookup size_id using size_country and size_number
+    const sizeIdQuery = `
+      SELECT size_id FROM sizes
+      WHERE size_country = $1 AND size_number = $2
+    `;
+    const sizeResult = await pool.query(sizeIdQuery, [
+      size_country,
+      size_number,
+    ]);
+
+    // If size_id is not found, return an error message
+    if (!sizeResult.rows[0]) {
+      return res.status(400).json({
+        status: "error",
+        msg: "Size not found.",
+      });
+    }
+
+    const size_id = sizeResult.rows[0].size_id;
 
     // Insert the new pair of shoes into the 'shoes' table
     const insertShoesQuery = `
       INSERT INTO shoes (brand, model, size_id)
       VALUES ($1, $2, $3)
     `;
-    const values = [brand, model, size_id];
-    await pool.query(insertShoesQuery, values);
+    await pool.query(insertShoesQuery, [brand, model, size_id]);
 
     res.json({
       status: "success",
@@ -192,11 +210,12 @@ const addShoes = async (req, res) => {
   }
 };
 
-// Get all shoes
 const getAllShoes = async (req, res) => {
   try {
     const query = `
-      SELECT * FROM shoes
+      SELECT shoes.*, sizes.size_country, sizes.size_number
+      FROM shoes
+      JOIN sizes ON shoes.size_id = sizes.size_id
     `;
     const shoes = await pool.query(query);
     res.json(shoes.rows);

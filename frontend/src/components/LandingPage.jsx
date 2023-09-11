@@ -1,7 +1,5 @@
 import React from "react";
-
 import { Button, Container, Stack } from "@mui/material";
-
 import LoginBar from "./Login/LoginBar";
 
 const LandingPage = () => {

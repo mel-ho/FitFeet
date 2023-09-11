@@ -1,7 +1,7 @@
 import React from "react";
 
 const RetailerProfile = () => {
-  return <div></div>;
+  return <></>;
 };
 
 export default RetailerProfile;

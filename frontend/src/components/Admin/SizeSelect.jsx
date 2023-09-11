@@ -11,7 +11,7 @@ import {
 import UserContext from "../context/user";
 import useFetch from "../hooks/useFetch";
 
-const SizeSelect = () => {
+const SizeSelect = ({ onSizeChange }) => {
   const userCtx = useContext(UserContext);
   const [sizeCountries, setSizeCountries] = useState([]);
   const [selectedSizeCountry, setSelectedSizeCountry] = useState("");
@@ -48,6 +48,13 @@ const SizeSelect = () => {
     getSizes();
   }, []);
 
+  useEffect(() => {
+    // Inform parent component about the selected size country and size number
+    if (selectedSizeCountry && selectedSizeNumber) {
+      onSizeChange(selectedSizeCountry, selectedSizeNumber);
+    }
+  }, [selectedSizeCountry, selectedSizeNumber]);
+
   const handleSizeCountryChange = async (event) => {
     const selectedCountry = event.target.value;
     setSelectedSizeCountry(selectedCountry);
@@ -73,8 +80,9 @@ const SizeSelect = () => {
     setSelectedSizeNumber(""); // Clear the selected size number
   };
 
-  const handleSizeNumberChange = (event) => {
+  const handleLocalSizeNumberChange = (event) => {
     setSelectedSizeNumber(event.target.value);
+    onSizeChange(event);
   };
 
   if (sizeCountries.length === 0) {
@@ -114,7 +122,7 @@ const SizeSelect = () => {
             labelId="size-number-select-label"
             id="size-number-select"
             value={selectedSizeNumber}
-            onChange={handleSizeNumberChange}
+            onChange={handleLocalSizeNumberChange}
           >
             <MenuItem value="">
               <em>Select Size</em>

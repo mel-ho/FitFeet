@@ -11,7 +11,7 @@ import {
 import UserContext from "../context/user";
 import useFetch from "../hooks/useFetch";
 
-const BrandSelect = () => {
+const BrandSelect = ({ onBrandChange }) => {
   const userCtx = useContext(UserContext);
   const [brands, setBrands] = useState([]);
   const [selectedBrand, setSelectedBrand] = useState("");
@@ -38,6 +38,7 @@ const BrandSelect = () => {
 
   const handleBrandChange = (event) => {
     setSelectedBrand(event.target.value);
+    onBrandChange(event);
   };
 
   return (

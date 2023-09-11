@@ -13,7 +13,7 @@ import {
 import UserContext from "../context/user";
 import useFetch from "../hooks/useFetch";
 
-const SizeSelect = () => {
+const SizeView = () => {
   const userCtx = useContext(UserContext);
   const [sizesData, setSizesData] = useState([]);
   const fetchData = useFetch();
@@ -70,4 +70,4 @@ const SizeSelect = () => {
   );
 };
 
-export default SizeSelect;
+export default SizeView;

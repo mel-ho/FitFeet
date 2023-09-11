@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import UserContext from "./components/context/user";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 
-import LandingPage from "./components/landingpage";
+import LandingPage from "./components/LandingPage";
 import UserDisplay from "./components/Users/UserDisplay";
 import RetailerDisplay from "./components/Retailers/RetailerDisplay";
 import AdminDisplay from "./components/Admin/AdminDisplay";

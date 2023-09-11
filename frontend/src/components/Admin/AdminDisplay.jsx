@@ -5,10 +5,12 @@ import SizeManagement from "./SizeMangement";
 import BrandManagement from "./BrandManagement";
 import ModelManagement from "./ModelManagement";
 import { Container, Stack } from "@mui/material";
+import ShoeAdd from "./ShoeAdd";
+import ShoeView from "./ShoeView";
 
 const AdminDisplay = () => {
   return (
-    <div>
+    <>
       <Stack direction="column" spacing={3}>
         <Container>
           <UserBar></UserBar>
@@ -23,9 +25,16 @@ const AdminDisplay = () => {
           <BrandManagement></BrandManagement>
           <hr />
           <ModelManagement></ModelManagement>
+          <hr />
+        </Container>
+
+        <Container>
+          <ShoeAdd></ShoeAdd>
+          <hr />
+          <ShoeView></ShoeView>
         </Container>
       </Stack>
-    </div>
+    </>
   );
 };
 
