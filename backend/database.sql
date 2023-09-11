@@ -79,42 +79,49 @@ VALUES ('fe5f4809-9c2a-47a2-8faf-fe34f43cb2e2', 'FiveTen', '91234567', '5 Tenth 
 
 -- create a constraint table for brands
 CREATE TABLE brands(
-    brand_id SERIAL PRIMARY KEY,
-    brandname VARCHAR(255) NOT NULL UNIQUE
+    brand VARCHAR(255) PRIMARY KEY NOT NULL
 );
 
 -- seeding some data for brands
-INSERT INTO brands (brandname) VALUES ('FiveTen'), ('La Sportiva'), ('Evolv');
+INSERT INTO brands (brand) VALUES ('FiveTen'), ('La Sportiva'), ('Evolv');
 
 
 -- create a constraint table for models
 CREATE TABLE models(
-    model_id SERIAL PRIMARY KEY,
-    brand_id INT,
-    model VARCHAR(255),
-    CONSTRAINT fk_brands FOREIGN KEY (brand_id) REFERENCES brands(brand_id),
-    CONSTRAINT uq_brand_model UNIQUE (brand_id, model)
+    model VARCHAR(255) PRIMARY KEY NOT NULL
 );
 
 -- seeding some data from models
-INSERT INTO models (brand_id, model) VALUES ('1', 'FiveTen Model 1'), ('1', 'FiveTen Model 2'),  ('2', 'La Sportiva Model 1'), ('3', 'Evolv Model 1');
+INSERT INTO models (model) VALUES ('Model 1'), ('Model 2'),  ('Model 3'), ('Model 4');
 
--- create a constraint table for size
+-- create a constraint table for size_countries
+CREATE TABLE size_countries(
+    size_country VARCHAR(255) PRIMARY KEY NOT NULL
+);
+
+INSERT INTO size_countries (size_country) VALUES ('US'), ('EUR'), ('UK');
+
+-- create a table for size
 CREATE TABLE sizes(
     size_id SERIAL PRIMARY KEY,
-    size_us INT NOT NULL UNIQUE
+    size_country VARCHAR(255) NOT NULL,
+    size_number INT NOT NULL,
+    CONSTRAINT fk_size_country FOREIGN KEY (size_country) REFERENCES size_countries(size_country),
+    CONSTRAINT uc_size_country_number UNIQUE (size_country, size_number)
 );
 
 -- seeding data for sizes
-INSERT INTO sizes (size_us) VALUES (2), (3), (4), (5), (6), (7), (8), (9), (10), (11), (12), (13);
-
+INSERT INTO sizes (size_country, size_number) VALUES ('US', 4), ('US', 5), ('US', 6), ('US', 7), ('US', 8), ('US', 9), ('EUR', 37), ('EUR', 38), ('EUR', 39), ('EUR', 40);
 
 CREATE TABLE shoes(
     shoe_id SERIAL PRIMARY KEY,
-    model_id INT NOT NULL,
+    brand VARCHAR(255) NOT NULL,
+    model VARCHAR(255) NOT NULL,
     size_id INT NOT NULL,
-    CONSTRAINT fk_model_id FOREIGN KEY (model_id) REFERENCES models(model_id),
-    CONSTRAINT fk_size_id FOREIGN KEY (size_id) REFERENCES sizes(size_id)
+    CONSTRAINT fk_brand FOREIGN KEY (brand) REFERENCES brands(brand),
+    CONSTRAINT fk_model FOREIGN KEY (model) REFERENCES models(model),
+    CONSTRAINT fk_size_id FOREIGN KEY (size_id) REFERENCES sizes(size_id),
+    CONSTRAINT unique_brand_model_size UNIQUE (brand, model, size_id)
 );
 
 

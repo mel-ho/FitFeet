@@ -6,12 +6,13 @@ import useFetch from "../hooks/useFetch";
 const BrandAdd = () => {
   const userCtx = useContext(UserContext);
   const [newBrand, setNewBrand] = useState("");
+  const [errorMessage, setErrorMessage] = useState(""); // Add error message state
   const fetchData = useFetch();
 
   const handleAddBrand = async () => {
     try {
       const response = await fetchData("/shoes/brand", "PUT", {
-        brandname: newBrand,
+        brand: newBrand,
       });
 
       if (response.ok) {
@@ -24,25 +25,27 @@ const BrandAdd = () => {
 
         if (updatedBrandsResponse.ok) {
           setNewBrand(""); // Clear the input field
+          setErrorMessage(""); // Clear any previous error message
         } else {
           console.error(
             "Error fetching updated brands:",
             updatedBrandsResponse.data
           );
+          setErrorMessage("Error fetching updated brands");
         }
       } else {
         console.error("Error adding brand:", response.data);
+        setErrorMessage("Error adding brand. Brand might already exists");
       }
     } catch (error) {
       console.error("Error adding brand:", error);
+      setErrorMessage("An error occurred while adding the brand.");
     }
   };
 
   return (
     <Box>
       <Paper>
-        <Typography variant="h5">Brand Management</Typography>
-
         <TextField
           type="text"
           placeholder="Enter brand"
@@ -54,6 +57,12 @@ const BrandAdd = () => {
         <Button variant="contained" onClick={handleAddBrand}>
           Add
         </Button>
+
+        {errorMessage && (
+          <Typography variant="body2" color="error">
+            {errorMessage}
+          </Typography>
+        )}
       </Paper>
     </Box>
   );

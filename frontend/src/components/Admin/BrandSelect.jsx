@@ -43,7 +43,7 @@ const BrandSelect = () => {
   return (
     <Box>
       <Paper>
-        <Typography variant="h6">View Brands</Typography>
+        <Typography variant="h6">Select Brands</Typography>
         <FormControl sx={{ m: 1, minWidth: 120 }} size="small">
           <InputLabel id="brand-select-label">Select Brand</InputLabel>
           <Select
@@ -53,8 +53,8 @@ const BrandSelect = () => {
             onChange={handleBrandChange}
           >
             {brands.map((brand) => (
-              <MenuItem key={brand.brand_id} value={brand.brandname}>
-                {brand.brandname}
+              <MenuItem key={brand.brand} value={brand.brand}>
+                {brand.brand}
               </MenuItem>
             ))}
           </Select>
