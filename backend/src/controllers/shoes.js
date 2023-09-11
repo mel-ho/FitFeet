@@ -77,16 +77,6 @@ const getAllModels = async (req, res) => {
   }
 };
 
-// Get models by brand
-const getModelsByBrand = async (req, res) => {
-  try {
-    const { brand } = req.params;
-    const query = `
-    SELECT * FROM models
-    WHERE BRAND`;
-  } catch (error) {}
-};
-
 // Get all size_countries
 const getAllCountries = async (req, res) => {
   try {
@@ -230,8 +220,9 @@ const getShoeByShoeId = async (req, res) => {
   try {
     const shoe_id = req.params.shoeId;
     const query = `
-      SELECT * FROM shoes
-      WHERE shoe_id = $1
+      SELECT shoes.*, sizes.size_country, sizes.size_number
+      FROM shoes
+      JOIN sizes ON shoes.size_id = sizes.size_id
     `;
     const shoe = await pool.query(query, [shoe_id]);
 
@@ -308,12 +299,25 @@ const addUserShoes = async (req, res) => {
   }
 };
 
-// Get all user shoes
 const getAllUserShoes = async (req, res) => {
   try {
     const query = `
-      SELECT * FROM user_shoes
+      SELECT 
+          us.user_shoe_id,
+          us.date_purchased,
+          us.date_worn,
+          us.date_disposed,
+          us.star_rating,
+          us.user_id,
+          sh.brand,
+          sh.model,
+          sz.size_country,
+          sz.size_number
+      FROM user_shoes us
+      INNER JOIN shoes sh ON us.shoe_id = sh.shoe_id
+      INNER JOIN sizes sz ON sh.size_id = sz.size_id
     `;
+
     const userShoes = await pool.query(query);
     res.json(userShoes.rows);
   } catch (error) {
@@ -322,13 +326,25 @@ const getAllUserShoes = async (req, res) => {
   }
 };
 
-// Get all user shoes by user ID
 const getUserShoesByUserId = async (req, res) => {
   try {
     const user_id = req.params.userId;
     const query = `
-      SELECT * FROM user_shoes
-      WHERE user_id = $1
+      SELECT 
+          us.user_shoe_id,
+          us.date_purchased,
+          us.date_worn,
+          us.date_disposed,
+          us.star_rating,
+          us.user_id,
+          sh.brand,
+          sh.model,
+          sz.size_country,
+          sz.size_number
+      FROM user_shoes us
+      INNER JOIN shoes sh ON us.shoe_id = sh.shoe_id
+      INNER JOIN sizes sz ON sh.size_id = sz.size_id
+      WHERE us.user_id = $1
     `;
     const userShoes = await pool.query(query, [user_id]);
     res.json(userShoes.rows);
@@ -338,16 +354,28 @@ const getUserShoesByUserId = async (req, res) => {
   }
 };
 
-// Get a specific user shoes by usershoe ID
 const getUserShoeByUsershoeId = async (req, res) => {
   try {
     const user_shoe_id = req.params.usershoeId;
     const query = `
-        SELECT * FROM user_shoes
-        WHERE user_shoe_id = $1
-      `;
-    const userShoes = await pool.query(query, [user_shoe_id]);
-    res.json(userShoes.rows);
+      SELECT 
+          us.user_shoe_id,
+          us.date_purchased,
+          us.date_worn,
+          us.date_disposed,
+          us.star_rating,
+          us.user_id,
+          sh.brand,
+          sh.model,
+          sz.size_country,
+          sz.size_number
+      FROM user_shoes us
+      INNER JOIN shoes sh ON us.shoe_id = sh.shoe_id
+      INNER JOIN sizes sz ON sh.size_id = sz.size_id
+      WHERE us.user_shoe_id = $1
+    `;
+    const userShoe = await pool.query(query, [user_shoe_id]);
+    res.json(userShoe.rows);
   } catch (error) {
     console.log(error.message);
     res.json({ status: "error", msg: error.message });
