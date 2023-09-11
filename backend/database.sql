@@ -29,6 +29,8 @@ CREATE TABLE user_address(
     CONSTRAINT fk_user_id FOREIGN KEY (user_id) REFERENCES users(user_id) ON DELETE CASCADE
 );
 
+INSERT INTO user_address (user_id, shipping_address) VALUES ('3801f23d-5dea-477e-803e-5d8e61ba38bc', 'This is the address of user@test.com');
+
 -- each user can only have 1 stored feet size detail
 CREATE TABLE user_feet(
     user_id UUID,
@@ -48,8 +50,11 @@ CREATE TABLE user_feet(
     CONSTRAINT fk_user_id FOREIGN KEY (user_id) REFERENCES users(user_id) ON DELETE CASCADE
 );
 
+INSERT INTO user_feet(user_id, foot_length_l, foot_length_r, foot_width_l, foot_width_r, toe_length_l, toe_length_r, small_perim_l, small_perim_r, big_perim_l, big_perim_r, heel_perim_l, heel_perim_r)
+VALUES ('3801f23d-5dea-477e-803e-5d8e61ba38bc', 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1);
+
 -- each user can only have 1 stored climbing experience
-CREATE TABLE users_climbingexp(
+CREATE TABLE user_climbingexp(
     user_id UUID,
     sport_climbing BOOLEAN NOT NULL,
     bouldering BOOLEAN NOT NULL,
@@ -58,6 +63,8 @@ CREATE TABLE users_climbingexp(
     PRIMARY KEY (user_id),
     CONSTRAINT fk_user_id FOREIGN KEY (user_id) REFERENCES users(user_id) ON DELETE CASCADE
 );
+
+INSERT INTO user_climbingexp(user_id, sport_climbing, bouldering, trad_climbing, years_exp) VALUES ('3801f23d-5dea-477e-803e-5d8e61ba38bc', TRUE, TRUE, FALSE, 10);
 
 CREATE TABLE retailers(
     retailer_id UUID PRIMARY KEY,
@@ -73,38 +80,33 @@ VALUES ('fe5f4809-9c2a-47a2-8faf-fe34f43cb2e2', 'FiveTen', '91234567', '5 Tenth 
 -- create a constraint table for brands
 CREATE TABLE brands(
     brand_id SERIAL PRIMARY KEY,
-    brandname VARCHAR(255) NOT NULL
+    brandname VARCHAR(255) NOT NULL UNIQUE
 );
 
 -- seeding some data for brands
-INSERT INTO brands (brandname) VALUES ('FiveTen');
-INSERT INTO brands (brandname) VALUES ('La Sportiva');
-INSERT INTO brands (brandname) VALUES ('Evolv');
+INSERT INTO brands (brandname) VALUES ('FiveTen'), ('La Sportiva'), ('Evolv');
+
 
 -- create a constraint table for models
 CREATE TABLE models(
     model_id SERIAL PRIMARY KEY,
     brand_id INT,
     model VARCHAR(255),
-    CONSTRAINT fk_brands FOREIGN KEY (brand_id) REFERENCES brands(brand_id)
+    CONSTRAINT fk_brands FOREIGN KEY (brand_id) REFERENCES brands(brand_id),
+    CONSTRAINT uq_brand_model UNIQUE (brand_id, model)
 );
 
 -- seeding some data from models
-INSERT INTO models (brand_id, model) VALUES ('1', 'FiveTen Model 1');
-INSERT INTO models (brand_id, model) VALUES ('1', 'FiveTen Model 2');
-INSERT INTO models (brand_id, model) VALUES ('2', 'La Sportiva Model 1');
-INSERT INTO models (brand_id, model) VALUES ('3', 'Evolv Model 1');
+INSERT INTO models (brand_id, model) VALUES ('1', 'FiveTen Model 1'), ('1', 'FiveTen Model 2'),  ('2', 'La Sportiva Model 1'), ('3', 'Evolv Model 1');
 
 -- create a constraint table for size
 CREATE TABLE sizes(
     size_id SERIAL PRIMARY KEY,
-    size_us INT NOT NULL
+    size_us INT NOT NULL UNIQUE
 );
 
 -- seeding data for sizes
-INSERT INTO sizes (size_us) VALUES (5);
-INSERT INTO sizes (size_us) VALUES (6);
-INSERT INTO sizes (size_us) VALUES (7);
+INSERT INTO sizes (size_us) VALUES (2), (3), (4), (5), (6), (7), (8), (9), (10), (11), (12), (13);
 
 
 CREATE TABLE shoes(

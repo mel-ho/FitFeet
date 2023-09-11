@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Box, Grid, Tabs, Tab } from "@mui/material";
+import { Box, Grid, Tabs, Tab, Container, Stack } from "@mui/material";
 import CustomTabPanel from "../Users/CustomTabPanel";
 
 import Orders from "./Orders";
@@ -20,39 +20,43 @@ const RetailerDisplay = () => {
   };
 
   return (
-    <div>
-      <UserBar></UserBar>
-      <h2>Retailer Display Page</h2>
-      <Box sx={{ flexGrow: 1 }}>
-        <Grid container spacing={2}>
-          <Grid item xs={4}>
-            "highlight item 1"
+    <Stack direction="column" spacing={3}>
+      <Container>
+        <UserBar></UserBar>
+      </Container>
+      <Container>
+        <h2>Retailer Display Page</h2>
+        <Box sx={{ flexGrow: 1 }}>
+          <Grid container spacing={2}>
+            <Grid item xs={4}>
+              "highlight item 1"
+            </Grid>
+            <Grid item xs={4}>
+              "highlight item 2"
+            </Grid>
+            <Grid item xs={4}>
+              "highlight item 3"
+            </Grid>
           </Grid>
-          <Grid item xs={4}>
-            "highlight item 2"
-          </Grid>
-          <Grid item xs={4}>
-            "highlight item 3"
-          </Grid>
-        </Grid>
-      </Box>
-      <Box sx={{ borderBottom: 1, borderColor: "divider" }}>
-        <Tabs value={value} onChange={handleChange}>
-          <Tab label="Orders" {...a11yProps(0)} />
-          <Tab label="Products" {...a11yProps(1)} />
-          <Tab label="Retailer Profile" {...a11yProps(3)} />
-        </Tabs>
-      </Box>
-      <CustomTabPanel value={value} index={0}>
-        <Orders></Orders>
-      </CustomTabPanel>
-      <CustomTabPanel value={value} index={1}>
-        <Products></Products>
-      </CustomTabPanel>
-      <CustomTabPanel value={value} index={2}>
-        <RetailerProfile></RetailerProfile>
-      </CustomTabPanel>
-    </div>
+        </Box>
+        <Box sx={{ borderBottom: 1, borderColor: "divider" }}>
+          <Tabs value={value} onChange={handleChange}>
+            <Tab label="Orders" {...a11yProps(0)} />
+            <Tab label="Products" {...a11yProps(1)} />
+            <Tab label="Retailer Profile" {...a11yProps(3)} />
+          </Tabs>
+        </Box>
+        <CustomTabPanel value={value} index={0}>
+          <Orders></Orders>
+        </CustomTabPanel>
+        <CustomTabPanel value={value} index={1}>
+          <Products></Products>
+        </CustomTabPanel>
+        <CustomTabPanel value={value} index={2}>
+          <RetailerProfile></RetailerProfile>
+        </CustomTabPanel>
+      </Container>
+    </Stack>
   );
 };
 

@@ -69,7 +69,7 @@ const addUserClimbingExperience = async (req, res) => {
     const { sport_climbing, bouldering, trad_climbing, years_exp } = req.body;
 
     const query = `
-      INSERT INTO users_climbingexp (user_id, sport_climbing, bouldering, trad_climbing, years_exp)
+      INSERT INTO user_climbingexp (user_id, sport_climbing, bouldering, trad_climbing, years_exp)
       VALUES ($1, $2, $3, $4, $5)
     `;
 
@@ -188,7 +188,7 @@ const getUserClimbingExperience = async (req, res) => {
   try {
     const user_id = req.params.userId;
     const query = `
-      SELECT * FROM users_climbingexp
+      SELECT * FROM user_climbingexp
       WHERE user_id = $1
     `;
     const climbingExp = await pool.query(query, [user_id]);
@@ -252,10 +252,10 @@ const updateUserClimbingExperience = async (req, res) => {
     const user_id = req.params.userId;
     const { sport_climbing, bouldering, trad_climbing, years_exp } = req.body;
 
-    // Check if the user_id exists in the users_climbingexp table
+    // Check if the user_id exists in the user_climbingexp table
     const userExistsQuery = `
       SELECT *
-      FROM users_climbingexp
+      FROM user_climbingexp
       WHERE user_id = $1
     `;
     const userExistsResult = await pool.query(userExistsQuery, [user_id]);
@@ -267,7 +267,7 @@ const updateUserClimbingExperience = async (req, res) => {
     }
 
     const query = `
-      UPDATE users_climbingexp
+      UPDATE user_climbingexp
       SET sport_climbing = $1, bouldering = $2, trad_climbing = $3, years_exp = $4
       WHERE user_id = $5
     `;

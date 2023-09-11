@@ -1,13 +1,15 @@
 import React from "react";
-import Button from "@mui/material/Button";
-import Container from "@mui/material/Container";
+
+import { Button, Container, Stack } from "@mui/material";
+
 import LoginBar from "./Login/LoginBar";
 
 const LandingPage = () => {
   return (
-    <>
-      <LoginBar />
-
+    <Stack direction="column" spacing={3}>
+      <Container>
+        <LoginBar />
+      </Container>
       <Container>
         <h1>Fit Feet</h1>
         <Container>
@@ -26,7 +28,7 @@ const LandingPage = () => {
         </Container>
         <Button variant="contained">Find my Fit</Button>
       </Container>
-    </>
+    </Stack>
   );
 };
 

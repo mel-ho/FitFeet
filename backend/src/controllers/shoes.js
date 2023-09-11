@@ -38,39 +38,60 @@ const getAllBrands = async (req, res) => {
   }
 };
 
-// Add a new brand model
-const addBrandModel = async (req, res) => {
+// Add a new model based on a selected brand
+const addModel = async (req, res) => {
   try {
     const { brand_id, model } = req.body;
-    const query = `
+
+    // Insert the new model into the models table
+    const insertQuery = `
       INSERT INTO models (brand_id, model)
       VALUES ($1, $2)
       RETURNING model_id
     `;
-    const values = [brand_id, model];
-    const newBrandModel = await pool.query(query, values);
+    const insertValues = [brand_id, model];
+    const newBrandModel = await pool.query(insertQuery, insertValues);
 
-    res.json({
+    res.status(201).json({
       status: "success",
-      msg: "New brand model added",
+      msg: "New model added",
       brandModelId: newBrandModel.rows[0].model_id,
     });
   } catch (error) {
-    console.log(error.message);
-    res.json({ status: "error", msg: error.message });
+    console.error(error.message);
+    res.status(500).json({ status: "error", msg: error.message });
   }
 };
 
-// Get all brand models
-const getAllBrandModels = async (req, res) => {
+// Get all models
+const getAllModels = async (req, res) => {
   try {
     const query = `
     SELECT b.brandname AS brandname, m.model
     FROM models m
     JOIN brands b ON m.brand_id = b.brand_id
   `;
-    const brandModels = await pool.query(query);
-    res.json(brandModels.rows);
+    const Models = await pool.query(query);
+    res.json(Models.rows);
+  } catch (error) {
+    console.log(error.message);
+    res.json({ status: "error", msg: error.message });
+  }
+};
+
+// Get all models by brand ID
+const getAllModelsByBrandId = async (req, res) => {
+  try {
+    const { brandId } = req.params;
+    console.log(brandId);
+    const query = `
+      SELECT m.model
+      FROM models m
+      WHERE m.brand_id = $1
+    `;
+    const values = [brandId];
+    const Models = await pool.query(query, values);
+    res.json(Models.rows);
   } catch (error) {
     console.log(error.message);
     res.json({ status: "error", msg: error.message });
@@ -81,13 +102,26 @@ const getAllBrandModels = async (req, res) => {
 const addSize = async (req, res) => {
   try {
     const { size_us } = req.body;
-    const query = `
+
+    // Check if the size already exists
+    const checkQuery = `
+      SELECT size_id FROM sizes WHERE size_us = $1
+    `;
+    const checkValues = [size_us];
+    const existingSize = await pool.query(checkQuery, checkValues);
+
+    if (existingSize.rows.length > 0) {
+      return res.status(400).json({ error: "Size already exists" });
+    }
+
+    // If the size doesn't exist, insert the new size
+    const insertQuery = `
       INSERT INTO sizes (size_us)
       VALUES ($1)
       RETURNING size_id
     `;
-    const values = [size_us];
-    const newSize = await pool.query(query, values);
+    const insertValues = [size_us];
+    const newSize = await pool.query(insertQuery, insertValues);
 
     res.json({
       status: "success",
@@ -96,7 +130,7 @@ const addSize = async (req, res) => {
     });
   } catch (error) {
     console.log(error.message);
-    res.json({ status: "error", msg: error.message });
+    res.status(500).json({ status: "error", msg: error.message });
   }
 };
 
@@ -283,8 +317,9 @@ const getUserShoeByUsershoeId = async (req, res) => {
 module.exports = {
   addBrand,
   getAllBrands,
-  addBrandModel,
-  getAllBrandModels,
+  addModel,
+  getAllModels,
+  getAllModelsByBrandId,
   addSize,
   getAllSizes,
   addShoes,

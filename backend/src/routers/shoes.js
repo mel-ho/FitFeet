@@ -3,8 +3,9 @@ const router = express.Router();
 const {
   addBrand,
   getAllBrands,
-  addBrandModel,
-  getAllBrandModels,
+  addModel,
+  getAllModels,
+  getAllModelsByBrandId,
   addSize,
   getAllSizes,
   addShoes,
@@ -19,8 +20,9 @@ const {
 router.put("/brand", addBrand);
 router.get("/brand", getAllBrands);
 
-router.put("/brandmodel", addBrandModel);
-router.get("/brandmodel", getAllBrandModels);
+router.put("/model/", addModel);
+router.get("/model/", getAllModels);
+router.get("/model/:brandId", getAllModelsByBrandId);
 
 router.put("/sizes", addSize);
 router.get("/sizes", getAllSizes);
