@@ -1,17 +1,5 @@
 import React, { useState, useEffect, useContext } from "react";
-import {
-  Box,
-  Button,
-  Paper,
-  Table,
-  TableBody,
-  TableCell,
-  TableContainer,
-  TableHead,
-  TableRow,
-  TextField,
-  Checkbox,
-} from "@mui/material";
+import { Box, Button, Grid, TextField, Checkbox } from "@mui/material";
 
 import UserContext from "../context/user";
 
@@ -163,93 +151,85 @@ const DisplayProfile = () => {
 
   return (
     <Box>
-      <TableContainer component={Paper}>
-        <Table sx={{ minWidth: 650 }} aria-label="simple table">
-          <TableBody>
-            <TableRow>
-              <TableCell>Email</TableCell>
-              <TableCell>{userData.email}</TableCell>
-            </TableRow>
-            <TableRow>
-              <TableCell>Shipping Address</TableCell>
-              <TableCell>
-                <TextField
-                  aria-label="Shipping Address"
-                  multiline
-                  maxRows={3}
-                  placeholder="Enter an address"
-                  value={shippingAddress}
-                  onChange={(e) => setShippingAddress(e.target.value)}
-                />
-              </TableCell>
-              <TableCell>
-                <Button variant="contained" onClick={handleSaveAddress}>
-                  Save
-                </Button>
-              </TableCell>
-            </TableRow>
-          </TableBody>
-        </Table>
-      </TableContainer>
-
-      {/* Display Climbing Experience */}
-      <Paper>
-        <TableContainer>
-          <Table>
-            <TableHead>
-              <TableRow>
-                <TableCell>Climbing Experience</TableCell>
-              </TableRow>
-            </TableHead>
-            <TableRow>
-              <TableCell>Sport Climbing</TableCell>
-              <TableCell align="left">
-                <Checkbox
-                  checked={climbingExperience.sport_climbing}
-                  onChange={() =>
-                    handleClimbingExperienceChange("sport_climbing")
-                  }
-                />
-              </TableCell>
-            </TableRow>
-            <TableRow>
-              <TableCell>Bouldering</TableCell>
-              <TableCell align="left">
-                <Checkbox
-                  checked={climbingExperience.bouldering}
-                  onChange={() => handleClimbingExperienceChange("bouldering")}
-                />
-              </TableCell>
-              <TableCell>{climbingExperience.bouldering}</TableCell>
-            </TableRow>
-            <TableRow>
-              <TableCell>Trad Climbing</TableCell>
-              <TableCell align="left">
-                <Checkbox
-                  checked={climbingExperience.trad_climbing}
-                  onChange={() =>
-                    handleClimbingExperienceChange("trad_climbing")
-                  }
-                />
-              </TableCell>
-            </TableRow>
-            <TableRow>
-              <TableCell>Years of Experience</TableCell>
-              <TableCell>
-                <TextField
-                  aria-label="Years of Experience"
-                  type="number"
-                  placeholder="Type a number…"
-                  value={climbingExperience.years_exp}
-                  onChange={(e) =>
-                    handleClimbingExperienceChange("years_exp", e.target.value)
-                  }
-                />
-              </TableCell>
-            </TableRow>
-          </Table>
-        </TableContainer>
-      </Paper>
+      <Grid
+        container
+        spacing={2}
+        alignItems="center"
+        style={{ textAlign: "left" }}
+      >
+        <Grid item xs={12} style={{ fontWeight: "bold" }}>
+          Personal Details
+        </Grid>
+        <Grid item xs={3}>
+          Email
+        </Grid>
+        <Grid item xs={5}>
+          {userData.email}
+        </Grid>
+        <Grid item xs={4}></Grid>
+        <Grid item xs={3}>
+          Shipping Address
+        </Grid>
+        <Grid item xs={3}>
+          <TextField
+            aria-label="Shipping Address"
+            multiline
+            maxRows={3}
+            placeholder="Enter an address"
+            value={shippingAddress}
+            onChange={(e) => setShippingAddress(e.target.value)}
+          />
+        </Grid>
+        <Grid item xs={2}>
+          <Button variant="contained" onClick={handleSaveAddress}>
+            Save
+          </Button>
+        </Grid>
+        <Grid item xs={12} style={{ fontWeight: "bold" }}>
+          Climbing Experience
+        </Grid>
+        <Grid item xs={1}>
+          <Checkbox
+            checked={climbingExperience.sport_climbing}
+            onChange={() => handleClimbingExperienceChange("sport_climbing")}
+          />
+        </Grid>
+        <Grid item xs={3}>
+          Sport Climbing
+        </Grid>
+        <Grid item xs={1}>
+          <Checkbox
+            checked={climbingExperience.bouldering}
+            onChange={() => handleClimbingExperienceChange("bouldering")}
+          />
+        </Grid>
+        <Grid item xs={3}>
+          Bouldering
+        </Grid>
+        <Grid item xs={1}>
+          <Checkbox
+            checked={climbingExperience.trad_climbing}
+            onChange={() => handleClimbingExperienceChange("trad_climbing")}
+          />
+        </Grid>
+        <Grid item xs={3}>
+          Trad Climbing
+        </Grid>
+        <Grid item xs={1}>
+          <TextField
+            aria-label="Years of Experience"
+            type="number"
+            placeholder="Type a number…"
+            value={climbingExperience.years_exp}
+            onChange={(e) =>
+              handleClimbingExperienceChange("years_exp", e.target.value)
+            }
+          />
+        </Grid>
+        <Grid item xs={3}>
+          Years of Experience
+        </Grid>
+      </Grid>
     </Box>
   );
 };

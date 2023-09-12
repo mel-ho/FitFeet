@@ -34,18 +34,18 @@ INSERT INTO user_address (user_id, shipping_address) VALUES ('3801f23d-5dea-477e
 -- each user can only have 1 stored feet size detail
 CREATE TABLE user_feet(
     user_id UUID,
-    foot_length_l INT,
-    foot_length_r INT,
-    foot_width_l INT,
-    foot_width_r INT,
-    toe_length_l INT,
-    toe_length_r INT,
-    small_perim_l INT,
-    small_perim_r INT,
-    big_perim_l INT,
-    big_perim_r INT,
-    heel_perim_l INT,
-    heel_perim_r INT,
+    foot_length_l NUMERIC(4,2),
+    foot_length_r NUMERIC(4,2),
+    foot_width_l NUMERIC(4,2),
+    foot_width_r NUMERIC(4,2),
+    toe_length_l NUMERIC(4,2),
+    toe_length_r NUMERIC(4,2),
+    small_perim_l NUMERIC(4,2),
+    small_perim_r NUMERIC(4,2),
+    big_perim_l NUMERIC(4,2),
+    big_perim_r NUMERIC(4,2),
+    heel_perim_l NUMERIC(4,2),
+    heel_perim_r NUMERIC(4,2),
     PRIMARY KEY (user_id),
     CONSTRAINT fk_user_id FOREIGN KEY (user_id) REFERENCES users(user_id) ON DELETE CASCADE
 );
@@ -105,7 +105,7 @@ INSERT INTO size_countries (size_country) VALUES ('US'), ('EUR'), ('UK');
 CREATE TABLE sizes(
     size_id SERIAL PRIMARY KEY,
     size_country VARCHAR(255) NOT NULL,
-    size_number INT NOT NULL,
+    size_number NUMERIC(4,2)NOT NULL,
     CONSTRAINT fk_size_country FOREIGN KEY (size_country) REFERENCES size_countries(size_country),
     CONSTRAINT uc_size_country_number UNIQUE (size_country, size_number)
 );
