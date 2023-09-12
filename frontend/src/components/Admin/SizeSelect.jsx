@@ -4,14 +4,13 @@ import {
   Typography,
   FormControl,
   InputLabel,
-  Paper,
   Select,
   MenuItem,
 } from "@mui/material";
 import UserContext from "../context/user";
 import useFetch from "../hooks/useFetch";
 
-const SizeSelect = ({ onSizeChange }) => {
+const SizeSelect = ({ size_country = "", size_number = "", onSizeChange }) => {
   const userCtx = useContext(UserContext);
   const [sizeCountries, setSizeCountries] = useState([]);
   const [selectedSizeCountry, setSelectedSizeCountry] = useState("");
@@ -50,9 +49,7 @@ const SizeSelect = ({ onSizeChange }) => {
 
   useEffect(() => {
     // Inform parent component about the selected size country and size number
-    if (selectedSizeCountry && selectedSizeNumber) {
-      onSizeChange(selectedSizeCountry, selectedSizeNumber);
-    }
+    onSizeChange(selectedSizeCountry, selectedSizeNumber);
   }, [selectedSizeCountry, selectedSizeNumber]);
 
   const handleSizeCountryChange = async (event) => {
@@ -91,50 +88,48 @@ const SizeSelect = ({ onSizeChange }) => {
 
   return (
     <Box>
-      <Paper>
-        <Typography variant="h6">Select Sizes</Typography>
-        <FormControl sx={{ m: 1, minWidth: 120 }} size="small">
-          <InputLabel id="size-country-select-label">
-            Select Size Country
-          </InputLabel>
-          <Select
-            labelId="size-country-select-label"
-            id="size-country-select"
-            value={selectedSizeCountry}
-            onChange={handleSizeCountryChange}
-          >
-            <MenuItem value="">
-              <em>Select Country</em>
+      <Typography variant="h6">Select Sizes</Typography>
+      <FormControl sx={{ m: 1, minWidth: 180 }} size="small">
+        <InputLabel id="size-country-select-label">
+          Select Size Country
+        </InputLabel>
+        <Select
+          labelId="size-country-select-label"
+          id="size-country-select"
+          value={size_country}
+          onChange={handleSizeCountryChange}
+        >
+          <MenuItem value="">
+            <em>Select Country</em>
+          </MenuItem>
+          {sizeCountries.map((country) => (
+            <MenuItem key={country} value={country}>
+              {country}
             </MenuItem>
-            {sizeCountries.map((country) => (
-              <MenuItem key={country} value={country}>
-                {country}
-              </MenuItem>
-            ))}
-          </Select>
-        </FormControl>
+          ))}
+        </Select>
+      </FormControl>
 
-        <FormControl sx={{ m: 1, minWidth: 120 }} size="small">
-          <InputLabel id="size-number-select-label">
-            Select Size Number
-          </InputLabel>
-          <Select
-            labelId="size-number-select-label"
-            id="size-number-select"
-            value={selectedSizeNumber}
-            onChange={handleLocalSizeNumberChange}
-          >
-            <MenuItem value="">
-              <em>Select Size</em>
+      <FormControl sx={{ m: 1, minWidth: 180 }} size="small">
+        <InputLabel id="size-number-select-label">
+          Select Size Number
+        </InputLabel>
+        <Select
+          labelId="size-number-select-label"
+          id="size-number-select"
+          value={size_number}
+          onChange={handleLocalSizeNumberChange}
+        >
+          <MenuItem value="">
+            <em>Select Size</em>
+          </MenuItem>
+          {sizeNumbers.map((number) => (
+            <MenuItem key={number} value={number}>
+              {number}
             </MenuItem>
-            {sizeNumbers.map((number) => (
-              <MenuItem key={number} value={number}>
-                {number}
-              </MenuItem>
-            ))}
-          </Select>
-        </FormControl>
-      </Paper>
+          ))}
+        </Select>
+      </FormControl>
     </Box>
   );
 };

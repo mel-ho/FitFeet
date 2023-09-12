@@ -8,6 +8,7 @@ import RetailerDisplay from "./components/Retailers/RetailerDisplay";
 import AdminDisplay from "./components/Admin/AdminDisplay";
 
 import "./App.css";
+import UserShoeAdd from "./components/Users/UserShoeAdd";
 
 function App() {
   const [accessToken, setAccessToken] = useState("");
@@ -44,6 +45,7 @@ function App() {
             <Route path="/user" element={<UserDisplay />} />
             <Route path="/retailer" element={<RetailerDisplay />} />
             <Route path="/admin" element={<AdminDisplay />} />
+            <Route path="/addshoe" element={<UserShoeAdd />} />
           </Routes>
         </BrowserRouter>
       </UserContext.Provider>

@@ -3,7 +3,8 @@ import { Box, Grid, Tabs, Tab, Container, Stack } from "@mui/material";
 import CustomTabPanel from "../Users/CustomTabPanel";
 
 import Orders from "./Orders";
-import Products from "./Products";
+import ProductView from "./ProductView";
+import ProductAdd from "./ProductAdd";
 import RetailerProfile from "./RetailerProfile";
 import UserBar from "../Login/UserBar";
 
@@ -43,6 +44,7 @@ const RetailerDisplay = () => {
           <Tabs value={value} onChange={handleChange}>
             <Tab label="Orders" {...a11yProps(0)} />
             <Tab label="Products" {...a11yProps(1)} />
+            <Tab label="Add Products" {...a11yProps(2)} />
             <Tab label="Retailer Profile" {...a11yProps(3)} />
           </Tabs>
         </Box>
@@ -50,9 +52,12 @@ const RetailerDisplay = () => {
           <Orders></Orders>
         </CustomTabPanel>
         <CustomTabPanel value={value} index={1}>
-          <Products></Products>
+          <ProductView></ProductView>
         </CustomTabPanel>
         <CustomTabPanel value={value} index={2}>
+          <ProductAdd></ProductAdd>
+        </CustomTabPanel>
+        <CustomTabPanel value={value} index={3}>
           <RetailerProfile></RetailerProfile>
         </CustomTabPanel>
       </Container>

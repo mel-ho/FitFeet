@@ -158,10 +158,11 @@ const SizeAdd = () => {
           </Select>
 
           <TextField
-            type="text"
+            type="number"
             placeholder="Enter size"
             sx={{ m: 1, minWidth: 120 }}
             size="small"
+            InputProps={{ inputProps: { min: 0 } }}
             value={newSize}
             onChange={(e) => setNewSize(e.target.value)}
           />

@@ -159,6 +159,7 @@ const getSizesbyCountry = async (req, res) => {
   }
 };
 
+// add new shoe. if existing size doesn't exists in size database, add that size too.
 const addShoes = async (req, res) => {
   try {
     const { brand, model, size_country, size_number } = req.body;
@@ -173,15 +174,22 @@ const addShoes = async (req, res) => {
       size_number,
     ]);
 
-    // If size_id is not found, return an error message
-    if (!sizeResult.rows[0]) {
-      return res.status(400).json({
-        status: "error",
-        msg: "Size not found.",
-      });
-    }
+    let size_id;
 
-    const size_id = sizeResult.rows[0].size_id;
+    // If size_id is not found, insert a new size
+    if (!sizeResult.rows[0]) {
+      const insertSizeQuery = `
+        INSERT INTO sizes (size_country, size_number)
+        VALUES ($1, $2) RETURNING size_id
+      `;
+      const newSizeResult = await pool.query(insertSizeQuery, [
+        size_country,
+        size_number,
+      ]);
+      size_id = newSizeResult.rows[0].size_id;
+    } else {
+      size_id = sizeResult.rows[0].size_id;
+    }
 
     // Insert the new pair of shoes into the 'shoes' table
     const insertShoesQuery = `
@@ -264,27 +272,88 @@ const getShoesByBrand = async (req, res) => {
   }
 };
 
-// Add a new pair of user shoes
 const addUserShoes = async (req, res) => {
   try {
     const {
-      shoe_id,
-      datePurchased,
-      dateWorn,
-      dateDisposed,
-      starRating,
+      brand,
+      model,
+      size_country,
+      size_number,
+      date_purchased,
+      date_worn,
+      date_disposed,
+      star_rating,
       user_id,
     } = req.body;
+
+    // First, check if the size already exists
+    const sizeIdQuery = `
+      SELECT size_id FROM sizes
+      WHERE size_country = $1 AND size_number = $2
+    `;
+    const sizeResult = await pool.query(sizeIdQuery, [
+      size_country,
+      size_number,
+    ]);
+    let size_id;
+
+    // If size_id is not found, insert a new size
+    if (!sizeResult.rows[0]) {
+      const insertSizeQuery = `
+        INSERT INTO sizes (size_country, size_number)
+        VALUES ($1, $2) RETURNING size_id
+      `;
+      const newSizeResult = await pool.query(insertSizeQuery, [
+        size_country,
+        size_number,
+      ]);
+      size_id = newSizeResult.rows[0].size_id;
+    } else {
+      size_id = sizeResult.rows[0].size_id;
+    }
+
+    // Check if the shoe already exists
+    const getShoeIdQuery = `
+      SELECT sh.shoe_id FROM shoes sh
+      INNER JOIN brands br ON sh.brand = br.brand
+      INNER JOIN models md ON sh.model = md.model
+      INNER JOIN sizes sz ON sh.size_id = sz.size_id
+      WHERE br.brand = $1 AND md.model = $2 AND sz.size_id = $3
+    `;
+    const shoeIdResult = await pool.query(getShoeIdQuery, [
+      brand,
+      model,
+      size_id,
+    ]);
+    let shoe_id;
+
+    // If shoe_id is not found, insert a new shoe
+    if (!shoeIdResult.rows[0]) {
+      const insertShoeQuery = `
+        INSERT INTO shoes (brand, model, size_id)
+        VALUES ($1, $2, $3) RETURNING shoe_id
+      `;
+      const newShoeResult = await pool.query(insertShoeQuery, [
+        brand,
+        model,
+        size_id,
+      ]);
+      shoe_id = newShoeResult.rows[0].shoe_id;
+    } else {
+      shoe_id = shoeIdResult.rows[0].shoe_id;
+    }
+
+    // Insert the new user_shoes entry
     const query = `
       INSERT INTO user_shoes (shoe_id, date_purchased, date_worn, date_disposed, star_rating, user_id)
       VALUES ($1, $2, $3, $4, $5, $6)
     `;
     const values = [
       shoe_id,
-      datePurchased,
-      dateWorn,
-      dateDisposed,
-      starRating,
+      date_purchased,
+      date_worn,
+      date_disposed,
+      star_rating,
       user_id,
     ];
     await pool.query(query, values);

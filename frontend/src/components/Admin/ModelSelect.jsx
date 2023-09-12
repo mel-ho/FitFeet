@@ -1,7 +1,6 @@
 import React, { useState, useEffect, useContext } from "react";
 import {
   Box,
-  Paper,
   Typography,
   FormControl,
   InputLabel,
@@ -11,7 +10,7 @@ import {
 import UserContext from "../context/user";
 import useFetch from "../hooks/useFetch";
 
-const ModelSelect = ({ onModelChange }) => {
+const ModelSelect = ({ value = "", onModelChange }) => {
   const userCtx = useContext(UserContext);
   const [models, setModels] = useState([]);
   const [selectedModel, setSelectedModel] = useState("");
@@ -43,24 +42,22 @@ const ModelSelect = ({ onModelChange }) => {
 
   return (
     <Box>
-      <Paper>
-        <Typography variant="h6">Select Models</Typography>
-        <FormControl sx={{ m: 1, minWidth: 120 }} size="small">
-          <InputLabel id="model-select-label">Select Model</InputLabel>
-          <Select
-            labelId="model-select-label"
-            id="model-select"
-            value={selectedModel}
-            onChange={handleLocalModelChange}
-          >
-            {models.map((model) => (
-              <MenuItem key={model.model} value={model.model}>
-                {model.model}
-              </MenuItem>
-            ))}
-          </Select>
-        </FormControl>
-      </Paper>
+      <Typography variant="h6">Select Models</Typography>
+      <FormControl sx={{ m: 1, minWidth: 180 }} size="small">
+        <InputLabel id="model-select-label">Select Model</InputLabel>
+        <Select
+          labelId="model-select-label"
+          id="model-select"
+          value={value}
+          onChange={handleLocalModelChange}
+        >
+          {models.map((model) => (
+            <MenuItem key={model.model} value={model.model}>
+              {model.model}
+            </MenuItem>
+          ))}
+        </Select>
+      </FormControl>
     </Box>
   );
 };

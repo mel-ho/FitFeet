@@ -1,7 +1,6 @@
 import React, { useState, useEffect, useContext } from "react";
 import {
   Box,
-  Paper,
   Typography,
   FormControl,
   InputLabel,
@@ -11,7 +10,7 @@ import {
 import UserContext from "../context/user";
 import useFetch from "../hooks/useFetch";
 
-const BrandSelect = ({ onBrandChange }) => {
+const BrandSelect = ({ value = "", onBrandChange }) => {
   const userCtx = useContext(UserContext);
   const [brands, setBrands] = useState([]);
   const [selectedBrand, setSelectedBrand] = useState("");
@@ -43,24 +42,22 @@ const BrandSelect = ({ onBrandChange }) => {
 
   return (
     <Box>
-      <Paper>
-        <Typography variant="h6">Select Brands</Typography>
-        <FormControl sx={{ m: 1, minWidth: 120 }} size="small">
-          <InputLabel id="brand-select-label">Select Brand</InputLabel>
-          <Select
-            labelId="brand-select-label"
-            id="brand-select"
-            value={selectedBrand}
-            onChange={handleBrandChange}
-          >
-            {brands.map((brand) => (
-              <MenuItem key={brand.brand} value={brand.brand}>
-                {brand.brand}
-              </MenuItem>
-            ))}
-          </Select>
-        </FormControl>
-      </Paper>
+      <Typography variant="h6">Select Brands</Typography>
+      <FormControl sx={{ m: 1, minWidth: 180 }} size="small">
+        <InputLabel id="brand-select-label">Select Brand</InputLabel>
+        <Select
+          labelId="brand-select-label"
+          id="brand-select"
+          value={value}
+          onChange={onBrandChange}
+        >
+          {brands.map((brand) => (
+            <MenuItem key={brand.brand} value={brand.brand}>
+              {brand.brand}
+            </MenuItem>
+          ))}
+        </Select>
+      </FormControl>
     </Box>
   );
 };

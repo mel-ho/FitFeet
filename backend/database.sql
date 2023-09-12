@@ -161,7 +161,7 @@ CREATE TABLE user_shoes(
     shoe_id INT NOT NULL,
     date_purchased DATE NOT NULL,
     date_worn DATE NOT NULL,
-    date_disposed DATE NOT NULL,
+    date_disposed DATE,
     star_rating INT NOT NULL,
     user_id UUID,
     CONSTRAINT fk_user_id FOREIGN KEY (user_id) REFERENCES users(user_id),

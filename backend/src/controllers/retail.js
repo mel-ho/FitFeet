@@ -151,10 +151,77 @@ const patchRetailerByRetailerId = async (req, res) => {
   }
 };
 
-// ADD new product
 const addNewProduct = async (req, res) => {
   try {
-    const { retailer_id, shoe_id, datePurchased, quantity } = req.body;
+    const {
+      retailer_id,
+      brand,
+      model,
+      size_country,
+      size_number,
+      date_purchased,
+      quantity,
+    } = req.body;
+
+    // Initial query to get size_id based on size_country and size_number
+    let getSizeIdQuery = `
+      SELECT size_id FROM sizes 
+      WHERE size_country = $1 AND size_number = $2
+    `;
+
+    const sizeResult = await pool.query(getSizeIdQuery, [
+      size_country,
+      size_number,
+    ]);
+    let size_id;
+
+    // If size_id is not found, insert a new size
+    if (!sizeResult.rows[0]) {
+      const insertSizeQuery = `
+        INSERT INTO sizes (size_country, size_number)
+        VALUES ($1, $2) RETURNING size_id
+      `;
+      const newSizeResult = await pool.query(insertSizeQuery, [
+        size_country,
+        size_number,
+      ]);
+      size_id = newSizeResult.rows[0].size_id;
+    } else {
+      size_id = sizeResult.rows[0].size_id;
+    }
+
+    // Query to get shoe_id based on brand, model, and size_id
+    let getShoeIdQuery = `
+      SELECT sh.shoe_id FROM shoes sh
+      INNER JOIN brands br ON sh.brand = br.brand
+      INNER JOIN models md ON sh.model = md.model
+      INNER JOIN sizes sz ON sh.size_id = sz.size_id
+      WHERE br.brand = $1 AND md.model = $2 AND sz.size_id = $3
+    `;
+    const shoeIdResult = await pool.query(getShoeIdQuery, [
+      brand,
+      model,
+      size_id,
+    ]);
+    let shoe_id;
+
+    // If shoe_id is not found, insert a new shoe
+    if (!shoeIdResult.rows[0]) {
+      const insertShoeQuery = `
+        INSERT INTO shoes (brand, model, size_id)
+        VALUES ($1, $2, $3) RETURNING shoe_id
+      `;
+      const newShoeResult = await pool.query(insertShoeQuery, [
+        brand,
+        model,
+        size_id,
+      ]);
+      shoe_id = newShoeResult.rows[0].shoe_id;
+    } else {
+      shoe_id = shoeIdResult.rows[0].shoe_id;
+    }
+
+    // Insert the new product entry
     const query = `
       INSERT INTO products (retailer_id, shoe_id, date_purchased, quantity)
       VALUES ($1, $2, $3, $4)
@@ -174,19 +241,23 @@ const addNewProduct = async (req, res) => {
   }
 };
 
-// GET all products by retailer ID
 const getAllProductsByRetailerId = async (req, res) => {
   try {
     const retailer_id = req.params.retailerId;
     const query = `
       SELECT p.product_id AS product_id,
-        p.shoe_id,
-        p.date_purchased,
-        p.quantity AS product_quantity,
-        r.retailer_id AS retailer_id,
-        r.name AS retailer_name
+             p.date_purchased,
+             p.quantity AS product_quantity,
+             b.brand,
+             m.model,
+             sz.size_country,
+             sz.size_number
       FROM products p
       JOIN retailers r ON p.retailer_id = r.retailer_id
+      JOIN shoes sh ON p.shoe_id = sh.shoe_id
+      JOIN brands b ON sh.brand = b.brand
+      JOIN models m ON sh.model = m.model
+      JOIN sizes sz ON sh.size_id = sz.size_id
       WHERE r.retailer_id = $1
     `;
     const products = await pool.query(query, [retailer_id]);

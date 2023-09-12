@@ -4,7 +4,7 @@ import useFetch from "../hooks/useFetch";
 import BrandSelect from "./BrandSelect";
 import ModelSelect from "./ModelSelect";
 import SizeSelect from "./SizeSelect";
-import { Box, Button, Container, Paper } from "@mui/material";
+import { Box, Button, Container, Paper, Typography } from "@mui/material";
 
 const ShoeAdd = () => {
   const userCtx = useContext(UserContext);
@@ -13,6 +13,7 @@ const ShoeAdd = () => {
   const [sizeCountry, setSizeCountry] = useState("");
   const [sizeNumber, setSizeNumber] = useState("");
   const [errorMessage, setErrorMessage] = useState(""); // Add error message state
+  const [successMessage, setSuccessMessage] = useState("");
   const fetchData = useFetch();
 
   const handleAddShoe = async () => {
@@ -38,21 +39,25 @@ const ShoeAdd = () => {
           setModel("");
           setSizeNumber("");
           setSizeCountry("");
+          setSuccessMessage("Successfully added new shoes!");
           setErrorMessage("");
         } else {
           console.error(
             "Error fetching updated shoe:",
             updatedShoeResponse.data
           );
-          setErrorMessage("Error fetching updated shoes");
+          setErrorMessage(response.data);
+          setSuccessMessage("");
         }
       } else {
         console.error("Error adding shoe:", response.data);
-        setErrorMessage("Error adding shoe. Shoe might already exists");
+        setErrorMessage(response.data);
+        setSuccessMessage("");
       }
     } catch (error) {
       console.error("Error adding shoe:", error);
-      setErrorMessage("An error occurred while adding the shoe.");
+      setErrorMessage(error.toString());
+      setSuccessMessage("");
     }
   };
 
@@ -79,12 +84,35 @@ const ShoeAdd = () => {
     <Box>
       <Paper>
         <Container>
-          <BrandSelect onBrandChange={handleBrandChange}></BrandSelect>
-          <ModelSelect onModelChange={handleModelChange}></ModelSelect>
-          <SizeSelect onSizeChange={handleSizeChange}></SizeSelect>
+          <BrandSelect
+            value={brand}
+            onBrandChange={(e) => setBrand(e.target.value)}
+          />
+          <ModelSelect
+            value={model}
+            onModelChange={(e) => setModel(e.target.value)}
+          />
+          <SizeSelect
+            size_country={sizeCountry}
+            size_number={sizeNumber}
+            onSizeChange={(size_country, size_number) => {
+              setSizeCountry(size_country);
+              if (size_number) {
+                setSizeNumber(size_number);
+              }
+            }}
+          />
           <Button variant="contained" onClick={handleAddShoe}>
             Add Shoe
           </Button>
+          {errorMessage && (
+            <Typography variant="body2" color="error">
+              {errorMessage}
+            </Typography>
+          )}
+          {successMessage && (
+            <Typography color="primary">{successMessage}</Typography>
+          )}
         </Container>
       </Paper>
     </Box>
