@@ -7,7 +7,6 @@ import {
   AppBar,
   Toolbar,
   Box,
-  Container,
   Grid,
   InputAdornment,
   IconButton,
@@ -61,64 +60,60 @@ const LoginBar = () => {
   return (
     <Box sx={{ flexGrow: 1 }}>
       <AppBar position="fixed">
-        <Toolbar sx={{ justifyContent: "space-between" }}>
-          <>
-            <img src="/fitfeetlogo.png" height="50px" />
-          </>
-          <>
-            <Grid container spacing={1} alignItems="center">
-              <Grid item>
-                <TextField
-                  margin="normal"
-                  required
-                  id="email"
-                  label="Email Address"
-                  name="email"
-                  autoComplete="email"
-                  autoFocus
-                  color="warning"
-                  size="small"
-                  variant="outlined"
-                  onChange={(e) => setEmail(e.target.value)}
-                />
-              </Grid>
-              <Grid item>
-                <TextField
-                  margin="normal"
-                  required
-                  name="password"
-                  label="Password"
-                  type={showPassword ? "text" : "password"}
-                  id="password"
-                  autoComplete="current-password"
-                  color="warning"
-                  size="small"
-                  variant="outlined"
-                  onChange={(e) => setPassword(e.target.value)}
-                  InputProps={{
-                    endAdornment: (
-                      <InputAdornment position="end">
-                        <IconButton onClick={toggleShowPassword}>
-                          {showPassword ? <VisibilityOff /> : <Visibility />}
-                        </IconButton>
-                      </InputAdornment>
-                    ),
-                  }}
-                />
-              </Grid>
-              <Grid item>
-                <Button
-                  type="submit"
-                  margin="normal"
-                  align="center"
-                  variant="contained"
-                  onClick={handleLogin}
-                >
-                  Login
-                </Button>
-              </Grid>
+        <Toolbar>
+          <Grid
+            container
+            spacing={1}
+            justifyContent="space-between"
+            alignItems="center"
+          >
+            <Grid item>
+              <img src="/fitfeetlogo.png" height="50px" sx={{ mr: 2 }} />
             </Grid>
-          </>
+            <Grid item>
+              <TextField
+                required
+                id="email"
+                label="Email Address"
+                name="email"
+                autoComplete="email"
+                autoFocus
+                color="warning"
+                size="small"
+                variant="outlined"
+                onChange={(e) => setEmail(e.target.value)}
+              />
+              <TextField
+                required
+                name="password"
+                label="Password"
+                type={showPassword ? "text" : "password"}
+                id="password"
+                autoComplete="current-password"
+                color="warning"
+                size="small"
+                variant="outlined"
+                onChange={(e) => setPassword(e.target.value)}
+                InputProps={{
+                  endAdornment: (
+                    <InputAdornment position="end">
+                      <IconButton onClick={toggleShowPassword}>
+                        {showPassword ? <VisibilityOff /> : <Visibility />}
+                      </IconButton>
+                    </InputAdornment>
+                  ),
+                }}
+              />
+              <Button
+                type="submit"
+                margin="normal"
+                variant="contained"
+                onClick={handleLogin}
+              >
+                Login
+              </Button>
+            </Grid>
+          </Grid>
         </Toolbar>
       </AppBar>
     </Box>

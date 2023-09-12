@@ -45,6 +45,7 @@ function App() {
             <Route path="/user" element={<UserDisplay />} />
             <Route path="/retailer" element={<RetailerDisplay />} />
             <Route path="/admin" element={<AdminDisplay />} />
+            <Route path="/addfeet" element={<UserShoeAdd />} />
             <Route path="/addshoe" element={<UserShoeAdd />} />
           </Routes>
         </BrowserRouter>

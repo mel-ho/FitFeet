@@ -108,11 +108,11 @@ const getRetailerById = async (req, res) => {
       SELECT u.user_id AS user_id,
         u.email AS email,
         r.retailer_id AS retailer_id,
-        r.name AS retailer_name,
-        r.contact_detail AS retailer_contact_detail,
-        r.contact_address AS retailer_contact_address
+        r.name AS name,
+        r.contact_detail AS contact_detail,
+        r.contact_address AS contact_address
       FROM users u
-      JOIN retailers r ON u.user_id = r.retailer_id
+      JOIN retailers r ON u.retailer_id = r.retailer_id
       WHERE r.retailer_id = $1
         AND u.is_retailer = TRUE
     `;

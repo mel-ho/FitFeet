@@ -175,7 +175,8 @@ const DisplayProfile = () => {
               <TableCell>
                 <TextField
                   aria-label="Shipping Address"
-                  type="text"
+                  multiline
+                  maxRows={3}
                   placeholder="Enter an address"
                   value={shippingAddress}
                   onChange={(e) => setShippingAddress(e.target.value)}
