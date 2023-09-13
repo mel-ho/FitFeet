@@ -4,14 +4,7 @@ import useFetch from "../hooks/useFetch";
 import BrandSelect from "../Admin/BrandSelect";
 import ModelSelect from "../Admin/ModelSelect";
 import SizeSelect from "../Admin/SizeSelect";
-import {
-  Box,
-  Button,
-  Container,
-  Grid,
-  TextField,
-  Typography,
-} from "@mui/material";
+import { Box, Button, Grid, TextField, Typography } from "@mui/material";
 import BrandAdd from "../Admin/BrandAdd";
 import ModelAdd from "../Admin/ModelAdd";
 import SizeAdd from "../Admin/SizeAdd";
@@ -22,10 +15,11 @@ const ProductAdd = () => {
   const [model, setModel] = useState("");
   const [sizeCountry, setSizeCountry] = useState("");
   const [sizeNumber, setSizeNumber] = useState("");
-  const [quantity, setQuantity] = useState(1);
   const [datePurchased, setDatePurchased] = useState(
     new Date().toISOString().substring(0, 10)
   );
+  const [quantity, setQuantity] = useState(1);
+  const [imgLink, setImgLink] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
   const [successMessage, setSuccessMessage] = useState("");
   const fetchData = useFetch();
@@ -41,6 +35,7 @@ const ProductAdd = () => {
         size_number: sizeNumber,
         date_purchased: datePurchased,
         quantity,
+        img_link: imgLink,
       });
 
       if (response.ok) {
@@ -49,8 +44,9 @@ const ProductAdd = () => {
         setModel("");
         setSizeCountry("");
         setSizeNumber("");
-        setQuantity(1);
         setDatePurchased(new Date().toISOString().substring(0, 10));
+        setQuantity(1);
+        setImgLink("");
         setSuccessMessage("Successfully added new product!");
         setErrorMessage("");
       } else {

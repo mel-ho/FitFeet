@@ -6,6 +6,7 @@ import useFetch from "../hooks/useFetch";
 const ModelAdd = () => {
   const userCtx = useContext(UserContext);
   const [newModel, setNewModel] = useState("");
+  const [imgLink, setImgLink] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
   const [successMessage, setSuccessMessage] = useState("");
   const fetchData = useFetch();
@@ -57,6 +58,14 @@ const ModelAdd = () => {
         size="small"
         value={newModel}
         onChange={(e) => setNewModel(e.target.value)}
+      />
+      <TextField
+        placeholder="Enter image link"
+        type="url"
+        sx={{ m: 1, minWidth: 180 }}
+        multiline
+        value={imgLink}
+        onChange={(e) => setImgLink(e.target.value)}
       />
       <Button
         sx={{ m: 1, minWidth: 80 }}

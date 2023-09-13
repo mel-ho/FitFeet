@@ -179,6 +179,16 @@ CREATE TABLE products(
     CONSTRAINT fk_shoe_id FOREIGN KEY (shoe_id) REFERENCES shoes(shoe_id)
 );
 
+INSERT INTO products (retailer_id, shoe_id, date_purchased, quantity) VALUES
+('fe5f4809-9c2a-47a2-8faf-fe34f43cb2e2',7,'01-01-2001',10),
+('fe5f4809-9c2a-47a2-8faf-fe34f43cb2e2',13,'01-01-2001',12),
+('fe5f4809-9c2a-47a2-8faf-fe34f43cb2e2',19,'01-01-2001',12),
+('fe5f4809-9c2a-47a2-8faf-fe34f43cb2e2',26,'01-01-2001',0),
+('fe5f4809-9c2a-47a2-8faf-fe34f43cb2e2',33,'01-01-2001',10),
+('fe5f4809-9c2a-47a2-8faf-fe34f43cb2e2',11,'01-01-2001',12),
+('fe5f4809-9c2a-47a2-8faf-fe34f43cb2e2',24,'01-01-2001',12),
+('fe5f4809-9c2a-47a2-8faf-fe34f43cb2e2',36,'01-01-2001',0);
+
 -- create a constraint table for order_status
 CREATE TABLE order_status(
     order_status VARCHAR(255) PRIMARY KEY NOT NULL

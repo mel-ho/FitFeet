@@ -78,27 +78,39 @@ const DisplayRecommended = () => {
               <CardMedia
                 component="img"
                 height="140"
-                image={shoe.img_link} // assuming img_link is a direct link to the image
+                image={shoe.img_link}
                 alt={`${shoe.brand} ${shoe.model}`}
               />
               <CardContent>
                 <Typography gutterBottom variant="h5" component="div">
-                  {shoe.brand}
+                  {shoe.model}
                 </Typography>
                 <Typography variant="body2" color="text.secondary">
-                  Model: {shoe.model} <br />
-                  Size: {shoe.size_number}
+                  Brand: {shoe.brand} <br />
+                  Size: {shoe.size_number} <br />
+                  {shoe.name ? (
+                    <>
+                      Retailer: {shoe.name} <br />
+                      Quantity: {shoe.quantity ?? 0}
+                    </>
+                  ) : (
+                    <Typography color="error">No Retailers Found</Typography>
+                  )}
                 </Typography>
               </CardContent>
             </CardActionArea>
             <CardActions>
-              <Button
-                size="small"
-                color="primary"
-                onClick={() => handleOrder(shoe)}
-              >
-                Order
-              </Button>
+              {shoe.name && shoe.quantity ? (
+                <Button
+                  size="small"
+                  color="primary"
+                  onClick={() => handleOrder(shoe)}
+                >
+                  Order
+                </Button>
+              ) : (
+                shoe.name && <Typography color="error">Sold Out</Typography>
+              )}
             </CardActions>
           </Card>
         ))}

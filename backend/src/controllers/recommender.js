@@ -9,7 +9,9 @@ const recommender = async (req, res) => {
         s.brand, 
         s.model,
         sz.size_number,
-        m.img_link  -- Include the img_link from the models table
+        m.img_link,
+        r.name,
+        p.quantity
       FROM 
         user_feet uf1
       JOIN 
@@ -20,9 +22,13 @@ const recommender = async (req, res) => {
       JOIN
         shoes s ON s.shoe_id = us.shoe_id
       JOIN
-        sizes sz ON sz.size_id = s.size_id
+          sizes sz ON sz.size_id = s.size_id
       JOIN
-        models m ON m.model = s.model  -- Join with the models table
+        models m ON m.model = s.model
+      LEFT JOIN
+        products p ON p.shoe_id = s.shoe_id
+      LEFT JOIN
+        retailers r ON r.retailer_id = p.retailer_id
       WHERE 
         uf1.user_id = $1 AND uf1.user_id != uf2.user_id
     `;

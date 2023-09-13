@@ -45,11 +45,11 @@ const addModel = async (req, res) => {
 
     // Insert the new model into the models table
     const insertQuery = `
-      INSERT INTO models (model)
-      VALUES ($1)
+      INSERT INTO models (model, img_link)
+      VALUES ($1, $2)
       RETURNING model
     `;
-    const insertValues = [model];
+    const insertValues = [model, img_link];
     const newModel = await pool.query(insertQuery, insertValues);
 
     res.status(201).json({
