@@ -388,6 +388,7 @@ const updateUserAddress = async (req, res) => {
     res.json({ status: "error", msg: error.message });
   }
 };
+
 module.exports = {
   getAllUsers,
   getUserById,

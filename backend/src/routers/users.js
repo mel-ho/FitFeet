@@ -13,6 +13,7 @@ const {
   updateUserClimbingExperience,
   updateUserFeetDimensions,
   updateUserAddress,
+  recommender,
 } = require("../controllers/users");
 
 router.get("/users", getAllUsers);

@@ -45,13 +45,6 @@ const UserManagement = () => {
     setSearchText(event.target.value);
   };
 
-  // Filter the userData based on the searchText
-  const filteredUserData = userData.filter(
-    (user) =>
-      user.user_id.toString().includes(searchText) ||
-      user.email.toLowerCase().includes(searchText.toLowerCase())
-  );
-
   const handleChangePage = (event, newPage) => {
     setPage(newPage);
   };
@@ -64,6 +57,16 @@ const UserManagement = () => {
   // Calculate the starting and ending indexes based on the current page and rowsPerPage
   const startIndex = page * rowsPerPage;
   const endIndex = startIndex + rowsPerPage;
+
+  // Filter the userData based on the searchText
+  const filteredUserData = userData.filter(
+    (user) =>
+      user.user_id.toString().includes(searchText) ||
+      user.email.toLowerCase().includes(searchText.toLowerCase())
+  );
+
+  // Slice the filtered user data based on the current pagination settings
+  const paginatedUserData = filteredUserData.slice(startIndex, endIndex);
 
   // PATCH to update user attributes
   const handleAttributeChange = async (user, attributeName) => {
@@ -113,20 +116,23 @@ const UserManagement = () => {
           <Table>
             <TableHead>
               <TableRow>
-                <TableCell>ID</TableCell>
-                <TableCell>Email</TableCell>
-                <TableCell>Is Retailer</TableCell>
-                <TableCell>Retailer ID</TableCell>
-                <TableCell>Is Admin</TableCell>
-                <TableCell>Is Active</TableCell>
+                <TableCell style={{ width: "20%" }}>Email</TableCell>
+                <TableCell style={{ width: "25%" }}>User ID</TableCell>
+                <TableCell style={{ width: "25%" }}>Retailer ID</TableCell>
+                <TableCell style={{ width: "10%" }}>Is Retailer</TableCell>
+                <TableCell style={{ width: "10%" }}>Is Admin</TableCell>
+                <TableCell style={{ width: "10%" }}>Is Active</TableCell>
               </TableRow>
             </TableHead>
             <TableBody>
-              {filteredUserData.map((user) => (
+              {paginatedUserData.map((user) => (
                 <TableRow key={user.user_id}>
-                  <TableCell>{user.user_id}</TableCell>
-                  <TableCell>{user.email}</TableCell>
-                  <TableCell>
+                  <TableCell style={{ width: "20%" }}>{user.email}</TableCell>
+                  <TableCell style={{ width: "25%" }}>{user.user_id}</TableCell>
+                  <TableCell style={{ width: "25%" }}>
+                    {user.retailer_id}
+                  </TableCell>
+                  <TableCell style={{ width: "10%" }}>
                     <Checkbox
                       checked={user.is_retailer}
                       onChange={() =>
@@ -134,14 +140,13 @@ const UserManagement = () => {
                       }
                     />
                   </TableCell>
-                  <TableCell>{user.retailer_id}</TableCell>
-                  <TableCell>
+                  <TableCell style={{ width: "10%" }}>
                     <Checkbox
                       checked={user.is_admin}
                       onChange={() => handleAttributeChange(user, "is_admin")}
                     />
                   </TableCell>
-                  <TableCell>
+                  <TableCell style={{ width: "10%" }}>
                     <Checkbox
                       checked={user.is_active}
                       onChange={() => handleAttributeChange(user, "is_active")}

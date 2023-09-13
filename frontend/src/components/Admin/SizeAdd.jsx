@@ -2,7 +2,6 @@ import React, { useState, useContext, useEffect } from "react";
 import {
   Box,
   Button,
-  Paper,
   TextField,
   Typography,
   FormControl,
@@ -19,6 +18,7 @@ const SizeAdd = () => {
   const [newSize, setNewSize] = useState("");
   const [sizeCountries, setSizeCountries] = useState([]);
   const [sizesData, setSizesData] = useState([]);
+  const [successMessage, setSuccessMessage] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
   const [isLoading, setIsLoading] = useState(false); // New loading state
   const fetchData = useFetch();
@@ -94,6 +94,7 @@ const SizeAdd = () => {
 
           if (updatedSizesResponse.ok) {
             setNewSize("");
+            setSuccessMessage("Successfully added new size!");
             setErrorMessage("");
             // Update the sizes state with the updated sizes for the selected country
             setSizesData(updatedSizesResponse.data);
@@ -108,16 +109,19 @@ const SizeAdd = () => {
           setErrorMessage(
             errorData.error || "An error occurred while adding the size."
           );
+          setSuccessMessage("");
         }
       } else {
         const errorMessage =
           "Invalid size input. Please enter a valid integer.";
         console.error(errorMessage);
         setErrorMessage(errorMessage);
+        setSuccessMessage("");
       }
     } catch (error) {
       console.error("Error adding size:", error);
       setErrorMessage("An error occurred while adding the size.");
+      setSuccessMessage("");
     }
   };
 
@@ -128,55 +132,52 @@ const SizeAdd = () => {
 
   return (
     <Box>
-      <Paper>
-        <Typography variant="h6">Add Sizes</Typography>
-        <FormControl sx={{ m: 1, minWidth: 120 }} size="small">
-          <InputLabel id="size-country-select-label">
-            Select Size Country
-          </InputLabel>
-          <Select
-            labelId="size-country-select-label"
-            id="size-country-select"
-            value={selectedCountry}
-            onChange={handleCountryChange}
-            sx={{ m: 1, minWidth: 120 }}
-          >
-            <MenuItem value="">
-              <em>Select Country</em>
-            </MenuItem>
-            {!isLoading ? (
-              sizeCountries.map((country) => (
-                <MenuItem key={country} value={country}>
-                  {country}
-                </MenuItem>
-              ))
-            ) : (
-              <MenuItem value="" disabled>
-                Loading...
+      <FormControl>
+        <InputLabel id="size-country-select-label">Select Country</InputLabel>
+        <Select
+          labelId="size-country-select-label"
+          id="size-country-select"
+          sx={{ m: 1, minWidth: 120 }}
+          size="small"
+          value={selectedCountry}
+          onChange={handleCountryChange}
+        >
+          <MenuItem value="">Select Country</MenuItem>
+          {!isLoading ? (
+            sizeCountries.map((country) => (
+              <MenuItem key={country} value={country}>
+                {country}
               </MenuItem>
-            )}
-          </Select>
+            ))
+          ) : (
+            <MenuItem value="" disabled>
+              Loading...
+            </MenuItem>
+          )}
+        </Select>
 
-          <TextField
-            type="number"
-            placeholder="Enter size"
-            sx={{ m: 1, minWidth: 120 }}
-            size="small"
-            InputProps={{ inputProps: { min: 0 } }}
-            value={newSize}
-            onChange={(e) => setNewSize(e.target.value)}
-          />
+        <TextField
+          type="number"
+          placeholder="Enter size"
+          sx={{ m: 1, minWidth: 120 }}
+          size="small"
+          InputProps={{ inputProps: { min: 0 } }}
+          value={newSize}
+          onChange={(e) => setNewSize(e.target.value)}
+        />
 
-          <Button variant="contained" onClick={handleAddSize}>
-            Add Size
-          </Button>
-        </FormControl>
-        {errorMessage && (
-          <Typography variant="body2" color="error">
-            {errorMessage}
-          </Typography>
-        )}
-      </Paper>
+        <Button variant="contained" onClick={handleAddSize}>
+          Add Size
+        </Button>
+      </FormControl>
+      {errorMessage && (
+        <Typography variant="body2" color="error">
+          {errorMessage}
+        </Typography>
+      )}
+      {successMessage && (
+        <Typography color="primary">{successMessage}</Typography>
+      )}
     </Box>
   );
 };

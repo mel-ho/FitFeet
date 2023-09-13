@@ -1,4 +1,8 @@
+-- create database
 CREATE DATABASE fitfeet;
+
+-- change directory into fitfeet database
+\c fitfeet
 
 -- user table
 CREATE TABLE users(
@@ -13,13 +17,25 @@ CREATE TABLE users(
 
 -- seeding some user data
 INSERT INTO users (user_id, email, password, is_retailer, retailer_id, is_admin, is_active)
-VALUES ('3801f23d-5dea-477e-803e-5d8e61ba38ba','admin@test.com', '$2b$12$oDvwjsCctlU7UfQO00ZPZOmGjr6TlM8K/ToqBTqjqXr6ibU0GBY9W', FALSE, NULL, TRUE, TRUE);
-INSERT INTO users (user_id, email, password, is_retailer, retailer_id, is_admin, is_active)
-VALUES ('3801f23d-5dea-477e-803e-5d8e61ba38bb','retailer@test.com', '$2b$12$oDvwjsCctlU7UfQO00ZPZOmGjr6TlM8K/ToqBTqjqXr6ibU0GBY9W', TRUE, 'fe5f4809-9c2a-47a2-8faf-fe34f43cb2e2', FALSE, TRUE);
-INSERT INTO users (user_id, email, password, is_retailer, retailer_id, is_admin, is_active)
-VALUES ('3801f23d-5dea-477e-803e-5d8e61ba38bc','user@test.com', '$2b$12$oDvwjsCctlU7UfQO00ZPZOmGjr6TlM8K/ToqBTqjqXr6ibU0GBY9W', FALSE, NULL, FALSE, TRUE);
-INSERT INTO users (user_id,email, password, is_retailer, retailer_id, is_admin, is_active)
-VALUES ('aca95e36-25d7-4d99-a794-3a1888a2ad34','invalid@test.com', '$2b$12$7mQw.ZtKW.kHtVFuaNWujuPKpMuJHrfJV8ecyF9eayFgoSbu3oYO.', TRUE, NULL, FALSE, FALSE);
+VALUES
+('aca95e36-25d7-4d99-a794-3a1888a2ad34','invalid@test.com', '$2b$12$7mQw.ZtKW.kHtVFuaNWujuPKpMuJHrfJV8ecyF9eayFgoSbu3oYO.', TRUE, NULL, FALSE, FALSE),
+('3801f23d-5dea-477e-803e-5d8e61ba38ba','admin@test.com', '$2b$12$oDvwjsCctlU7UfQO00ZPZOmGjr6TlM8K/ToqBTqjqXr6ibU0GBY9W', FALSE, NULL, TRUE, TRUE),
+('3801f23d-5dea-477e-803e-5d8e61ba38bb','retailer@test.com', '$2b$12$oDvwjsCctlU7UfQO00ZPZOmGjr6TlM8K/ToqBTqjqXr6ibU0GBY9W', TRUE, 'fe5f4809-9c2a-47a2-8faf-fe34f43cb2e2', FALSE, TRUE),
+('3801f23d-5dea-477e-803e-5d8e61ba38bc','user@test.com', '$2b$12$oDvwjsCctlU7UfQO00ZPZOmGjr6TlM8K/ToqBTqjqXr6ibU0GBY9W', FALSE, NULL, FALSE, TRUE),
+('2801f23d-5dea-477e-803e-5d8e61ba38bb', 'user1@test.com', '$2b$12$oDvwjsCctlU7UfQO00ZPZOmGjr6TlM8K/ToqBTqjqXr6ibU0GBY9W', FALSE, NULL, FALSE, TRUE),
+('4801f23d-5dea-477e-803e-5d8e61ba38bb', 'user2@test.com', '$2b$12$oDvwjsCctlU7UfQO00ZPZOmGjr6TlM8K/ToqBTqjqXr6ibU0GBY9W', FALSE, NULL, FALSE, TRUE),
+('5801f23d-5dea-477e-803e-5d8e61ba38bb', 'user3@test.com', '$2b$12$oDvwjsCctlU7UfQO00ZPZOmGjr6TlM8K/ToqBTqjqXr6ibU0GBY9W', FALSE, NULL, FALSE, TRUE),
+('6801f23d-5dea-477e-803e-5d8e61ba38bb', 'user4@test.com', '$2b$12$oDvwjsCctlU7UfQO00ZPZOmGjr6TlM8K/ToqBTqjqXr6ibU0GBY9W', FALSE, NULL, FALSE, TRUE),
+('7801f23d-5dea-477e-803e-5d8e61ba38bb', 'user5@test.com', '$2b$12$oDvwjsCctlU7UfQO00ZPZOmGjr6TlM8K/ToqBTqjqXr6ibU0GBY9W', FALSE, NULL, FALSE, TRUE),
+('8801f23d-5dea-477e-803e-5d8e61ba38bb', 'user6@test.com', '$2b$12$oDvwjsCctlU7UfQO00ZPZOmGjr6TlM8K/ToqBTqjqXr6ibU0GBY9W', FALSE, NULL, FALSE, TRUE),
+('9801f23d-5dea-477e-803e-5d8e61ba38bb', 'user7@test.com', '$2b$12$oDvwjsCctlU7UfQO00ZPZOmGjr6TlM8K/ToqBTqjqXr6ibU0GBY9W', FALSE, NULL, FALSE, TRUE),
+('3701f23d-5dea-477e-803e-5d8e61ba38bb', 'user8@test.com', '$2b$12$oDvwjsCctlU7UfQO00ZPZOmGjr6TlM8K/ToqBTqjqXr6ibU0GBY9W', FALSE, NULL, FALSE, TRUE),
+('3601f23d-5dea-477e-803e-5d8e61ba38bb', 'user9@test.com', '$2b$12$oDvwjsCctlU7UfQO00ZPZOmGjr6TlM8K/ToqBTqjqXr6ibU0GBY9W', FALSE, NULL, FALSE, TRUE),
+('3501f23d-5dea-477e-803e-5d8e61ba38bb', 'user10@test.com', '$2b$12$oDvwjsCctlU7UfQO00ZPZOmGjr6TlM8K/ToqBTqjqXr6ibU0GBY9W', FALSE, NULL, FALSE, TRUE),
+('3401f23d-5dea-477e-803e-5d8e61ba38bb', 'user11@test.com', '$2b$12$oDvwjsCctlU7UfQO00ZPZOmGjr6TlM8K/ToqBTqjqXr6ibU0GBY9W', FALSE, NULL, FALSE, TRUE),
+('3301f23d-5dea-477e-803e-5d8e61ba38bb', 'user12@test.com', '$2b$12$oDvwjsCctlU7UfQO00ZPZOmGjr6TlM8K/ToqBTqjqXr6ibU0GBY9W', FALSE, NULL, FALSE, TRUE),
+('3201f23d-5dea-477e-803e-5d8e61ba38bb', 'user13@test.com', '$2b$12$oDvwjsCctlU7UfQO00ZPZOmGjr6TlM8K/ToqBTqjqXr6ibU0GBY9W', FALSE, NULL, FALSE, TRUE),
+('3101f23d-5dea-477e-803e-5d8e61ba38bb', 'user14@test.com', '$2b$12$oDvwjsCctlU7UfQO00ZPZOmGjr6TlM8K/ToqBTqjqXr6ibU0GBY9W', FALSE, NULL, FALSE, TRUE);
 
 -- each user can only have 1 registered address
 CREATE TABLE user_address( 
@@ -51,7 +67,21 @@ CREATE TABLE user_feet(
 );
 
 INSERT INTO user_feet(user_id, foot_length_l, foot_length_r, foot_width_l, foot_width_r, toe_length_l, toe_length_r, small_perim_l, small_perim_r, big_perim_l, big_perim_r, heel_perim_l, heel_perim_r)
-VALUES ('3801f23d-5dea-477e-803e-5d8e61ba38bc', 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1);
+VALUES ('3801f23d-5dea-477e-803e-5d8e61ba38bc', 25, 24, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1),
+('2801f23d-5dea-477e-803e-5d8e61ba38bb', 23.7, 23.7, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1),
+('4801f23d-5dea-477e-803e-5d8e61ba38bb', 24.1, 24.1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1),
+('5801f23d-5dea-477e-803e-5d8e61ba38bb', 24.5, 24.5, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1),
+('6801f23d-5dea-477e-803e-5d8e61ba38bb', 25, 25, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1),
+('7801f23d-5dea-477e-803e-5d8e61ba38bb', 25.4, 25.4, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1),
+('8801f23d-5dea-477e-803e-5d8e61ba38bb', 25.8, 25.8, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1),
+('9801f23d-5dea-477e-803e-5d8e61ba38bb', 26.2, 26.2, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1),
+('3701f23d-5dea-477e-803e-5d8e61ba38bb', 27.1, 27.1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1),
+('3601f23d-5dea-477e-803e-5d8e61ba38bb', 22, 22, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1),
+('3501f23d-5dea-477e-803e-5d8e61ba38bb', 22.9, 22.9, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1),
+('3401f23d-5dea-477e-803e-5d8e61ba38bb', 23.7, 23.7, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1),
+('3301f23d-5dea-477e-803e-5d8e61ba38bb', 24.5, 24.5, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1),
+('3201f23d-5dea-477e-803e-5d8e61ba38bb', 25.4, 25.4, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1),
+('3101f23d-5dea-477e-803e-5d8e61ba38bb', 26.2, 26.2, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1);
 
 -- each user can only have 1 stored climbing experience
 CREATE TABLE user_climbingexp(
@@ -83,16 +113,23 @@ CREATE TABLE brands(
 );
 
 -- seeding some data for brands
-INSERT INTO brands (brand) VALUES ('FiveTen'), ('La Sportiva'), ('Evolv');
+INSERT INTO brands (brand) VALUES ('FiveTen'), ('La Sportiva'), ('Evolv'), ('Black Diamond');
 
 
 -- create a constraint table for models
 CREATE TABLE models(
-    model VARCHAR(255) PRIMARY KEY NOT NULL
+    model VARCHAR(255) PRIMARY KEY NOT NULL,
+    img_link VARCHAR(255)
 );
 
 -- seeding some data from models
-INSERT INTO models (model) VALUES ('Model 1'), ('Model 2'),  ('Model 3'), ('Model 4');
+INSERT INTO models (model, img_link) VALUES ('Miura', 'https://lcdn.lasportivausa.com/pub/media/catalog/product/2/0/20j_706706_miura_lime_1_4.jpg'),
+('Tarantula','https://lcdn.lasportivausa.com/pub/media/catalog/product/3/0/30j_999311_tarantula_black_poppy_1_1.jpg'),
+('Solution','https://lcdn.lasportivausa.com/pub/media/catalog/product/2/0/20g_000100_solution_whiteyellow_1_5.jpg'),
+('Method','https://cdn11.bigcommerce.com/s-hgn1l9sh63/images/stencil/1000w/attribute_rule_images/16894_source_1662270110.png'),
+('Futura','https://lcdn.lasportivausa.com/pub/media/catalog/product/2/0/20r_600100_futura_blueyellow_1_4.jpg'),
+('Momentum','https://cdn11.bigcommerce.com/s-hgn1l9sh63/images/stencil/1000w/attribute_rule_images/11260_source_1687931318.png');
+
 
 -- create a constraint table for size_countries
 CREATE TABLE size_countries(
@@ -111,7 +148,7 @@ CREATE TABLE sizes(
 );
 
 -- seeding data for sizes
-INSERT INTO sizes (size_country, size_number) VALUES ('US', 4), ('US', 5), ('US', 6), ('US', 7), ('US', 8), ('US', 9), ('EUR', 37), ('EUR', 38), ('EUR', 39), ('EUR', 40);
+INSERT INTO sizes (size_country, size_number) VALUES ('US', 5), ('US', 5.5), ('US', 6), ('US', 6.5), ('US', 7), ('US', 7.5), ('US', 8),('US', 8.5),  ('US', 9), ('US', 10), ('EUR', 37), ('EUR', 38), ('EUR', 39), ('EUR', 40);
 
 CREATE TABLE shoes(
     shoe_id SERIAL PRIMARY KEY,
@@ -124,6 +161,13 @@ CREATE TABLE shoes(
     CONSTRAINT unique_brand_model_size UNIQUE (brand, model, size_id)
 );
 
+INSERT INTO shoes(brand, model, size_id) VALUES 
+('La Sportiva', 'Miura', 2), ('La Sportiva', 'Tarantula', 2), ('La Sportiva', 'Solution', 2), ('La Sportiva', 'Futura', 2), ('Black Diamond', 'Method', 2), ('Black Diamond', 'Momentum', 2),
+('La Sportiva', 'Miura', 3), ('La Sportiva', 'Tarantula', 3), ('La Sportiva', 'Solution', 3), ('La Sportiva', 'Futura', 3), ('Black Diamond', 'Method', 3), ('Black Diamond', 'Momentum', 3),
+('La Sportiva', 'Miura', 4), ('La Sportiva', 'Tarantula', 4), ('La Sportiva', 'Solution', 4), ('La Sportiva', 'Futura', 4), ('Black Diamond', 'Method', 4), ('Black Diamond', 'Momentum', 4),
+('La Sportiva', 'Miura', 5), ('La Sportiva', 'Tarantula', 5), ('La Sportiva', 'Solution', 5), ('La Sportiva', 'Futura', 5), ('Black Diamond', 'Method', 5), ('Black Diamond', 'Momentum', 5),
+('La Sportiva', 'Miura', 6), ('La Sportiva', 'Tarantula', 6), ('La Sportiva', 'Solution', 6), ('La Sportiva', 'Futura', 6), ('Black Diamond', 'Method', 6), ('Black Diamond', 'Momentum', 6),
+('La Sportiva', 'Miura', 7), ('La Sportiva', 'Tarantula', 7), ('La Sportiva', 'Solution', 7), ('La Sportiva', 'Futura', 7), ('Black Diamond', 'Method', 7), ('Black Diamond', 'Momentum', 7);
 
 CREATE TABLE products(
     product_id SERIAL PRIMARY KEY,
@@ -159,11 +203,22 @@ CREATE TABLE orders(
 CREATE TABLE user_shoes(
     user_shoe_id SERIAL PRIMARY KEY,
     shoe_id INT NOT NULL,
-    date_purchased DATE NOT NULL,
-    date_worn DATE NOT NULL,
+    date_purchased DATE,
+    date_worn DATE,
     date_disposed DATE,
     star_rating INT NOT NULL,
     user_id UUID,
     CONSTRAINT fk_user_id FOREIGN KEY (user_id) REFERENCES users(user_id),
     CONSTRAINT fk_shoe_id FOREIGN KEY (shoe_id) REFERENCES shoes(shoe_id)
 );
+
+INSERT INTO user_shoes(shoe_id, date_purchased, date_worn, date_disposed, star_rating, user_id) VALUES
+(7,NULL,NULL,NULL,4,'2801f23d-5dea-477e-803e-5d8e61ba38bb'),
+(13,NULL,NULL,NULL,4,'4801f23d-5dea-477e-803e-5d8e61ba38bb'),
+(19,NULL,NULL,NULL,5,'5801f23d-5dea-477e-803e-5d8e61ba38bb'),
+(26,NULL,NULL,NULL,4,'6801f23d-5dea-477e-803e-5d8e61ba38bb'),
+(33,NULL,NULL,NULL,5,'7801f23d-5dea-477e-803e-5d8e61ba38bb'),
+(11,NULL,NULL,NULL,4,'3501f23d-5dea-477e-803e-5d8e61ba38bb'),
+(24,NULL,NULL,NULL,4,'3401f23d-5dea-477e-803e-5d8e61ba38bb'),
+(36,NULL,NULL,NULL,4,'3301f23d-5dea-477e-803e-5d8e61ba38bb');
+

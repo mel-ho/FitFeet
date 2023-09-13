@@ -1,5 +1,12 @@
 import React, { useState, useEffect, useContext } from "react";
-import { Box, Paper, Typography, TableCell } from "@mui/material";
+import {
+  Box,
+  Typography,
+  TableCell,
+  TableRow,
+  Table,
+  TableBody,
+} from "@mui/material";
 import UserContext from "../context/user";
 import useFetch from "../hooks/useFetch";
 
@@ -29,15 +36,19 @@ const ModelView = () => {
 
   return (
     <Box>
-      <Paper>
-        <Typography variant="h6">Select Models</Typography>
-
-        {models.map((model) => (
-          <TableCell key={model.model} value={model.model}>
-            {model.model}
-          </TableCell>
-        ))}
-      </Paper>
+      <Typography variant="h6">View Models</Typography>
+      <Table>
+        <TableBody>
+          {models.map((model) => (
+            <TableRow key={model.model}>
+              <TableCell style={{ width: "20%" }}>
+                <img src={model.img_link} alt={model.model} width="100" />
+              </TableCell>
+              <TableCell style={{ width: "80%" }}>{model.model}</TableCell>
+            </TableRow>
+          ))}
+        </TableBody>
+      </Table>
     </Box>
   );
 };

@@ -88,11 +88,8 @@ const SizeSelect = ({ size_country = "", size_number = "", onSizeChange }) => {
 
   return (
     <Box>
-      <Typography variant="h6">Select Sizes</Typography>
       <FormControl sx={{ m: 1, minWidth: 180 }} size="small">
-        <InputLabel id="size-country-select-label">
-          Select Size Country
-        </InputLabel>
+        <InputLabel id="size-country-select-label">Select Country</InputLabel>
         <Select
           labelId="size-country-select-label"
           id="size-country-select"
@@ -111,9 +108,7 @@ const SizeSelect = ({ size_country = "", size_number = "", onSizeChange }) => {
       </FormControl>
 
       <FormControl sx={{ m: 1, minWidth: 180 }} size="small">
-        <InputLabel id="size-number-select-label">
-          Select Size Number
-        </InputLabel>
+        <InputLabel id="size-number-select-label">Select Size</InputLabel>
         <Select
           labelId="size-number-select-label"
           id="size-number-select"

@@ -9,6 +9,7 @@ const auth = require("./src/routers/auth");
 const users = require("./src/routers/users");
 const retail = require("./src/routers/retail");
 const shoes = require("./src/routers/shoes");
+const recommender = require("./src/routers/recommender");
 
 const limit = rateLimit({
   windowMs: 15 * 6 * 1000, // 15 mins
@@ -31,6 +32,7 @@ app.use("/auth", auth);
 app.use("/users", users);
 app.use("/retail", retail);
 app.use("/shoes", shoes);
+app.use("/recommender", recommender);
 
 const PORT = process.env.PORT || 5001;
 app.listen(PORT, () => {

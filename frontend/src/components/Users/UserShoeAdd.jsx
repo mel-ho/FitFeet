@@ -9,7 +9,6 @@ import {
   Box,
   Button,
   Container,
-  Paper,
   Rating,
   TextField,
   Typography,
@@ -74,60 +73,56 @@ const UserShoeAdd = () => {
 
   return (
     <Box>
-      <Paper>
-        <Container>
-          <Typography variant="h4">Add Your Shoe</Typography>
-          <BrandSelect
-            value={brand}
-            onBrandChange={(e) => setBrand(e.target.value)}
-          />
-          <ModelSelect
-            value={model}
-            onModelChange={(e) => setModel(e.target.value)}
-          />
-          <SizeSelect
-            size_country={sizeCountry}
-            size_number={sizeNumber}
-            onSizeChange={(size_country, size_number) => {
-              setSizeCountry(size_country);
-              if (size_number) {
-                setSizeNumber(size_number);
-              }
-            }}
-          />
-          <TextField
-            label="Date Purchased"
-            type="date"
-            InputLabelProps={{ shrink: true }}
-            onChange={handleDateChange(setDatePurchased)}
-          />
-          <TextField
-            label="Date Worn"
-            type="date"
-            InputLabelProps={{ shrink: true }}
-            onChange={handleDateChange(setDateWorn)}
-          />
-          <TextField
-            label="Date Disposed"
-            type="date"
-            InputLabelProps={{ shrink: true }}
-            onChange={handleDateChange(setDateDisposed)}
-          />
-          <Rating
-            value={starRating}
-            onChange={(event, newValue) => setStarRating(newValue)}
-          />
-          <Button variant="contained" onClick={handleAddUserShoe}>
-            Add User Shoe
-          </Button>
-          {errorMessage && (
-            <Typography color="error">{errorMessage}</Typography>
-          )}
-          {successMessage && (
-            <Typography color="primary">{successMessage}</Typography>
-          )}
-        </Container>
-      </Paper>
+      <Container>
+        <Typography variant="h4">Add Your Shoe</Typography>
+        <BrandSelect
+          value={brand}
+          onBrandChange={(e) => setBrand(e.target.value)}
+        />
+        <ModelSelect
+          value={model}
+          onModelChange={(e) => setModel(e.target.value)}
+        />
+        <SizeSelect
+          size_country={sizeCountry}
+          size_number={sizeNumber}
+          onSizeChange={(size_country, size_number) => {
+            setSizeCountry(size_country);
+            if (size_number) {
+              setSizeNumber(size_number);
+            }
+          }}
+        />
+        <TextField
+          label="Date Purchased"
+          type="date"
+          InputLabelProps={{ shrink: true }}
+          onChange={handleDateChange(setDatePurchased)}
+        />
+        <TextField
+          label="Date Worn"
+          type="date"
+          InputLabelProps={{ shrink: true }}
+          onChange={handleDateChange(setDateWorn)}
+        />
+        <TextField
+          label="Date Disposed"
+          type="date"
+          InputLabelProps={{ shrink: true }}
+          onChange={handleDateChange(setDateDisposed)}
+        />
+        <Rating
+          value={starRating}
+          onChange={(event, newValue) => setStarRating(newValue)}
+        />
+        <Button variant="contained" onClick={handleAddUserShoe}>
+          Add User Shoe
+        </Button>
+        {errorMessage && <Typography color="error">{errorMessage}</Typography>}
+        {successMessage && (
+          <Typography color="primary">{successMessage}</Typography>
+        )}
+      </Container>
     </Box>
   );
 };

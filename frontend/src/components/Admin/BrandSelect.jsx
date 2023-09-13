@@ -42,7 +42,6 @@ const BrandSelect = ({ value = "", onBrandChange }) => {
 
   return (
     <Box>
-      <Typography variant="h6">Select Brands</Typography>
       <FormControl sx={{ m: 1, minWidth: 180 }} size="small">
         <InputLabel id="brand-select-label">Select Brand</InputLabel>
         <Select

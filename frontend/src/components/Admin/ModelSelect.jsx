@@ -1,12 +1,5 @@
 import React, { useState, useEffect, useContext } from "react";
-import {
-  Box,
-  Typography,
-  FormControl,
-  InputLabel,
-  Select,
-  MenuItem,
-} from "@mui/material";
+import { Box, FormControl, InputLabel, Select, MenuItem } from "@mui/material";
 import UserContext from "../context/user";
 import useFetch from "../hooks/useFetch";
 
@@ -42,7 +35,6 @@ const ModelSelect = ({ value = "", onModelChange }) => {
 
   return (
     <Box>
-      <Typography variant="h6">Select Models</Typography>
       <FormControl sx={{ m: 1, minWidth: 180 }} size="small">
         <InputLabel id="model-select-label">Select Model</InputLabel>
         <Select
