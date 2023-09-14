@@ -54,7 +54,7 @@ FitFeet is an shoe recommender / retail management app. It was created as my cap
 ## Technologies Used
 - PERN stack
 - Material UI (https://mui.com/)
-- 
+
 ## Future Improvements
 - Improve recommendation algorithm. Currently due to a lack of time, it is only based on matching user to other users with similar feet lenght
 - Payment integration when user orders a shoe
