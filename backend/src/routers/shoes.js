@@ -20,7 +20,7 @@ const {
 } = require("../controllers/shoes");
 
 const checkValid = require("../middleware/checkValid");
-const { authUser, authRetailer } = require("../middleware/auth");
+const { authUser, authRetailer, authAdmin } = require("../middleware/auth");
 
 router.put("/brand", authRetailer, checkValid, addBrand);
 router.get("/brand", authRetailer, getAllBrands);
@@ -34,7 +34,7 @@ router.get("/sizes", authRetailer, getAllSizes);
 router.get("/sizes/:country", authRetailer, getSizesbyCountry);
 
 router.put("/shoes", authUser, checkValid, addShoes);
-router.get("/shoes", authUser, getAllShoes);
+router.get("/shoes", authAdmin, getAllShoes);
 router.get("/shoes/:shoeId", authUser, getShoeByShoeId);
 router.get("/shoes/b/:brand", authUser, getShoesByBrand);
 

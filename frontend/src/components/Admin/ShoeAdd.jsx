@@ -4,7 +4,7 @@ import useFetch from "../hooks/useFetch";
 import BrandSelect from "./BrandSelect";
 import ModelSelect from "./ModelSelect";
 import SizeSelect from "./SizeSelect";
-import { Box, Button, Container, Paper, Typography } from "@mui/material";
+import { Box, Button, Container, Typography } from "@mui/material";
 
 const ShoeAdd = () => {
   const userCtx = useContext(UserContext);
@@ -78,39 +78,37 @@ const ShoeAdd = () => {
 
   return (
     <Box>
-      <Paper>
-        <Container>
-          <BrandSelect
-            value={brand}
-            onBrandChange={(e) => setBrand(e.target.value)}
-          />
-          <ModelSelect
-            value={model}
-            onModelChange={(e) => setModel(e.target.value)}
-          />
-          <SizeSelect
-            size_country={sizeCountry}
-            size_number={sizeNumber}
-            onSizeChange={(size_country, size_number) => {
-              setSizeCountry(size_country);
-              if (size_number) {
-                setSizeNumber(size_number);
-              }
-            }}
-          />
-          <Button variant="contained" onClick={handleAddShoe}>
-            Add Shoe
-          </Button>
-          {errorMessage && (
-            <Typography variant="body2" color="error">
-              {errorMessage}
-            </Typography>
-          )}
-          {successMessage && (
-            <Typography color="primary">{successMessage}</Typography>
-          )}
-        </Container>
-      </Paper>
+      <Container>
+        <BrandSelect
+          value={brand}
+          onBrandChange={(e) => setBrand(e.target.value)}
+        />
+        <ModelSelect
+          value={model}
+          onModelChange={(e) => setModel(e.target.value)}
+        />
+        <SizeSelect
+          size_country={sizeCountry}
+          size_number={sizeNumber}
+          onSizeChange={(size_country, size_number) => {
+            setSizeCountry(size_country);
+            if (size_number) {
+              setSizeNumber(size_number);
+            }
+          }}
+        />
+        <Button variant="contained" onClick={handleAddShoe}>
+          Add Shoe
+        </Button>
+        {errorMessage && (
+          <Typography variant="body2" color="error">
+            {errorMessage}
+          </Typography>
+        )}
+        {successMessage && (
+          <Typography color="primary">{successMessage}</Typography>
+        )}
+      </Container>
     </Box>
   );
 };

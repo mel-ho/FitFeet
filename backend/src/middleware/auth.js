@@ -9,30 +9,22 @@ const verifyToken = (token) => {
 };
 
 const authUser = (req, res, next) => {
-  if (!("authorization" in req.headers)) {
-    return res.status(400).json({ status: "error", msg: "no token found" });
-  }
+  const token = req.headers["authorization"]?.replace("Bearer ", "");
+  const decoded = verifyToken(token);
 
-  const token = req.headers["authorization"].replace("Bearer ", "");
-
-  if (token) {
-    const decoded = verifyToken(token);
-    if (decoded) {
-      req.decoded = decoded;
-      next();
-    } else {
-      return res.status(401).json({ status: "error", msg: "unauthorized" });
-    }
+  if (decoded) {
+    req.decoded = decoded;
+    next();
   } else {
-    return res.status(403).json({ status: "error", msg: "forbidden" });
+    return res.status(401).json({ status: "error", msg: "unauthorized" });
   }
 };
 
 const authRetailer = (req, res, next) => {
-  const token = req.headers["authorization"].replace("Bearer ", "");
+  const token = req.headers["authorization"]?.replace("Bearer ", "");
   const decoded = verifyToken(token);
 
-  if (decoded && decoded.is_retailer === true) {
+  if (decoded && (decoded.is_retailer || decoded.is_admin)) {
     req.decoded = decoded;
     next();
   } else {
@@ -41,10 +33,10 @@ const authRetailer = (req, res, next) => {
 };
 
 const authAdmin = (req, res, next) => {
-  const token = req.headers["authorization"].replace("Bearer ", "");
+  const token = req.headers["authorization"]?.replace("Bearer ", "");
   const decoded = verifyToken(token);
 
-  if (decoded && decoded.is_admin === true) {
+  if (decoded && decoded.is_admin) {
     req.decoded = decoded;
     next();
   } else {
