@@ -1,11 +1,13 @@
 import React, { useContext } from "react";
-import { Link } from "react-router-dom";
-import { AppBar, Toolbar, Box, Grid, Typography } from "@mui/material";
+import { Link, useNavigate } from "react-router-dom";
+
+import { AppBar, Box, Button, Grid, Toolbar, Typography } from "@mui/material";
 
 import UserContext from "../context/user";
 
 const UserBar = () => {
   const userCtx = useContext(UserContext);
+  const navigate = useNavigate();
 
   return (
     <Box sx={{ display: "flex" }}>
@@ -22,13 +24,28 @@ const UserBar = () => {
                 <img src="/fitfeetlogo.png" height="50px" alt="FitFeet Logo" />
               </Link>
             </Grid>
-
-            <Grid item>
+            <Grid item display={"flex"}>
               {userCtx.userEmail && (
-                <Typography variant="body1" sx={{ marginRight: 2 }}>
-                  Logged in as: {userCtx.userEmail}
+                <Typography
+                  variant="body1"
+                  sx={{
+                    display: "flex",
+                    alignItems: "center",
+                    marginRight: 2,
+                  }}
+                >
+                  {userCtx.userEmail}
                 </Typography>
               )}
+
+              <Button
+                variant="contained"
+                type="submit"
+                margin="normal"
+                onClick={() => navigate("/")}
+              >
+                Logout
+              </Button>
             </Grid>
           </Grid>
         </Toolbar>

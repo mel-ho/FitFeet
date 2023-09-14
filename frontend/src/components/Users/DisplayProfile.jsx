@@ -215,7 +215,10 @@ const DisplayProfile = () => {
         <Grid item xs={3}>
           Trad Climbing
         </Grid>
-        <Grid item xs={1}>
+        <Grid item xs={3}>
+          Years of Experience:
+        </Grid>
+        <Grid item xs={3}>
           <TextField
             aria-label="Years of Experience"
             type="number"
@@ -225,9 +228,6 @@ const DisplayProfile = () => {
               handleClimbingExperienceChange("years_exp", e.target.value)
             }
           />
-        </Grid>
-        <Grid item xs={3}>
-          Years of Experience
         </Grid>
       </Grid>
     </Box>

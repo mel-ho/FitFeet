@@ -16,21 +16,39 @@ const {
   updateOrderStatusByOrderId,
 } = require("../controllers/retail");
 
-router.put("/retailers", addNewRetailer);
-router.get("/retailers", getAllRetailers);
-router.get("/retailers/:retailerId", getRetailerById);
-router.patch("/retailers/:retailerId", patchRetailerByRetailerId);
+const checkValid = require("../middleware/checkValid");
+const { authUser, authRetailer, authAdmin } = require("../middleware/auth");
 
-router.put("/products", addNewProduct);
-router.get("/products/:retailerId", getAllProductsByRetailerId);
-router.get("/products/:productId", getProductByProductId);
-router.patch("products/:productId", updateProductQuantitybyProductId);
+router.put("/retailers", authAdmin, checkValid, addNewRetailer);
+router.get("/retailers", authAdmin, getAllRetailers);
+router.get("/retailers/:retailerId", authRetailer, getRetailerById);
+router.patch(
+  "/retailers/:retailerId",
+  authRetailer,
+  checkValid,
+  patchRetailerByRetailerId
+);
 
-router.put("/orders", addNewOrder);
-router.get("/orders/r/:retailerId", getAllOrdersByRetailerId);
-router.get("/orders/u/:userId", getOrderByUserId);
+router.put("/products", checkValid, authRetailer, addNewProduct);
+router.get("/products/:retailerId", authRetailer, getAllProductsByRetailerId);
+router.get("/products/:productId", authRetailer, getProductByProductId);
+router.patch(
+  "products/:productId",
+  authRetailer,
+  checkValid,
+  updateProductQuantitybyProductId
+);
 
-router.get("/orderstatus/", getOrderStatus);
-router.patch("/orderstatus/:orderId", updateOrderStatusByOrderId);
+router.put("/orders", authUser, checkValid, addNewOrder);
+router.get("/orders/r/:retailerId", authRetailer, getAllOrdersByRetailerId);
+router.get("/orders/u/:userId", authUser, getOrderByUserId);
+
+router.get("/orderstatus/", authRetailer, getOrderStatus);
+router.patch(
+  "/orderstatus/:orderId",
+  authRetailer,
+  checkValid,
+  updateOrderStatusByOrderId
+);
 
 module.exports = router;

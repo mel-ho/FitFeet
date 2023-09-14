@@ -32,7 +32,7 @@ const authRetailer = (req, res, next) => {
   const token = req.headers["authorization"].replace("Bearer ", "");
   const decoded = verifyToken(token);
 
-  if (decoded && decoded.is_retailer === True) {
+  if (decoded && decoded.is_retailer === true) {
     req.decoded = decoded;
     next();
   } else {
@@ -44,7 +44,7 @@ const authAdmin = (req, res, next) => {
   const token = req.headers["authorization"].replace("Bearer ", "");
   const decoded = verifyToken(token);
 
-  if (decoded && decoded.is_admin === True) {
+  if (decoded && decoded.is_admin === true) {
     req.decoded = decoded;
     next();
   } else {

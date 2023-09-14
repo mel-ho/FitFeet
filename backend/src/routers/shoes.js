@@ -19,25 +19,28 @@ const {
   getUserShoeByUsershoeId,
 } = require("../controllers/shoes");
 
-router.put("/brand", addBrand);
-router.get("/brand", getAllBrands);
+const checkValid = require("../middleware/checkValid");
+const { authUser, authRetailer } = require("../middleware/auth");
 
-router.put("/model/", addModel);
-router.get("/model/", getAllModels);
+router.put("/brand", authRetailer, checkValid, addBrand);
+router.get("/brand", authRetailer, getAllBrands);
 
-router.get("/sizecountry", getAllCountries);
-router.put("/sizes", addSize);
-router.get("/sizes", getAllSizes);
-router.get("/sizes/:country", getSizesbyCountry);
+router.put("/model/", authRetailer, checkValid, addModel);
+router.get("/model/", authRetailer, getAllModels);
 
-router.put("/shoes", addShoes);
-router.get("/shoes", getAllShoes);
-router.get("/shoes/:shoeId", getShoeByShoeId);
-router.get("/shoes/b/:brand", getShoesByBrand);
+router.get("/sizecountry", authRetailer, getAllCountries);
+router.put("/sizes", authRetailer, checkValid, addSize);
+router.get("/sizes", authRetailer, getAllSizes);
+router.get("/sizes/:country", authRetailer, getSizesbyCountry);
 
-router.put("/usershoes", addUserShoes);
-router.get("/usershoes", getAllUserShoes);
-router.get("/usershoes/:userId", getUserShoesByUserId);
-router.post("/usershoes/:usershoeId", getUserShoeByUsershoeId);
+router.put("/shoes", authUser, checkValid, addShoes);
+router.get("/shoes", authUser, getAllShoes);
+router.get("/shoes/:shoeId", authUser, getShoeByShoeId);
+router.get("/shoes/b/:brand", authUser, getShoesByBrand);
+
+router.put("/usershoes", authUser, addUserShoes);
+router.get("/usershoes", authUser, getAllUserShoes);
+router.get("/usershoes/:userId", authUser, getUserShoesByUserId);
+router.post("/usershoes/:usershoeId", authUser, getUserShoeByUsershoeId);
 
 module.exports = router;

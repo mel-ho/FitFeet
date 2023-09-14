@@ -13,20 +13,32 @@ const {
   updateUserClimbingExperience,
   updateUserFeetDimensions,
   updateUserAddress,
-  recommender,
 } = require("../controllers/users");
 
-router.get("/users", getAllUsers);
-router.get("/users/:userId", getUserById);
-router.patch("/users/:userId", patchUser);
-router.put("/userexp/:userId", addUserClimbingExperience);
-router.put("/userfeet/:userId", addUserFeetDimensions);
-router.put("/useraddress/:userId", addUserAddress);
-router.get("/userexp/:userId", getUserClimbingExperience);
+const checkValid = require("../middleware/checkValid");
+const { authUser, authAdmin } = require("../middleware/auth");
+
+router.get("/users", authAdmin, getAllUsers);
+router.get("/users/:userId", authUser, getUserById);
+router.patch("/users/:userId", authUser, checkValid, patchUser);
+router.put("/userexp/:userId", authUser, checkValid, addUserClimbingExperience);
+router.put("/userfeet/:userId", authUser, checkValid, addUserFeetDimensions);
+router.put("/useraddress/:userId", authUser, checkValid, addUserAddress);
+router.get("/userexp/:userId", authUser, getUserClimbingExperience);
 router.get("/userfeet/:userId", getUserFeetDimensions);
-router.get("/useraddress/:userId", getUserAddress);
-router.patch("/userexp/:userId", updateUserClimbingExperience);
-router.patch("/userfeet/:userId", updateUserFeetDimensions);
-router.patch("/useraddress/:userId", updateUserAddress);
+router.get("/useraddress/:userId", authUser, getUserAddress);
+router.patch(
+  "/userexp/:userId",
+  authUser,
+  checkValid,
+  updateUserClimbingExperience
+);
+router.patch(
+  "/userfeet/:userId",
+  authUser,
+  checkValid,
+  updateUserFeetDimensions
+);
+router.patch("/useraddress/:userId", authUser, checkValid, updateUserAddress);
 
 module.exports = router;

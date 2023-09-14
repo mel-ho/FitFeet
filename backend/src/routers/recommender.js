@@ -2,6 +2,8 @@ const express = require("express");
 const router = express.Router();
 const { recommender } = require("../controllers/recommender");
 
-router.get("/:userId", recommender);
+const { authUser } = require("../middleware/auth");
+
+router.get("/:userId", authUser, recommender);
 
 module.exports = router;
