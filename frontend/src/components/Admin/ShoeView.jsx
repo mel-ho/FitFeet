@@ -1,8 +1,6 @@
 import React, { useContext, useEffect, useState } from "react";
 import {
   Box,
-  Typography,
-  Paper,
   Table,
   TableBody,
   TableCell,
@@ -57,37 +55,43 @@ const ShoeView = () => {
 
   return (
     <Box>
-      <Paper>
-        <Typography variant="h6">View Shoes</Typography>
-        <TextField
-          label="Search by Brand, Model, or Size"
-          variant="outlined"
-          value={searchText}
-          onChange={handleSearch}
-        />
-        <TableContainer>
-          <Table>
-            <TableHead>
-              <TableRow>
-                <TableCell>Brand</TableCell>
-                <TableCell>Model</TableCell>
-                <TableCell>Country</TableCell>
-                <TableCell>Size</TableCell>
+      <br />
+      <TextField
+        label="Search by Brand, Model, or Size"
+        variant="outlined"
+        value={searchText}
+        onChange={handleSearch}
+      />
+      <TableContainer>
+        <Table>
+          <TableHead>
+            <TableRow>
+              <TableCell>
+                <b>Brand</b>
+              </TableCell>
+              <TableCell>
+                <b>Model</b>
+              </TableCell>
+              <TableCell>
+                <b>Country</b>
+              </TableCell>
+              <TableCell>
+                <b>Size</b>
+              </TableCell>
+            </TableRow>
+          </TableHead>
+          <TableBody>
+            {filteredShoesData.map((shoe, index) => (
+              <TableRow key={index}>
+                <TableCell>{shoe.brand}</TableCell>
+                <TableCell>{shoe.model}</TableCell>
+                <TableCell>{shoe.size_country}</TableCell>
+                <TableCell>{shoe.size_number}</TableCell>
               </TableRow>
-            </TableHead>
-            <TableBody>
-              {filteredShoesData.map((shoe, index) => (
-                <TableRow key={index}>
-                  <TableCell>{shoe.brand}</TableCell>
-                  <TableCell>{shoe.model}</TableCell>
-                  <TableCell>{shoe.size_country}</TableCell>
-                  <TableCell>{shoe.size_number}</TableCell>
-                </TableRow>
-              ))}
-            </TableBody>
-          </Table>
-        </TableContainer>
-      </Paper>
+            ))}
+          </TableBody>
+        </Table>
+      </TableContainer>
     </Box>
   );
 };

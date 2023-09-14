@@ -62,42 +62,6 @@ const patchUser = async (req, res) => {
   }
 };
 
-// add user climbing exerience by userId
-const addUserClimbingExperience = async (req, res) => {
-  try {
-    const user_id = req.params.userId;
-    const { sport_climbing, bouldering, trad_climbing, years_exp } = req.body;
-
-    const query = `
-      INSERT INTO user_climbingexp (user_id, sport_climbing, bouldering, trad_climbing, years_exp)
-      VALUES ($1, $2, $3, $4, $5)
-    `;
-
-    const values = [
-      user_id,
-      sport_climbing,
-      bouldering,
-      trad_climbing,
-      years_exp,
-    ];
-    await pool.query(query, values);
-
-    res.json({
-      status: "success",
-      msg: "User climbing experience added",
-    });
-  } catch (error) {
-    if (error.code === "23505") {
-      return res.status(409).json({
-        status: "error",
-        msg: "User climbing experience already exists",
-      });
-    }
-    console.log(error.message);
-    res.json({ status: "error", msg: error.message });
-  }
-};
-
 // add feet dimension by userId
 const addUserFeetDimensions = async (req, res) => {
   try {
@@ -147,36 +111,6 @@ const addUserFeetDimensions = async (req, res) => {
       return res
         .status(409)
         .json({ status: "error", msg: "User feet dimensions already exists" });
-    }
-    console.log(error.message);
-    res.json({ status: "error", msg: error.message });
-  }
-};
-
-// add user_address by userId
-const addUserAddress = async (req, res) => {
-  try {
-    const user_id = req.params.userId;
-    const { shipping_address } = req.body;
-
-    const query = `
-      INSERT INTO user_address (user_id, shipping_address)
-      VALUES ($1, $2 )
-    `;
-
-    const values = [user_id, shipping_address];
-    await pool.query(query, values);
-
-    res.json({
-      status: "success",
-      msg: "User shipping address added",
-    });
-  } catch (error) {
-    if (error.code === "23505") {
-      return res.status(409).json({
-        status: "error",
-        msg: "User shipping address already exists",
-      });
     }
     console.log(error.message);
     res.json({ status: "error", msg: error.message });
@@ -261,17 +195,31 @@ const updateUserClimbingExperience = async (req, res) => {
     const userExistsResult = await pool.query(userExistsQuery, [user_id]);
 
     if (userExistsResult.rows.length === 0) {
-      return res
-        .status(404)
-        .json({ status: "error", msg: "User climbing experience not found" });
+      // If user_id does not exist, insert a new record
+      const insertQuery = `
+        INSERT INTO user_climbingexp (user_id, sport_climbing, bouldering, trad_climbing, years_exp)
+        VALUES ($1, $2, $3, $4, $5)
+      `;
+      const values = [
+        user_id,
+        sport_climbing,
+        bouldering,
+        trad_climbing,
+        years_exp,
+      ];
+      await pool.query(insertQuery, values);
+      return res.json({
+        status: "success",
+        msg: "User climbing experience added",
+      });
     }
 
-    const query = `
+    // Update the existing record
+    const updateQuery = `
       UPDATE user_climbingexp
       SET sport_climbing = $1, bouldering = $2, trad_climbing = $3, years_exp = $4
       WHERE user_id = $5
     `;
-
     const values = [
       sport_climbing,
       bouldering,
@@ -279,7 +227,7 @@ const updateUserClimbingExperience = async (req, res) => {
       years_exp,
       user_id,
     ];
-    await pool.query(query, values);
+    await pool.query(updateQuery, values);
 
     res.json({ status: "success", msg: "User climbing experience updated" });
   } catch (error) {
@@ -368,24 +316,28 @@ const updateUserAddress = async (req, res) => {
     const userExistsResult = await pool.query(userExistsQuery, [user_id]);
 
     if (userExistsResult.rows.length === 0) {
-      return res
-        .status(404)
-        .json({ status: "error", msg: "User address not found" });
+      // Insert new address if the user_id is not found
+      const insertQuery = `
+        INSERT INTO user_address (user_id, shipping_address)
+        VALUES ($1, $2)
+      `;
+      await pool.query(insertQuery, [user_id, shipping_address]);
+      return res.json({ status: "success", msg: "User address added" });
     }
 
-    const query = `
+    // Update the existing address if the user_id is found
+    const updateQuery = `
       UPDATE user_address
       SET shipping_address = $1
       WHERE user_id = $2
     `;
-
     const values = [shipping_address, user_id];
-    await pool.query(query, values);
+    await pool.query(updateQuery, values);
 
     res.json({ status: "success", msg: "User address updated" });
   } catch (error) {
     console.log(error.message);
-    res.json({ status: "error", msg: error.message });
+    res.status(500).json({ status: "error", msg: error.message });
   }
 };
 
@@ -393,9 +345,7 @@ module.exports = {
   getAllUsers,
   getUserById,
   patchUser,
-  addUserClimbingExperience,
   addUserFeetDimensions,
-  addUserAddress,
   getUserClimbingExperience,
   getUserFeetDimensions,
   getUserAddress,

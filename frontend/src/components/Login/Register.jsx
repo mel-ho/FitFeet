@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { Button, Container, TextField, Typography } from "@mui/material";
 import useFetch from "../hooks/useFetch";
 
 const Register = () => {
@@ -34,24 +35,39 @@ const Register = () => {
   };
 
   return (
-    <div>
-      <h1>Registration Page</h1>
-      <input
+    <Container
+      style={{
+        display: "flex",
+        flexDirection: "column",
+        alignItems: "center",
+        padding: "20px",
+        gap: "2px",
+      }}
+    >
+      <Typography variant="h6">
+        <b>Give me your personal details to gain access!</b>
+      </Typography>
+      <br />
+      <TextField
         type="email"
         placeholder="Email"
         value={email}
         onChange={(e) => setEmail(e.target.value)}
       />
-      <input
+      <br />
+      <TextField
         type="password"
-        placeholder="Password"
+        placeholder="Set Password"
         value={password}
         onChange={(e) => setPassword(e.target.value)}
       />
-      <button onClick={handleRegister}>Register</button>
+      <br />
+      <Button variant="contained" onClick={handleRegister}>
+        Register
+      </Button>
       {errorMessage && <p style={{ color: "red" }}>{errorMessage}</p>}
       {successMessage && <p style={{ color: "green" }}>{successMessage}</p>}
-    </div>
+    </Container>
   );
 };
 

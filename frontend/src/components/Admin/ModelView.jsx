@@ -36,7 +36,6 @@ const ModelView = () => {
 
   return (
     <Box>
-      <Typography variant="h6">View Models</Typography>
       <Table>
         <TableBody>
           {models.map((model) => (

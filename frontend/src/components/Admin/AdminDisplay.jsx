@@ -53,7 +53,6 @@ const AdminDisplay = () => {
           <CustomTabPanel value={value} index={3}>
             <ModelView />
           </CustomTabPanel>
-
           <CustomTabPanel value={value} index={4}>
             <ShoeManagement />
           </CustomTabPanel>

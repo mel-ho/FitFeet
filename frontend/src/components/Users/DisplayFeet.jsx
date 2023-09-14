@@ -38,6 +38,48 @@ const DisplayFeet = () => {
     }
   };
 
+  const handleAdd = () => {
+    // Initialize `updatedFeetData` with default or empty values
+    setUpdatedFeetData({
+      foot_length_l: "",
+      foot_length_r: "",
+      foot_width_l: "",
+      foot_width_r: "",
+      toe_length_l: "",
+      toe_length_r: "",
+      small_perim_l: "",
+      small_perim_r: "",
+      big_perim_l: "",
+      big_perim_r: "",
+      heel_perim_l: "",
+      heel_perim_r: "",
+    });
+
+    // Switch to edit mode
+    setEditable(true);
+  };
+
+  const handleAddNewDetails = async () => {
+    // Your PUT request logic to add new feet details
+    const user_id = userCtx.userId;
+    const res = await fetchData(
+      `/users/userfeet/${user_id}`,
+      "PUT",
+      updatedFeetData,
+      userCtx.accessToken
+    );
+
+    if (res.ok) {
+      setEditable(false);
+      // Refresh the feet dimensions data
+      getFeetDimensions();
+    } else {
+      console.error("Error adding new feet dimensions: ", res.data);
+    }
+  };
+
+  const isEmpty = Object.keys(feetData).length === 0;
+
   const handleEdit = () => {
     setEditable(true);
   };
@@ -78,9 +120,15 @@ const DisplayFeet = () => {
         <Table>
           <TableHead>
             <TableRow>
-              <TableCell>Dimension</TableCell>
-              <TableCell>Left Leg</TableCell>
-              <TableCell>Right Leg</TableCell>
+              <TableCell>
+                <b>Dimension</b>
+              </TableCell>
+              <TableCell>
+                <b>Left Leg</b>
+              </TableCell>
+              <TableCell>
+                <b>Right Leg</b>
+              </TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
@@ -240,7 +288,21 @@ const DisplayFeet = () => {
           </TableBody>
         </Table>
       </TableContainer>
-      {editable ? (
+      {isEmpty ? (
+        !editable ? (
+          <Button variant="contained" color="primary" onClick={handleAdd}>
+            Add
+          </Button>
+        ) : (
+          <Button
+            variant="contained"
+            color="secondary"
+            onClick={handleAddNewDetails}
+          >
+            Add New Details
+          </Button>
+        )
+      ) : editable ? (
         <Button variant="contained" color="primary" onClick={handleSave}>
           Save
         </Button>

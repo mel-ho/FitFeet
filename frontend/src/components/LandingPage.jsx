@@ -1,10 +1,18 @@
-import React from "react";
-import { Button, Container, Stack } from "@mui/material";
+import React, { useState } from "react";
+import { Button, Container, Stack, Dialog } from "@mui/material";
 import LoginBar from "./Login/LoginBar";
 import { useNavigate } from "react-router-dom";
+import Register from "./Login/Register";
 
 const LandingPage = () => {
   const navigate = useNavigate();
+
+  const [open, setOpen] = useState(false);
+
+  const handleClose = () => {
+    setOpen(false);
+  };
+
   return (
     <Stack direction="column" spacing={3}>
       <Container>
@@ -26,9 +34,12 @@ const LandingPage = () => {
             <h3>Place Orders</h3>
           </Container>
         </Container>
-        <Button variant="contained" onClick={() => navigate("/register")}>
+        <Button variant="contained" onClick={() => setOpen(true)}>
           Find my Fit
         </Button>
+        <Dialog open={open} onClose={handleClose}>
+          <Register />
+        </Dialog>
       </Container>
     </Stack>
   );

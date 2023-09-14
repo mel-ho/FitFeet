@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useContext } from "react";
-import { Box, Paper, Typography, TableCell } from "@mui/material";
+import { Box, Table, TableCell, TableRow, TableBody } from "@mui/material";
 import UserContext from "../context/user";
 import useFetch from "../hooks/useFetch";
 
@@ -29,14 +29,17 @@ const BrandView = () => {
 
   return (
     <Box>
-      <Paper>
-        <Typography variant="h6">View Brands</Typography>
-        {brands.map((brand) => (
-          <TableCell key={brand.brand} value={brand.brand}>
-            {brand.brand}
-          </TableCell>
-        ))}
-      </Paper>
+      <Table>
+        <TableBody>
+          {brands.map((brand) => (
+            <TableRow>
+              <TableCell key={brand.brand} value={brand.brand}>
+                {brand.brand}
+              </TableCell>
+            </TableRow>
+          ))}
+        </TableBody>
+      </Table>
     </Box>
   );
 };

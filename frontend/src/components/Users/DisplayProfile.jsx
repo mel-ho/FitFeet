@@ -51,11 +51,11 @@ const DisplayProfile = () => {
   };
 
   const handleSaveAddress = () => {
-    // Make a PATCH request to update the shipping address in the database
     const user_id = userCtx.userId;
     const updatedShippingAddress = {
       shipping_address: shippingAddress,
     };
+
     fetchData(
       `/users/useraddress/${user_id}`,
       "PATCH",
@@ -95,40 +95,34 @@ const DisplayProfile = () => {
     let updatedExperience;
 
     if (experienceName === "years_exp") {
-      // Convert the input value to an integer
       const yearsExp = parseInt(experienceValue, 10);
 
       if (!isNaN(yearsExp)) {
-        // Update years of experience as an integer
         updatedExperience = {
           ...climbingExperience,
           [experienceName]: yearsExp,
         };
       } else {
-        // Handle the case where the input is not a valid integer
         updatedExperience = {
           ...climbingExperience,
-          [experienceName]: 0, // Set a default value or handle the error as needed
+          [experienceName]: 0,
         };
       }
     } else {
-      // Update checkboxes (sport_climbing, bouldering, trad_climbing)
       updatedExperience = {
         ...climbingExperience,
         [experienceName]: !climbingExperience[experienceName],
       };
     }
+
     setClimbingExperience(updatedExperience);
 
-    // Make a PATCH request to update climbing experience in the database
     const user_id = userCtx.userId;
-    const updatedClimbingExperience = {
-      ...updatedExperience,
-    };
+
     fetchData(
       `/users/userexp/${user_id}`,
       "PATCH",
-      updatedClimbingExperience,
+      updatedExperience,
       userCtx.accessToken
     )
       .then((res) => {

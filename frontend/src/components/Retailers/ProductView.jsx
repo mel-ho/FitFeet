@@ -74,13 +74,27 @@ const ProductView = () => {
         <Table>
           <TableHead>
             <TableRow>
-              <TableCell>Product ID</TableCell>
-              <TableCell>Brand</TableCell>
-              <TableCell>Model</TableCell>
-              <TableCell>Country</TableCell>
-              <TableCell>Size</TableCell>
-              <TableCell>Date Purchased</TableCell>
-              <TableCell>Quantity</TableCell>
+              <TableCell>
+                <b>Product ID</b>
+              </TableCell>
+              <TableCell>
+                <b>Brand</b>
+              </TableCell>
+              <TableCell>
+                <b>Model</b>
+              </TableCell>
+              <TableCell>
+                <b>Country</b>
+              </TableCell>
+              <TableCell>
+                <b>Size</b>
+              </TableCell>
+              <TableCell>
+                <b>Date Purchased</b>
+              </TableCell>
+              <TableCell>
+                <b>Quantity</b>
+              </TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
