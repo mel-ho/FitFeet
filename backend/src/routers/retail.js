@@ -1,7 +1,6 @@
 const express = require("express");
 const router = express.Router();
 const {
-  addNewRetailer,
   getAllRetailers,
   getRetailerById,
   patchRetailerByRetailerId,
@@ -19,7 +18,6 @@ const {
 const checkValid = require("../middleware/checkValid");
 const { authUser, authRetailer, authAdmin } = require("../middleware/auth");
 
-router.put("/retailers", authAdmin, checkValid, addNewRetailer);
 router.get("/retailers", authAdmin, getAllRetailers);
 router.get("/retailers/:retailerId", authRetailer, getRetailerById);
 router.patch(

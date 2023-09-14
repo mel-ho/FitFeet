@@ -56,7 +56,7 @@ const UserManagement = () => {
   const startIndex = page * rowsPerPage;
   const endIndex = startIndex + rowsPerPage;
 
-  // Filter the userData based on the searchText
+  // Filter the userData based on the searchText and sort by email
   const filteredUserData = userData
     .filter(
       (user) =>
@@ -99,6 +99,34 @@ const UserManagement = () => {
     }
   };
 
+  const handleRetailerIDChange = async (user, newRetailerID) => {
+    // Create the data to be sent for the PATCH request.
+    const dataToUpdateForUser = {
+      email: user.email,
+      is_retailer: user.is_retailer,
+      is_admin: user.is_admin,
+      is_active: user.is_active,
+      retailer_id: newRetailerID, // Updating retailer_id
+    };
+
+    // Execute the PATCH request to update the retailer_id.
+    const res = await fetchData(
+      `/users/users/${user.user_id}`, // URL to update the specific user by user_id
+      "PATCH", // HTTP method
+      dataToUpdateForUser, // Data to update
+      userCtx.accessToken // Access token for authentication
+    );
+
+    // Check if the PATCH request was successful.
+    if (res.ok) {
+      // Re-fetch the data to update the UI.
+      getUsers();
+    } else {
+      // Log the error to the console if the PATCH request fails.
+      console.error("Error updating retailer ID:", res.data);
+    }
+  };
+
   useEffect(() => {
     getUsers();
   }, []);
@@ -129,7 +157,12 @@ const UserManagement = () => {
                 <TableCell style={{ width: "20%" }}>{user.email}</TableCell>
                 <TableCell style={{ width: "25%" }}>{user.user_id}</TableCell>
                 <TableCell style={{ width: "25%" }}>
-                  {user.retailer_id}
+                  <TextField
+                    value={user.retailer_id || ""}
+                    onChange={(e) =>
+                      handleRetailerIDChange(user, e.target.value)
+                    }
+                  />
                 </TableCell>
                 <TableCell style={{ width: "10%" }}>
                   <Checkbox

@@ -77,7 +77,7 @@ const RetailerProfile = () => {
                   InputProps={{
                     readOnly: true,
                   }}
-                  value={retailerInfo.retailer_id}
+                  value={userCtx.retailerId}
                 />
               </TableCell>
             </TableRow>
@@ -89,10 +89,7 @@ const RetailerProfile = () => {
                   InputProps={{
                     readOnly: true,
                   }}
-                  value={retailerInfo.email}
-                  onChange={(e) =>
-                    setRetailerInfo({ ...retailerInfo, email: e.target.value })
-                  }
+                  value={userCtx.userEmail}
                 />
               </TableCell>
             </TableRow>

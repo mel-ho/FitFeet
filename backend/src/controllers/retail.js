@@ -2,81 +2,6 @@
 const { v4: uuidv4 } = require("uuid");
 const pool = require("../db");
 
-// Add a new retailer and update related information in the users table
-const addNewRetailer = async (req, res) => {
-  try {
-    const { email, name, contact_detail, contact_address } = req.body;
-
-    const client = await pool.connect();
-
-    // start a database transaction
-    await client.query("BEGIN");
-
-    try {
-      // Check if the provided email exists in the users table
-      const checkUserQuery = `
-        SELECT retailer_id, is_retailer FROM users WHERE email = $1
-      `;
-      const checkUserResult = await client.query(checkUserQuery, [email]);
-
-      if (checkUserResult.rows.length === 0) {
-        return res.status(404).json({ status: "error", msg: "User not found" });
-      }
-
-      const user_id = checkUserResult.rows[0].user_id;
-      const is_retailer = checkUserResult.rows[0].is_retailer;
-
-      // If the user is already a retailer, return an error
-      if (is_retailer) {
-        return res
-          .status(400)
-          .json({ status: "error", msg: "User is already a retailer" });
-      }
-
-      // Insert the new retailer into the retailers table
-      const retailer_id = uuidv4(); // Generate a new UUID for the retailer
-      const insertRetailerQuery = `
-        INSERT INTO retailers (retailer_id, name, contact_detail, contact_address)
-        VALUES ($1, $2, $3, $4)
-      `;
-      const retailerValues = [
-        retailer_id,
-        name,
-        contact_detail,
-        contact_address,
-      ];
-      await client.query(insertRetailerQuery, retailerValues);
-
-      // Update the user to set is_retailer to true and retailer_id
-      const updateUserQuery = `
-        UPDATE users
-        SET is_retailer = TRUE, retailer_id = $1
-        WHERE user_id = $2
-      `;
-      await client.query(updateUserQuery, [retailer_id, user_id]);
-
-      // Commit the transaction
-      await client.query("COMMIT");
-
-      res.json({
-        status: "success",
-        msg: "New retailer added",
-        retailer_id: retailer_id,
-      });
-    } catch (error) {
-      // If any error occurs, rollback the transaction and handle the error
-      await client.query("ROLLBACK");
-      throw error;
-    } finally {
-      // Release the database client
-      client.release();
-    }
-  } catch (error) {
-    console.log(error.message);
-    res.json({ status: "error", msg: error.message });
-  }
-};
-
 // GET all retailers
 const getAllRetailers = async (req, res) => {
   try {
@@ -129,22 +54,42 @@ const getRetailerById = async (req, res) => {
   }
 };
 
-// UPDATE retailer details By Retailer ID
 const patchRetailerByRetailerId = async (req, res) => {
   try {
     const retailer_id = req.params.retailerId;
     const { name, contact_detail, contact_address } = req.body;
 
-    const query = `
-      UPDATE retailers
-      SET name = $1, contact_detail = $2, contact_address = $3
-      WHERE retailer_id = $4
+    // Check if retailer_id already exists in the database
+    const checkQuery = `
+      SELECT * FROM retailers WHERE retailer_id = $1
     `;
 
-    const values = [name, contact_detail, contact_address, retailer_id];
-    await pool.query(query, values);
+    const checkResult = await pool.query(checkQuery, [retailer_id]);
 
-    res.json({ status: "success", msg: "Retailer details updated" });
+    if (checkResult.rowCount === 0) {
+      // If retailer_id does not exist, INSERT new row
+      const insertQuery = `
+        INSERT INTO retailers (retailer_id, name, contact_detail, contact_address)
+        VALUES ($1, $2, $3, $4)
+      `;
+
+      const values = [retailer_id, name, contact_detail, contact_address];
+      await pool.query(insertQuery, values);
+
+      res.json({ status: "success", msg: "New retailer added" });
+    } else {
+      // If retailer_id exists, UPDATE the existing row
+      const updateQuery = `
+        UPDATE retailers
+        SET name = $1, contact_detail = $2, contact_address = $3
+        WHERE retailer_id = $4
+      `;
+
+      const values = [name, contact_detail, contact_address, retailer_id];
+      await pool.query(updateQuery, values);
+
+      res.json({ status: "success", msg: "Retailer details updated" });
+    }
   } catch (error) {
     console.log(error.message);
     res.json({ status: "error", msg: error.message });
@@ -481,7 +426,6 @@ const updateOrderStatusByOrderId = async (req, res) => {
 };
 
 module.exports = {
-  addNewRetailer,
   getAllRetailers,
   getRetailerById,
   patchRetailerByRetailerId,
