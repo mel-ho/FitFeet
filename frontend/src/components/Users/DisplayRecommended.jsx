@@ -12,16 +12,18 @@ import {
 } from "@mui/material";
 import UserContext from "../context/user";
 import useFetch from "../hooks/useFetch";
+import DisplayOrder from "./DisplayOrder";
 
 const DisplayRecommended = () => {
   const userCtx = useContext(UserContext);
   const [recommendedShoes, setRecommendedShoes] = useState([]);
   const [searchText, setSearchText] = useState("");
+  const [errorMessage, setErrorMessage] = useState("");
+  const [successMessage, setSuccessMessage] = useState("");
   const fetchData = useFetch();
 
   const getRecommendedShoes = async () => {
     try {
-      console.log(userCtx.userId);
       const user_id = userCtx.userId;
       const res = await fetchData(
         `/recommender/${user_id}`,
@@ -29,7 +31,6 @@ const DisplayRecommended = () => {
         undefined,
         userCtx.accessToken
       );
-      console.log(res);
       if (res.ok) {
         setRecommendedShoes(res.data);
       } else {
@@ -56,9 +57,39 @@ const DisplayRecommended = () => {
     getRecommendedShoes();
   }, []);
 
-  const handleOrder = (shoe) => {
-    // Logic for ordering the shoe can go here
-    console.log(`Ordered: ${shoe.brand} ${shoe.model} ${shoe.size_number}`);
+  const handleOrder = async (shoe) => {
+    try {
+      const retailerId = shoe.retailer_id;
+      const userId = userCtx.userId;
+      const productId = shoe.product_id;
+
+      const product = {
+        retailer_id: retailerId,
+        user_id: userId,
+        product_id: productId,
+        quantity: 1,
+      };
+
+      const res = await fetchData(
+        "/retail/orders",
+        "PUT",
+        product,
+        userCtx.accessToken
+      );
+      if (res.ok) {
+        setSuccessMessage(
+          `Successfully ordered: ${shoe.brand} ${shoe.model} ${shoe.size_country} ${shoe.size_number}`
+        );
+        setErrorMessage("");
+        getRecommendedShoes();
+      } else {
+        setErrorMessage(response.data);
+        setSuccessMessage("");
+      }
+    } catch (error) {
+      setErrorMessage(response.data);
+      setSuccessMessage("");
+    }
   };
 
   return (
@@ -87,7 +118,7 @@ const DisplayRecommended = () => {
                 </Typography>
                 <Typography variant="body2" color="text.secondary">
                   Brand: {shoe.brand} <br />
-                  Size: {shoe.size_number} <br />
+                  Size: {shoe.size_country} {shoe.size_number} <br />
                   {shoe.name ? (
                     <>
                       Retailer: {shoe.name} <br />
@@ -115,6 +146,11 @@ const DisplayRecommended = () => {
           </Card>
         ))}
       </Box>
+      <Box>
+        {errorMessage && <Typography color="error">{errorMessage}</Typography>}
+        {successMessage && <Typography>{successMessage}</Typography>}
+      </Box>
+      <DisplayOrder></DisplayOrder>
     </Box>
   );
 };

@@ -324,25 +324,29 @@ const addNewOrder = async (req, res) => {
   const client = await pool.connect();
 
   try {
-    const { retailer_id, product_id, quantity, order_date, order_status } =
-      req.body;
+    const { retailer_id, user_id, product_id, quantity } = req.body;
+
+    const defaultOrderDate = new Date().toISOString().substring(0, 10); // Use the current date
+    const defaultOrderStatus = "ORDERED";
 
     // Start a transaction
     await client.query("BEGIN");
 
     // Insert the new order
     const insertOrderQuery = `
-      INSERT INTO orders (retailer_id, product_id, quantity, order_date, order_status)
-      VALUES ($1, $2, $3, $4, $5)
+      INSERT INTO orders (retailer_id, user_id, product_id, quantity, order_date, order_status)
+      VALUES ($1, $2, $3, $4, $5, $6)
       RETURNING order_id
     `;
     const orderValues = [
       retailer_id,
+      user_id,
       product_id,
       quantity,
-      order_date,
-      order_status,
+      defaultOrderDate,
+      defaultOrderStatus,
     ];
+
     const newOrder = await client.query(insertOrderQuery, orderValues);
     const order_id = newOrder.rows[0].order_id;
 
@@ -380,16 +384,16 @@ const getAllOrdersByRetailerId = async (req, res) => {
     const retailer_id = req.params.retailerId;
     const query = `
       SELECT o.order_id AS order_id,
-        o.product_id,
+        s.brand AS shoe_brand,
+        s.model AS shoe_model,
+        sz.size_number AS shoe_size,
         o.quantity AS order_quantity,
         o.order_date,
-        o.order_status,
-        p.retailer_id,
-        p.shoe_id,
-        p.date_purchased,
-        p.quantity AS product_quantity
+        o.order_status
       FROM orders o
       JOIN products p ON o.product_id = p.product_id
+      JOIN shoes s ON p.shoe_id = s.shoe_id
+      JOIN sizes sz ON s.size_id = sz.size_id
       WHERE p.retailer_id = $1
     `;
     const orders = await pool.query(query, [retailer_id]);
@@ -400,32 +404,36 @@ const getAllOrdersByRetailerId = async (req, res) => {
   }
 };
 
-// GET order by orderID
-const getOrderById = async (req, res) => {
+// GET order by userId
+const getOrderByUserId = async (req, res) => {
   try {
-    const order_id = req.params.orderId;
+    const user_id = req.params.userId;
+
     const query = `
-      SELECT o.order_id AS order_id,
-        o.product_id,
-        o.quantity AS order_quantity,
-        o.order_date,
-        o.order_status,
-        p.retailer_id,
-        p.shoe_id,
-        p.date_purchased,
-        p.quantity AS product_quantity
+      SELECT 
+        o.order_id,
+        s.brand,  -- display brand
+        s.model,  -- display model
+        r.name AS retailer_name,  -- display retailer name
+        o.order_date,  -- display order date
+        o.order_status,  -- display order status
+        m.img_link
       FROM orders o
       JOIN products p ON o.product_id = p.product_id
-      WHERE o.order_id = $1
+      JOIN shoes s ON p.shoe_id = s.shoe_id
+      JOIN models m ON s.model = m.model
+      JOIN retailers r ON p.retailer_id = r.retailer_id  -- Join with the retailers table to get the retailer name
+      WHERE o.user_id = $1;
+
     `;
-    const order = await pool.query(query, [order_id]);
+    const order = await pool.query(query, [user_id]);
 
     // Check if an order with the specified ID exists
     if (order.rows.length === 0) {
       return res.status(404).json({ status: "error", msg: "Order not found" });
     }
 
-    res.json(order.rows[0]);
+    res.json(order.rows);
   } catch (error) {
     console.log(error.message);
     res.status(500).json({ status: "error", msg: error.message });
@@ -463,6 +471,6 @@ module.exports = {
   updateProductQuantitybyProductId,
   addNewOrder,
   getAllOrdersByRetailerId,
-  getOrderById,
+  getOrderByUserId,
   updateOrderStatusByOrderId,
 };

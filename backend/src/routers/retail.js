@@ -11,7 +11,7 @@ const {
   updateProductQuantitybyProductId,
   addNewOrder,
   getAllOrdersByRetailerId,
-  getOrderById,
+  getOrderByUserId,
   updateOrderStatusByOrderId,
 } = require("../controllers/retail");
 
@@ -26,8 +26,8 @@ router.get("/products/:productId", getProductByProductId);
 router.patch("products/:productId", updateProductQuantitybyProductId);
 
 router.put("/orders", addNewOrder);
-router.get("/orders/:retailerId", getAllOrdersByRetailerId);
-router.get("/orders/:orderId", getOrderById);
-router.patch("orders/:orderId", updateOrderStatusByOrderId);
+router.get("/orders/r/:retailerId", getAllOrdersByRetailerId);
+router.get("/orders/u/:userId", getOrderByUserId);
+router.patch("/orders/:orderId", updateOrderStatusByOrderId);
 
 module.exports = router;

@@ -8,10 +8,13 @@ const recommender = async (req, res) => {
         DISTINCT s.shoe_id, 
         s.brand, 
         s.model,
+        sz.size_country,
         sz.size_number,
         m.img_link,
         r.name,
-        p.quantity
+        p.product_id,
+        p.quantity,
+        p.retailer_id
       FROM 
         user_feet uf1
       JOIN 
