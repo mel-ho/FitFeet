@@ -1,12 +1,9 @@
 import React, { useState } from "react";
-import { Button, Container, Stack, Dialog } from "@mui/material";
+import { Button, Box, Container, Stack, Dialog } from "@mui/material";
 import LoginBar from "./Login/LoginBar";
-import { useNavigate } from "react-router-dom";
 import Register from "./Login/Register";
 
 const LandingPage = () => {
-  const navigate = useNavigate();
-
   const [open, setOpen] = useState(false);
 
   const handleClose = () => {
@@ -14,13 +11,19 @@ const LandingPage = () => {
   };
 
   return (
-    <Stack direction="column" spacing={3}>
-      <Container>
-        <LoginBar />
-      </Container>
-      <Container>
-        <h1>Fit Feet</h1>
+    <div style={{ backgroundColor: "black", width: "100v" }}>
+      <Stack direction="row" spacing={3}>
         <Container>
+          <LoginBar />
+        </Container>
+        <Container
+          style={{
+            backgroundColor: "white",
+            height: "100%",
+            alignItems: "center",
+          }}
+        >
+          <h1>Fit Feet</h1>
           <Container>
             <h2>How it works</h2>
           </Container>
@@ -33,15 +36,35 @@ const LandingPage = () => {
           <Container>
             <h3>Place Orders</h3>
           </Container>
+          <Button variant="contained" onClick={() => setOpen(true)}>
+            Find my Fit
+          </Button>
+          <br />
+          <br />
+          <Dialog open={open} onClose={handleClose}>
+            <Register />
+          </Dialog>
         </Container>
-        <Button variant="contained" onClick={() => setOpen(true)}>
-          Find my Fit
-        </Button>
-        <Dialog open={open} onClose={handleClose}>
-          <Register />
-        </Dialog>
-      </Container>
-    </Stack>
+        <Container
+          style={{
+            height: "70vh",
+            position: "relative",
+            margin: 0,
+            padding: 0,
+            alignItems: "flex-start",
+          }}
+        >
+          <img
+            src="/FootLines.jpg"
+            alt="background"
+            style={{
+              height: "100%",
+              zIndex: -1,
+            }}
+          />
+        </Container>
+      </Stack>
+    </div>
   );
 };
 
