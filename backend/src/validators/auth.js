@@ -7,11 +7,6 @@ const validateRegistrationData = [
     min: 6,
     max: 24,
   }),
-  body("isActive", "isActive is required").not().isEmpty(),
-  body("isStaff", "isStaff is required").not().isEmpty(),
-  // body("staffRank", "staffRank is required").not().isEmpty(),
-  body("isMember", "isMember is required").not().isEmpty(),
-  // body("memberRank", "memberRank is required").not().isEmpty(),
 ];
 
 const validateLoginData = [

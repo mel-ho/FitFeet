@@ -1,8 +1,10 @@
 import React from "react";
 import { Button, Container, Stack } from "@mui/material";
 import LoginBar from "./Login/LoginBar";
+import { useNavigate } from "react-router-dom";
 
 const LandingPage = () => {
+  const navigate = useNavigate();
   return (
     <Stack direction="column" spacing={3}>
       <Container>
@@ -24,7 +26,9 @@ const LandingPage = () => {
             <h3>Place Orders</h3>
           </Container>
         </Container>
-        <Button variant="contained">Find my Fit</Button>
+        <Button variant="contained" onClick={() => navigate("/register")}>
+          Find my Fit
+        </Button>
       </Container>
     </Stack>
   );

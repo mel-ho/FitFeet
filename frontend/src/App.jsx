@@ -3,6 +3,7 @@ import UserContext from "./components/context/user";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 
 import LandingPage from "./components/LandingPage";
+import Register from "./components/Login/Register";
 import UserDisplay from "./components/Users/UserDisplay";
 import RetailerDisplay from "./components/Retailers/RetailerDisplay";
 import AdminDisplay from "./components/Admin/AdminDisplay";
@@ -42,6 +43,7 @@ function App() {
         <BrowserRouter>
           <Routes>
             <Route index element={<LandingPage />} />
+            <Route path="/register" element={<Register />} />
             <Route path="/user" element={<UserDisplay />} />
             <Route path="/retailer" element={<RetailerDisplay />} />
             <Route path="/admin" element={<AdminDisplay />} />
