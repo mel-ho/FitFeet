@@ -12,6 +12,7 @@ const {
   addNewOrder,
   getAllOrdersByRetailerId,
   getOrderByUserId,
+  getOrderStatus,
   updateOrderStatusByOrderId,
 } = require("../controllers/retail");
 
@@ -28,6 +29,8 @@ router.patch("products/:productId", updateProductQuantitybyProductId);
 router.put("/orders", addNewOrder);
 router.get("/orders/r/:retailerId", getAllOrdersByRetailerId);
 router.get("/orders/u/:userId", getOrderByUserId);
-router.patch("/orders/:orderId", updateOrderStatusByOrderId);
+
+router.get("/orderstatus/", getOrderStatus);
+router.patch("/orderstatus/:orderId", updateOrderStatusByOrderId);
 
 module.exports = router;

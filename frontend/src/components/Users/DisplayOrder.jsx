@@ -28,10 +28,10 @@ const DisplayOrder = () => {
       if (res.ok) {
         setOrders(res.data);
       } else {
-        setErrorMessage("Error fetching orders: ", res.data);
+        console.log("Error fetching orders: " + res.data);
       }
     } catch (error) {
-      setErrorMessage("Error fetching orders: ", error);
+      console.log("Error fetching orders: " + res.data);
     }
   };
 
@@ -42,31 +42,35 @@ const DisplayOrder = () => {
   return (
     <Box>
       <Box display="flex" flexWrap="wrap" p={1} m={1}>
-        {orders.map((order, index) => (
-          <Card sx={{ maxWidth: 345, m: 1 }} key={index}>
-            <CardActionArea>
-              <CardMedia
-                component="img"
-                height="140"
-                image={order.img_link}
-                alt={`${order.brand} ${order.model}`}
-              />
-
-              <CardContent>
-                <Typography gutterBottom variant="h5" component="div">
-                  {order.model}
-                </Typography>
-                <Typography variant="body2" color="text.secondary">
-                  Brand: {order.brand} <br />
-                  Retailer: {order.retailer_name} <br />
-                  Order Date: {new Date(order.order_date).toLocaleDateString()}
-                  <br />
-                  Status: {order.order_status}
-                </Typography>
-              </CardContent>
-            </CardActionArea>
-          </Card>
-        ))}
+        {orders.length > 0 ? (
+          orders.map((order, index) => (
+            <Card sx={{ maxWidth: 345, m: 1 }} key={index}>
+              <CardActionArea>
+                <CardMedia
+                  component="img"
+                  height="140"
+                  image={order.img_link}
+                  alt={`${order.brand} ${order.model}`}
+                />
+                <CardContent>
+                  <Typography gutterBottom variant="h5" component="div">
+                    {order.model}
+                  </Typography>
+                  <Typography variant="body2" color="text.secondary">
+                    Brand: {order.brand} <br />
+                    Retailer: {order.retailer_name} <br />
+                    Order Date:{" "}
+                    {new Date(order.order_date).toLocaleDateString()}
+                    <br />
+                    Status: {order.order_status}
+                  </Typography>
+                </CardContent>
+              </CardActionArea>
+            </Card>
+          ))
+        ) : (
+          <Typography variant="h6">No existing orders</Typography>
+        )}
       </Box>
       {errorMessage && <Typography color="error">{errorMessage}</Typography>}
     </Box>

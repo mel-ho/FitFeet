@@ -62,20 +62,16 @@ const ShoeAdd = () => {
   };
 
   const handleBrandChange = (event) => {
-    console.log("1Event in AddShoe: ", event.target.value);
     const selectedBrand = event.target.value;
     setBrand(selectedBrand);
   };
 
   const handleModelChange = (event) => {
-    console.log("2Event in AddShoe: ", event.target.value);
     const selectedModel = event.target.value;
     setModel(selectedModel);
   };
 
   const handleSizeChange = (sizeCountry, sizeNumber) => {
-    console.log("3", sizeCountry);
-    console.log("4", sizeNumber);
     setSizeCountry(sizeCountry);
     setSizeNumber(sizeNumber);
   };

@@ -35,7 +35,6 @@ const UserManagement = () => {
 
     if (res.ok) {
       setUserData(res.data);
-      console.log("Updated userData:", res.data);
     } else {
       console.error("Error fetching user data: ", res.data);
     }

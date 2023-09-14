@@ -327,7 +327,7 @@ const addNewOrder = async (req, res) => {
     const { retailer_id, user_id, product_id, quantity } = req.body;
 
     const defaultOrderDate = new Date().toISOString().substring(0, 10); // Use the current date
-    const defaultOrderStatus = "ORDERED";
+    const defaultOrderStatus = "ordered";
 
     // Start a transaction
     await client.query("BEGIN");
@@ -383,18 +383,24 @@ const getAllOrdersByRetailerId = async (req, res) => {
   try {
     const retailer_id = req.params.retailerId;
     const query = `
-      SELECT o.order_id AS order_id,
-        s.brand AS shoe_brand,
-        s.model AS shoe_model,
-        sz.size_number AS shoe_size,
-        o.quantity AS order_quantity,
-        o.order_date,
-        o.order_status
-      FROM orders o
-      JOIN products p ON o.product_id = p.product_id
-      JOIN shoes s ON p.shoe_id = s.shoe_id
-      JOIN sizes sz ON s.size_id = sz.size_id
-      WHERE p.retailer_id = $1
+    SELECT 
+    o.order_id,
+    p.product_id,
+    o.user_id,
+    s.brand,
+    s.model,
+    sz.size_number,
+    sz.size_country,
+    o.quantity AS order_quantity,
+    o.order_date,
+    o.order_status,
+    ua.shipping_address
+  FROM orders o
+  LEFT JOIN products p ON o.product_id = p.product_id
+  LEFT JOIN shoes s ON p.shoe_id = s.shoe_id
+  LEFT JOIN sizes sz ON s.size_id = sz.size_id
+  LEFT JOIN user_address ua ON o.user_id = ua.user_id
+  WHERE p.retailer_id = $1
     `;
     const orders = await pool.query(query, [retailer_id]);
     res.json(orders.rows);
@@ -440,6 +446,20 @@ const getOrderByUserId = async (req, res) => {
   }
 };
 
+// GET order status
+const getOrderStatus = async (req, res) => {
+  try {
+    const query = `
+      SELECT * FROM order_status
+    `;
+    const order_status = await pool.query(query);
+    res.json(order_status.rows);
+  } catch (error) {
+    console.log(error.message);
+    res.json({ status: "error", msg: error.message });
+  }
+};
+
 // UPDATE order_status by order ID
 const updateOrderStatusByOrderId = async (req, res) => {
   try {
@@ -472,5 +492,6 @@ module.exports = {
   addNewOrder,
   getAllOrdersByRetailerId,
   getOrderByUserId,
+  getOrderStatus,
   updateOrderStatusByOrderId,
 };

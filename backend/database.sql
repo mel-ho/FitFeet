@@ -195,7 +195,7 @@ CREATE TABLE order_status(
 );
 
 -- setting the order_status
-INSERT INTO order_status (order_status) VALUES ('REJECTED'), ('ORDERED'), ('PACKED'), ('SHIPPED'), ('COMPLETED');
+INSERT INTO order_status (order_status) VALUES ('rejected'), ('ordered'), ('packed'), ('shipped'), ('completed');
 
 CREATE TABLE orders(
     order_id SERIAL PRIMARY KEY,

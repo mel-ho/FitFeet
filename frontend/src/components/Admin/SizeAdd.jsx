@@ -128,7 +128,6 @@ const SizeAdd = () => {
   const handleCountryChange = (event) => {
     setSelectedCountry(event.target.value);
   };
-  console.log("Size Countries:", sizeCountries);
 
   return (
     <Box>

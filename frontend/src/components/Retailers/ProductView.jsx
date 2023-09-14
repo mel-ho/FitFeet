@@ -1,8 +1,6 @@
 import React, { useEffect, useState, useContext } from "react";
 import {
   Box,
-  Typography,
-  Paper,
   Table,
   TableBody,
   TableCell,
@@ -22,7 +20,6 @@ const ProductView = () => {
   const fetchData = useFetch();
 
   const getProducts = async () => {
-    console.log(userCtx.retailerId);
     try {
       const retailer_id = userCtx.retailerId; // Retrieve retailer ID from context
       const res = await fetchData(
@@ -31,7 +28,6 @@ const ProductView = () => {
         undefined,
         userCtx.accessToken
       );
-      console.log(res);
       if (res.ok) {
         setProductData(res.data);
       } else {
@@ -66,44 +62,42 @@ const ProductView = () => {
 
   return (
     <Box>
-      <Paper>
-        <br />
-        <TextField
-          label="Search by Product ID, Brand, Model, or Size"
-          variant="outlined"
-          size="small"
-          value={searchText}
-          onChange={handleSearch}
-        />
-        <TableContainer>
-          <Table>
-            <TableHead>
-              <TableRow>
-                <TableCell>Product ID</TableCell>
-                <TableCell>Brand</TableCell>
-                <TableCell>Model</TableCell>
-                <TableCell>Country</TableCell>
-                <TableCell>Size</TableCell>
-                <TableCell>Date Purchased</TableCell>
-                <TableCell>Quantity</TableCell>
+      <br />
+      <TextField
+        label="Search by Product ID, Brand, Model, or Size"
+        variant="outlined"
+        size="small"
+        value={searchText}
+        onChange={handleSearch}
+      />
+      <TableContainer>
+        <Table>
+          <TableHead>
+            <TableRow>
+              <TableCell>Product ID</TableCell>
+              <TableCell>Brand</TableCell>
+              <TableCell>Model</TableCell>
+              <TableCell>Country</TableCell>
+              <TableCell>Size</TableCell>
+              <TableCell>Date Purchased</TableCell>
+              <TableCell>Quantity</TableCell>
+            </TableRow>
+          </TableHead>
+          <TableBody>
+            {filteredProductData.map((product, index) => (
+              <TableRow key={index}>
+                <TableCell>{product.product_id}</TableCell>
+                <TableCell>{product.brand}</TableCell>
+                <TableCell>{product.model}</TableCell>
+                <TableCell>{product.size_country}</TableCell>
+                <TableCell>{product.size_number}</TableCell>
+                <TableCell>{formatDate(product.date_purchased)}</TableCell>
+                <TableCell>{product.product_quantity}</TableCell>
               </TableRow>
-            </TableHead>
-            <TableBody>
-              {filteredProductData.map((product, index) => (
-                <TableRow key={index}>
-                  <TableCell>{product.product_id}</TableCell>
-                  <TableCell>{product.brand}</TableCell>
-                  <TableCell>{product.model}</TableCell>
-                  <TableCell>{product.size_country}</TableCell>
-                  <TableCell>{product.size_number}</TableCell>
-                  <TableCell>{formatDate(product.date_purchased)}</TableCell>
-                  <TableCell>{product.product_quantity}</TableCell>
-                </TableRow>
-              ))}
-            </TableBody>
-          </Table>
-        </TableContainer>
-      </Paper>
+            ))}
+          </TableBody>
+        </Table>
+      </TableContainer>
     </Box>
   );
 };

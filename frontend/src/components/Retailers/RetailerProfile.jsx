@@ -18,8 +18,6 @@ const RetailerProfile = () => {
   const fetchData = useFetch();
   const userCtx = useContext(UserContext);
 
-  console.log(userCtx);
-
   const handleChange = (event, newValue) => {
     setValue(newValue);
   };
@@ -35,7 +33,6 @@ const RetailerProfile = () => {
       );
 
       if (res.ok) {
-        console.log("Received retailer data: ", res.data);
         setRetailerInfo(res.data);
       } else {
         console.error("Error fetching retailer details:", res.data);

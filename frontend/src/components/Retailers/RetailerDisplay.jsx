@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { Box, Grid, Tabs, Tab, Container, Stack } from "@mui/material";
 import CustomTabPanel from "../Users/CustomTabPanel";
 
-import Orders from "./Orders";
+import RetailerOrders from "./RetailerOrders";
 import ProductView from "./ProductView";
 import ProductAdd from "./ProductAdd";
 import RetailerProfile from "./RetailerProfile";
@@ -27,19 +27,6 @@ const RetailerDisplay = () => {
       </Container>
       <Container>
         <h2>Retailer Display Page</h2>
-        <Box sx={{ flexGrow: 1 }}>
-          <Grid container spacing={2}>
-            <Grid item xs={4}>
-              "highlight item 1"
-            </Grid>
-            <Grid item xs={4}>
-              "highlight item 2"
-            </Grid>
-            <Grid item xs={4}>
-              "highlight item 3"
-            </Grid>
-          </Grid>
-        </Box>
         <Box sx={{ borderBottom: 1, borderColor: "divider" }}>
           <Tabs value={value} onChange={handleChange}>
             <Tab label="Orders" {...a11yProps(0)} />
@@ -49,7 +36,7 @@ const RetailerDisplay = () => {
           </Tabs>
         </Box>
         <CustomTabPanel value={value} index={0}>
-          <Orders></Orders>
+          <RetailerOrders></RetailerOrders>
         </CustomTabPanel>
         <CustomTabPanel value={value} index={1}>
           <ProductView></ProductView>

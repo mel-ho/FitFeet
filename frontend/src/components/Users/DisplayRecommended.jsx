@@ -150,7 +150,6 @@ const DisplayRecommended = () => {
         {errorMessage && <Typography color="error">{errorMessage}</Typography>}
         {successMessage && <Typography>{successMessage}</Typography>}
       </Box>
-      <DisplayOrder></DisplayOrder>
     </Box>
   );
 };
