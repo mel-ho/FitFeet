@@ -56,6 +56,10 @@ It was created as my capstone project for GA's Software Engineering Immersion.
 - PERN stack
 - Material UI (https://mui.com/)
 
+
+
 ## Future Improvements
 - Improve recommendation algorithm. Currently due to a lack of time, it is only based on matching user to other users with similar feet lenght
-- Payment integration when user orders a shoe
+- Improvements to user signup and input data flow.
+- Payment integration when user orders a shoe. Adding cost and retail price for shoes. plus integration with 3rd party payment gateway.
+- Logout is just a redirect to the front page and not a proper logout that prevents the user from going back in
