@@ -1,6 +1,6 @@
 # FitFeet
-FitFeet is an shoe recommender / retail management app.
-It was created as my capstone project for GA's Software Engineering Immersion.
+- FitFeet is an shoe recommender (based on other user inputs) / retail management app.
+- It was created as my capstone project for GA's Software Engineering Immersion.
 
 ## App Main Features
 - User Interface
