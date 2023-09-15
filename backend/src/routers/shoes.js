@@ -38,7 +38,7 @@ router.get("/shoes", authAdmin, getAllShoes);
 router.get("/shoes/:shoeId", authUser, getShoeByShoeId);
 router.get("/shoes/b/:brand", authUser, getShoesByBrand);
 
-router.put("/usershoes", authUser, addUserShoes);
+router.put("/usershoes", authUser, checkValid, addUserShoes);
 router.get("/usershoes", authUser, getAllUserShoes);
 router.get("/usershoes/:userId", authUser, getUserShoesByUserId);
 router.post("/usershoes/:usershoeId", authUser, getUserShoeByUsershoeId);

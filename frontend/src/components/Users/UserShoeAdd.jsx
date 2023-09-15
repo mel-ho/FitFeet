@@ -31,17 +31,22 @@ const UserShoeAdd = () => {
   const handleAddUserShoe = async () => {
     try {
       const userId = userCtx?.userId || null; // Use null if user is not logged in
-      const response = await fetchData("/shoes/usershoes", "PUT", {
-        brand: brand,
-        model: model,
-        size_country: sizeCountry,
-        size_number: sizeNumber,
-        date_purchased: datePurchased,
-        date_worn: dateWorn,
-        date_disposed: dateDisposed,
-        star_rating: starRating,
-        user_id: userId,
-      });
+      const response = await fetchData(
+        "/shoes/usershoes",
+        "PUT",
+        {
+          brand: brand,
+          model: model,
+          size_country: sizeCountry,
+          size_number: sizeNumber,
+          date_purchased: datePurchased,
+          date_worn: dateWorn,
+          date_disposed: dateDisposed,
+          star_rating: starRating,
+          user_id: userId,
+        },
+        userCtx.accessToken
+      );
 
       if (response.ok) {
         // Reset to initial state after a successful add
