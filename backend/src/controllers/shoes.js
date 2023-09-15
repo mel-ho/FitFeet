@@ -1,7 +1,7 @@
 // brands + shoes + user_shoes
 const pool = require("../db");
 
-// Add a new brand
+// Add a new brand - admin & retailer interface
 const addBrand = async (req, res) => {
   try {
     const { brand } = req.body;
@@ -24,7 +24,7 @@ const addBrand = async (req, res) => {
   }
 };
 
-// Get all brands
+// Get all brands - admin & retailer interface
 const getAllBrands = async (req, res) => {
   try {
     const query = `
@@ -38,7 +38,7 @@ const getAllBrands = async (req, res) => {
   }
 };
 
-// Add a new model
+// Add a new model - admin & retailer interface
 const addModel = async (req, res) => {
   try {
     const { model } = req.body;
@@ -63,7 +63,7 @@ const addModel = async (req, res) => {
   }
 };
 
-// Get all models
+// Get all models - admin interface
 const getAllModels = async (req, res) => {
   try {
     const query = `
@@ -77,7 +77,7 @@ const getAllModels = async (req, res) => {
   }
 };
 
-// Get all size_countries
+// Get all size_countries - admin interface
 const getAllCountries = async (req, res) => {
   try {
     const query = `
@@ -91,7 +91,7 @@ const getAllCountries = async (req, res) => {
   }
 };
 
-// Add a new size
+// Add a new size - admin & retailer interface
 const addSize = async (req, res) => {
   try {
     const { size_country, size_number } = req.body;
@@ -114,7 +114,7 @@ const addSize = async (req, res) => {
   }
 };
 
-// Get all sizes
+// Get all sizes - admin interface
 const getAllSizes = async (req, res) => {
   try {
     const query = `
@@ -128,7 +128,7 @@ const getAllSizes = async (req, res) => {
   }
 };
 
-// Get sizes by size_country
+// Get sizes by size_country - admin interface
 const getSizesbyCountry = async (req, res) => {
   try {
     const size_country = req.params.country;
@@ -208,6 +208,7 @@ const addShoes = async (req, res) => {
   }
 };
 
+// get all shoes
 const getAllShoes = async (req, res) => {
   try {
     const query = `
@@ -272,6 +273,7 @@ const getShoesByBrand = async (req, res) => {
   }
 };
 
+// PUT for user to add shoes - user interface
 const addUserShoes = async (req, res) => {
   try {
     const {
@@ -368,6 +370,7 @@ const addUserShoes = async (req, res) => {
   }
 };
 
+// get all user shoes - not yet used
 const getAllUserShoes = async (req, res) => {
   try {
     const query = `
@@ -395,6 +398,7 @@ const getAllUserShoes = async (req, res) => {
   }
 };
 
+// get user's shoes by userID -
 const getUserShoesByUserId = async (req, res) => {
   try {
     const user_id = req.params.userId;

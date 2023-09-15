@@ -4,6 +4,7 @@ import CustomTabPanel from "./CustomTabPanel";
 import DisplayRecommended from "./DisplayRecommended";
 import DisplayFeet from "./DisplayFeet";
 import DisplayOrder from "./DisplayOrder";
+import DisplayShoes from "./DisplayShoes";
 import DisplayProfile from "./DisplayProfile";
 import UserBar from "../Login/UserBar";
 
@@ -35,8 +36,9 @@ const UserDisplay = () => {
             >
               <Tab label="Recommended Shoes" {...a11yProps(0)} />
               <Tab label="My Orders" {...a11yProps(1)} />
-              <Tab label="Feet Dimensions" {...a11yProps(2)} />
-              <Tab label="User Profile" {...a11yProps(3)} />
+              <Tab label="My Shoes" {...a11yProps(2)} />
+              <Tab label="Feet Dimensions" {...a11yProps(3)} />
+              <Tab label="User Profile" {...a11yProps(4)} />
             </Tabs>
           </Box>
           <CustomTabPanel value={value} index={0}>
@@ -46,9 +48,12 @@ const UserDisplay = () => {
             <DisplayOrder></DisplayOrder>
           </CustomTabPanel>
           <CustomTabPanel value={value} index={2}>
-            <DisplayFeet></DisplayFeet>
+            <DisplayShoes></DisplayShoes>
           </CustomTabPanel>
           <CustomTabPanel value={value} index={3}>
+            <DisplayFeet></DisplayFeet>
+          </CustomTabPanel>
+          <CustomTabPanel value={value} index={4}>
             <DisplayProfile></DisplayProfile>
           </CustomTabPanel>
         </Container>

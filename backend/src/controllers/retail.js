@@ -1,8 +1,7 @@
 // retailers + orders + products
-const { v4: uuidv4 } = require("uuid");
 const pool = require("../db");
 
-// GET all retailers
+// GET all retailers - not used yet
 const getAllRetailers = async (req, res) => {
   try {
     const query = `
@@ -25,7 +24,7 @@ const getAllRetailers = async (req, res) => {
   }
 };
 
-// GET retailer By ID
+// GET retailer By retailer ID - to populate retailer profile
 const getRetailerById = async (req, res) => {
   try {
     const retailer_id = req.params.retailerId;
@@ -54,6 +53,7 @@ const getRetailerById = async (req, res) => {
   }
 };
 
+// UPDATE retailer by retailer ID - to update retailer profile
 const patchRetailerByRetailerId = async (req, res) => {
   try {
     const retailer_id = req.params.retailerId;
@@ -96,6 +96,7 @@ const patchRetailerByRetailerId = async (req, res) => {
   }
 };
 
+// PUT new product - for retailer to add a new product
 const addNewProduct = async (req, res) => {
   try {
     const {
@@ -186,6 +187,7 @@ const addNewProduct = async (req, res) => {
   }
 };
 
+// GET all products by retailer ID - to populate product list for retailer
 const getAllProductsByRetailerId = async (req, res) => {
   try {
     const retailer_id = req.params.retailerId;
@@ -213,7 +215,7 @@ const getAllProductsByRetailerId = async (req, res) => {
   }
 };
 
-// GET product by productID
+// GET product by productID - not used yet
 const getProductByProductId = async (req, res) => {
   try {
     const product_id = req.params.productId;
@@ -244,7 +246,7 @@ const getProductByProductId = async (req, res) => {
   }
 };
 
-// UPDATE product quantity by product ID
+// UPDATE product quantity by product ID - not used yet
 const updateProductQuantitybyProductId = async (req, res) => {
   try {
     const product_id = req.params.productId;
@@ -264,7 +266,7 @@ const updateProductQuantitybyProductId = async (req, res) => {
   }
 };
 
-// ADD  new order
+// ADD new order - add new order from user interface
 const addNewOrder = async (req, res) => {
   const client = await pool.connect();
 
@@ -323,7 +325,7 @@ const addNewOrder = async (req, res) => {
   }
 };
 
-// GET all orders by retailer ID
+// GET all orders by retailer ID - populate order list on retailer interface
 const getAllOrdersByRetailerId = async (req, res) => {
   try {
     const retailer_id = req.params.retailerId;
@@ -355,7 +357,7 @@ const getAllOrdersByRetailerId = async (req, res) => {
   }
 };
 
-// GET order by userId
+// GET order by userId - populate order list on user interface
 const getOrderByUserId = async (req, res) => {
   try {
     const user_id = req.params.userId;
@@ -391,7 +393,7 @@ const getOrderByUserId = async (req, res) => {
   }
 };
 
-// GET order status
+// GET order status - for order_status drop down select
 const getOrderStatus = async (req, res) => {
   try {
     const query = `
@@ -405,7 +407,7 @@ const getOrderStatus = async (req, res) => {
   }
 };
 
-// UPDATE order_status by order ID
+// UPDATE order_status by order ID - for updating order status on each order
 const updateOrderStatusByOrderId = async (req, res) => {
   try {
     const order_id = req.params.orderId;
