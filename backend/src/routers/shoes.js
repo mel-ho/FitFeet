@@ -22,16 +22,16 @@ const {
 const checkValid = require("../middleware/checkValid");
 const { authUser, authRetailer, authAdmin } = require("../middleware/auth");
 
-router.put("/brand", authRetailer, checkValid, addBrand);
-router.get("/brand", authRetailer, getAllBrands);
+router.put("/brand", authUser, checkValid, addBrand);
+router.get("/brand", authUser, getAllBrands);
 
-router.put("/model/", authRetailer, checkValid, addModel);
-router.get("/model/", authRetailer, getAllModels);
+router.put("/model/", authUser, checkValid, addModel);
+router.get("/model/", authUser, getAllModels);
 
-router.get("/sizecountry", authRetailer, getAllCountries);
-router.put("/sizes", authRetailer, checkValid, addSize);
-router.get("/sizes", authRetailer, getAllSizes);
-router.get("/sizes/:country", authRetailer, getSizesbyCountry);
+router.get("/sizecountry", authUser, getAllCountries);
+router.put("/sizes", authUser, checkValid, addSize);
+router.get("/sizes", authUser, getAllSizes);
+router.get("/sizes/:country", authUser, getSizesbyCountry);
 
 router.put("/shoes", authUser, checkValid, addShoes);
 router.get("/shoes", authAdmin, getAllShoes);
